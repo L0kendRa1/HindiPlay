@@ -1,9 +1,9 @@
 import React from 'react';
-import { LetterItem, FeedbackType } from '../types/activity';
+import { HindiCharacter, FeedbackType } from '../types/activity';
 import { Check, X } from 'lucide-react';
 
 interface AnswerCardProps {
-  letter: LetterItem;
+  character: HindiCharacter;
   index: number;
   isSelected: boolean;
   isWrong: boolean;
@@ -13,7 +13,7 @@ interface AnswerCardProps {
 }
 
 export const AnswerCard: React.FC<AnswerCardProps> = ({
-  letter,
+  character,
   index,
   isSelected,
   isWrong,
@@ -43,11 +43,11 @@ export const AnswerCard: React.FC<AnswerCardProps> = ({
 
   return (
     <button
-      onClick={() => onSelect(letter.id)}
+      onClick={() => onSelect(character.id)}
       disabled={isQuestionAnswered || isWrong}
       className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl transition-all duration-200 w-full min-h-[160px] md:min-h-[200px] focus:outline-none focus:ring-4 focus:ring-toy-yellow/70 ${cardStyle}`}
-      aria-label={`अक्षर ${letter.char}, विकल्प ${index + 1}`}
-      title={`अक्षर ${letter.char} चुनें (${keyboardKeys[index]})`}
+      aria-label={`अक्षर ${character.char}, विकल्प ${index + 1}`}
+      title={`अक्षर ${character.char} चुनें (${keyboardKeys[index]})`}
     >
       {/* Keyboard Shortcut Badge */}
       <span className="absolute top-3 left-3 w-7 h-7 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shadow-sm">
@@ -68,14 +68,14 @@ export const AnswerCard: React.FC<AnswerCardProps> = ({
 
       {/* Large Devanagari Character */}
       <span className="text-6xl md:text-7xl lg:text-8xl font-black font-hindi leading-none select-none tracking-normal">
-        {letter.char}
+        {character.char}
       </span>
 
       {/* Optional example word hint on correct answer */}
-      {isCorrect && letter.exampleWord && (
+      {isCorrect && character.exampleWord && (
         <div className="mt-2 flex items-center gap-1.5 text-sm md:text-base font-bold bg-white/20 px-3 py-1 rounded-full text-white animate-pop-in">
-          <span>{letter.exampleWord.emoji}</span>
-          <span>{letter.exampleWord.word}</span>
+          <span>{character.exampleWord.emoji}</span>
+          <span>{character.exampleWord.word}</span>
         </div>
       )}
     </button>

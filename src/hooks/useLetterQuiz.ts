@@ -1,12 +1,22 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Question, FeedbackType, ActivityStats } from '../types/activity';
-import { generateVowelRound } from '../data/vowels';
+import { Question, FeedbackType, ActivityStats, CategoryFilter } from '../types/activity';
+import { generateCharacterRound } from '../data/hindiCharacters';
 import { audioService } from '../services/audioService';
 
 const TOTAL_ROUND_QUESTIONS = 10;
 
-export function useLetterQuiz() {
-  const [questions, setQuestions] = useState<Question[]>(() => generateVowelRound(TOTAL_ROUND_QUESTIONS));
+interface UseLetterQuizOptions {
+  initialCategory?: CategoryFilter;
+  totalQuestions?: number;
+}
+
+export function useLetterQuiz(options: UseLetterQuizOptions = {}) {
+  const { initialCategory = 'all', totalQuestions = TOTAL_ROUND_QUESTIONS } = options;
+
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>(initialCategory);
+  const [questions, setQuestions] = useState<Question[]>(() =>
+    generateCharacterRound({ count: totalQuestions, categoryFilter: initialCategory })
+  );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [wrongOptionIds, setWrongOptionIds] = useState<string[]>([]);
@@ -15,7 +25,7 @@ export function useLetterQuiz() {
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [isRoundComplete, setIsRoundComplete] = useState<boolean>(false);
   const [stats, setStats] = useState<ActivityStats>({
-    totalQuestions: TOTAL_ROUND_QUESTIONS,
+    totalQuestions,
     currentQuestionIndex: 0,
     score: 0,
     firstAttemptSuccessCount: 0,
@@ -26,12 +36,12 @@ export function useLetterQuiz() {
   const currentQuestion = questions[currentIndex] || null;
   const isQuestionAnswered = feedback === 'correct';
 
-  // Play audio for current target letter
+  // Play audio for current target character
   const playCurrentAudio = useCallback(() => {
     if (!currentQuestion) return;
     setIsAudioPlaying(true);
     audioService.playLetterAudio(
-      currentQuestion.targetLetter.char,
+      currentQuestion.targetCharacter.char,
       () => setIsAudioPlaying(true),
       () => setIsAudioPlaying(false)
     );
@@ -113,26 +123,43 @@ export function useLetterQuiz() {
     }
   }, [currentIndex, questions.length]);
 
-  // Restart activity
-  const restartQuiz = useCallback(() => {
-    audioService.playSfx('pop');
-    const newQuestions = generateVowelRound(TOTAL_ROUND_QUESTIONS);
-    setQuestions(newQuestions);
-    setCurrentIndex(0);
-    setSelectedOptionId(null);
-    setWrongOptionIds([]);
-    setFeedback('idle');
-    setAttempts(0);
-    setIsRoundComplete(false);
-    setStats({
-      totalQuestions: TOTAL_ROUND_QUESTIONS,
-      currentQuestionIndex: 0,
-      score: 0,
-      firstAttemptSuccessCount: 0,
-      streak: 0,
-      bestStreak: 0,
-    });
-  }, []);
+  // Restart activity or switch category filter
+  const restartQuiz = useCallback(
+    (newFilter?: CategoryFilter) => {
+      audioService.playSfx('pop');
+      const activeFilter = newFilter !== undefined ? newFilter : categoryFilter;
+      if (newFilter !== undefined) {
+        setCategoryFilter(newFilter);
+      }
+      const newQuestions = generateCharacterRound({
+        count: totalQuestions,
+        categoryFilter: activeFilter,
+      });
+      setQuestions(newQuestions);
+      setCurrentIndex(0);
+      setSelectedOptionId(null);
+      setWrongOptionIds([]);
+      setFeedback('idle');
+      setAttempts(0);
+      setIsRoundComplete(false);
+      setStats({
+        totalQuestions,
+        currentQuestionIndex: 0,
+        score: 0,
+        firstAttemptSuccessCount: 0,
+        streak: 0,
+        bestStreak: 0,
+      });
+    },
+    [categoryFilter, totalQuestions]
+  );
+
+  const changeCategoryFilter = useCallback(
+    (filter: CategoryFilter) => {
+      restartQuiz(filter);
+    },
+    [restartQuiz]
+  );
 
   return {
     questions,
@@ -145,10 +172,12 @@ export function useLetterQuiz() {
     isQuestionAnswered,
     isAudioPlaying,
     isRoundComplete,
+    categoryFilter,
     stats,
     playCurrentAudio,
     handleSelectOption,
     handleNextQuestion,
     restartQuiz,
+    changeCategoryFilter,
   };
 }

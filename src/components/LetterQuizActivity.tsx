@@ -19,11 +19,13 @@ export const LetterQuizActivity: React.FC = () => {
     isQuestionAnswered,
     isAudioPlaying,
     isRoundComplete,
+    categoryFilter,
     stats,
     playCurrentAudio,
     handleSelectOption,
     handleNextQuestion,
     restartQuiz,
+    changeCategoryFilter,
   } = useLetterQuiz();
 
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -38,7 +40,7 @@ export const LetterQuizActivity: React.FC = () => {
   // Global Keyboard shortcuts (1, 2, 3, Space, Enter)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Avoid firing if user is in an input
+      // Avoid firing if user is inside an input or select
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
@@ -92,9 +94,18 @@ export const LetterQuizActivity: React.FC = () => {
   if (isRoundComplete) {
     return (
       <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
-        <Header score={stats.score} streak={stats.streak} />
+        <Header
+          score={stats.score}
+          streak={stats.streak}
+          categoryFilter={categoryFilter}
+          onSelectCategory={changeCategoryFilter}
+        />
         <main className="flex-1 flex items-center justify-center py-6">
-          <RoundSummary stats={stats} onRestart={restartQuiz} />
+          <RoundSummary
+            stats={stats}
+            categoryFilter={categoryFilter}
+            onRestart={() => restartQuiz()}
+          />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">
           हिंदी बाल मंच • Toy Theater Inspired Prototype
@@ -109,8 +120,13 @@ export const LetterQuizActivity: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
-      {/* Top Bar */}
-      <Header score={stats.score} streak={stats.streak} />
+      {/* Top Bar with Category Filter & Stats */}
+      <Header
+        score={stats.score}
+        streak={stats.streak}
+        categoryFilter={categoryFilter}
+        onSelectCategory={changeCategoryFilter}
+      />
 
       {/* Main Play Area */}
       <main className="flex-1 flex flex-col items-center justify-center max-w-4xl w-full mx-auto px-4 py-4">
@@ -127,12 +143,12 @@ export const LetterQuizActivity: React.FC = () => {
         {/* Feedback Message / Prompt Banner */}
         <FeedbackBanner feedback={feedback} attempts={wrongOptionIds.length} />
 
-        {/* 3 Letter Option Cards */}
+        {/* 3 Character Option Cards */}
         <div className="w-full grid grid-cols-3 gap-3 md:gap-6 my-4 max-w-2xl">
           {currentQuestion.options.map((option, idx) => (
             <AnswerCard
               key={option.id}
-              letter={option}
+              character={option}
               index={idx}
               isSelected={selectedOptionId === option.id}
               isWrong={wrongOptionIds.includes(option.id)}

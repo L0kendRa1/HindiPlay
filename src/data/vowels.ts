@@ -1,10 +1,12 @@
-import { LetterItem, Question } from '../types/activity';
+import { HindiCharacter } from '../types/activity';
 
-export const HINDI_VOWELS: LetterItem[] = [
+export const HINDI_VOWELS: HindiCharacter[] = [
   {
     id: 'vowel_a',
     char: 'अ',
     name: 'a',
+    category: 'vowel',
+    subCategory: 'hrasva',
     pronunciationHint: 'अ (छोटा अ)',
     exampleWord: {
       word: 'अनार',
@@ -16,6 +18,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_aa',
     char: 'आ',
     name: 'aa',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'आ (बड़ा आ)',
     exampleWord: {
       word: 'आम',
@@ -27,6 +31,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_i',
     char: 'इ',
     name: 'i',
+    category: 'vowel',
+    subCategory: 'hrasva',
     pronunciationHint: 'इ (छोटी इ)',
     exampleWord: {
       word: 'इमली',
@@ -38,6 +44,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_ee',
     char: 'ई',
     name: 'ee',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'ई (बड़ी ई)',
     exampleWord: {
       word: 'ईख',
@@ -49,6 +57,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_u',
     char: 'उ',
     name: 'u',
+    category: 'vowel',
+    subCategory: 'hrasva',
     pronunciationHint: 'उ (छोटा उ)',
     exampleWord: {
       word: 'उल्लू',
@@ -60,6 +70,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_oo',
     char: 'ऊ',
     name: 'oo',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'ऊ (बड़ा ऊ)',
     exampleWord: {
       word: 'ऊन',
@@ -68,9 +80,24 @@ export const HINDI_VOWELS: LetterItem[] = [
     },
   },
   {
+    id: 'vowel_ri',
+    char: 'ऋ',
+    name: 'ri',
+    category: 'vowel',
+    subCategory: 'hrasva',
+    pronunciationHint: 'ऋ (ऋषि)',
+    exampleWord: {
+      word: 'ऋषि',
+      meaning: 'Sage',
+      emoji: '🧘',
+    },
+  },
+  {
     id: 'vowel_e',
     char: 'ए',
     name: 'e',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'ए (छोटा ए)',
     exampleWord: {
       word: 'एक',
@@ -82,6 +109,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_ai',
     char: 'ऐ',
     name: 'ai',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'ऐ (बड़ा ऐ)',
     exampleWord: {
       word: 'ऐनक',
@@ -93,6 +122,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_o',
     char: 'ओ',
     name: 'o',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'ओ (छोटा ओ)',
     exampleWord: {
       word: 'ओखली',
@@ -104,6 +135,8 @@ export const HINDI_VOWELS: LetterItem[] = [
     id: 'vowel_au',
     char: 'औ',
     name: 'au',
+    category: 'vowel',
+    subCategory: 'deergha',
     pronunciationHint: 'औ (बड़ा औ)',
     exampleWord: {
       word: 'औरत',
@@ -111,42 +144,30 @@ export const HINDI_VOWELS: LetterItem[] = [
       emoji: '👩',
     },
   },
+  {
+    id: 'vowel_am',
+    char: 'अं',
+    name: 'am',
+    category: 'vowel',
+    subCategory: 'anusvara',
+    pronunciationHint: 'अं (अंगूर)',
+    exampleWord: {
+      word: 'अंगूर',
+      meaning: 'Grapes',
+      emoji: '🍇',
+    },
+  },
+  {
+    id: 'vowel_ah',
+    char: 'अः',
+    name: 'ah',
+    category: 'vowel',
+    subCategory: 'visarga',
+    pronunciationHint: 'अः (खाली)',
+    exampleWord: {
+      word: 'अः',
+      meaning: 'Visarga',
+      emoji: '✨',
+    },
+  },
 ];
-
-/**
- * Fisher-Yates shuffle helper
- */
-export function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-/**
- * Generates a full round of questions.
- * Ensures every target letter appears in random order and options are randomized.
- */
-export function generateVowelRound(count: number = 10, optionsCount: number = 3): Question[] {
-  // Shuffle all 10 vowels to determine the sequence of target letters
-  const shuffledTargets = shuffleArray(HINDI_VOWELS).slice(0, count);
-
-  return shuffledTargets.map((target, idx) => {
-    // Pick (optionsCount - 1) distractor letters from the remaining pool
-    const otherLetters = HINDI_VOWELS.filter((item) => item.id !== target.id);
-    const shuffledOthers = shuffleArray(otherLetters);
-    const distractors = shuffledOthers.slice(0, optionsCount - 1);
-
-    // Combine target with distractors and shuffle the 3 options
-    const options = shuffleArray([target, ...distractors]);
-
-    return {
-      id: `q_${idx + 1}_${target.name}`,
-      targetLetter: target,
-      options,
-      correctAnswerId: target.id,
-    };
-  });
-}

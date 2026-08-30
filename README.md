@@ -1,26 +1,26 @@
-# 🎨 हिंदी अक्षर पहचानो (Hindi Interactive Learning Toy)
+# 🎨 हिंदी अक्षर पहचानो (Hindi Character Recognition Toy)
 
-A playful, interactive Hindi vowel recognition activity inspired by the "learn by doing" philosophy of **Toy Theater**. Designed specifically for young Hindi learners (ages 5–8).
+A playful, interactive Hindi character recognition activity inspired by the "learn by doing" philosophy of **Toy Theater**. Designed specifically for young Hindi learners (ages 5–8) to master the complete Devanagari alphabet.
 
 ---
 
-## 🌟 Features
+## 🌟 What's New in the Refactored Architecture
 
-- **Activity: "अक्षर पहचानो" (Letter Recognition)**:
-  - Covers all 10 primary Devanagari vowels: **अ, आ, इ, ई, उ, ऊ, ए, ऐ, ओ, औ**
-  - Audio prompt button with speech synthesis & acoustic tone fallbacks
-  - 3 large, colorful, tactile 3D-styled letter cards per question
-  - Gentle, non-punishing feedback loop for mistakes ("फिर से कोशिश करो 😊")
-  - Celebratory audio chimes, star rewards, and confetti upon completion
-  - Progress tracking (10 questions per round, score counter, streak tracker)
-- **Accessibility & Child-Friendly Controls**:
-  - Full keyboard support: `[1]`, `[2]`, `[3]` for selecting cards, `[Space]` / `[R]` for audio, `[Enter]` for next question / replay
-  - Touch-optimized large buttons for tablets and mobile devices
-  - Clean Devanagari typography using **Baloo 2** and **Noto Sans Devanagari**
-- **Modular & Extensible Architecture**:
-  - Independent audio layer (`audioService`) allowing zero-friction drop-in of prerecorded audio files
-  - Isolated question generation & data models in `src/data/` and `src/types/`
-  - Fully decoupled UI components in `src/components/`
+- **Unified Character Recognition Engine**:
+  - Reusable, generic Hindi Character architecture replacing vowel-specific logic.
+  - Supports **स्वर (13 Vowels: `अ` to `अः`)** and **व्यंजन (33 Consonants: `क` to `ह`)** across all 5 standard vargas, antahstha, and ushma consonants.
+  - Extensible foundation ready for **मात्राएँ (Matras)** and **संयुक्त अक्षर (Conjuncts)** via typed categories without modifying the quiz engine.
+- **Dynamic Category Filtering**:
+  - Learners can switch seamlessly between **"सभी अक्षर" (All Characters)**, **"स्वर" (Vowels Only)**, and **"व्यंजन" (Consonants Only)**.
+- **Intelligent Question Generation**:
+  - Selects pedagogically sound distractor options from the matching category.
+  - Guarantees zero duplicate options and randomized option positions.
+- **Child-Friendly Audio Engine**:
+  - Works seamlessly across vowels and consonants via `audioService.playLetterAudio(char)`.
+  - Native `hi-IN` SpeechSynthesis + Web Audio acoustic fallback.
+  - Cheerful musical chimes on correct answers and gentle retry cues on mistakes.
+- **Keyboard & Touch Accessibility**:
+  - Shortcuts: `[1]`, `[2]`, `[3]` for selecting cards, `[Space]` / `[R]` for audio replay, `[Enter]` for next question and replay.
 
 ---
 
@@ -28,28 +28,30 @@ A playful, interactive Hindi vowel recognition activity inspired by the "learn b
 
 ```
 hindi/
-├── index.html                   # HTML entry point with Baloo 2 font imports
+├── index.html                   # HTML entry with Google Fonts ('Baloo 2' and 'Noto Sans Devanagari')
 ├── package.json                 # Project dependencies & scripts
 ├── tailwind.config.js           # Child-friendly color palette & 3D shadows
 ├── tsconfig.json                # TypeScript strict configuration
 ├── vite.config.ts               # Vite bundler configuration
 └── src/
     ├── main.tsx                 # React DOM mount point
-    ├── App.tsx                  # Root component
+    ├── App.tsx                  # Root layout
     ├── index.css                # Base Tailwind styles & custom scrollbars
     ├── types/
-    │   └── activity.ts          # Type definitions for letter, question, stats, feedback
+    │   └── activity.ts          # Core generic models: HindiCharacter, CharacterCategory, CategoryFilter, Question, ActivityStats
     ├── data/
-    │   └── vowels.ts            # Question bank & round generator for 10 Hindi vowels
+    │   ├── vowels.ts            # Complete Devanagari vowels dataset (13 characters)
+    │   ├── consonants.ts        # Complete Devanagari consonants dataset (33 characters)
+    │   └── hindiCharacters.ts   # Master collection, category query helpers, and intelligent round generator
     ├── services/
     │   └── audioService.ts      # SpeechSynthesis (hi-IN) + Web Audio API synthesizer
     ├── hooks/
     │   └── useLetterQuiz.ts     # Activity game loop, attempts, streak, and scoring
     └── components/
-        ├── Header.tsx           # Title, sound mute toggle, and star score
+        ├── Header.tsx           # Title, category filter pills ("सभी अक्षर", "स्वर", "व्यंजन"), score & sound toggle
         ├── ProgressBar.tsx      # 10-step progress dots with golden star indicators
         ├── AudioButton.tsx      # Prominent pulsing speaker prompt button
-        ├── AnswerCard.tsx       # Big tactile 3D Devanagari letter card
+        ├── AnswerCard.tsx       # Big tactile 3D Devanagari character card
         ├── FeedbackBanner.tsx   # Encouraging visual feedback messages
         ├── RoundSummary.tsx     # Celebratory end-of-round score modal + confetti
         └── LetterQuizActivity.tsx # Main activity container coordinating components
@@ -76,16 +78,11 @@ hindi/
    ```
 
 3. **Open the application**:
-   Open your browser and navigate to `http://localhost:3000` (or the URL shown in your terminal).
+   Open your browser and navigate to `http://localhost:3000`.
 
 4. **Build for production**:
    ```bash
    npm run build
-   ```
-
-5. **Preview production build**:
-   ```bash
-   npm run preview
    ```
 
 ---
@@ -97,15 +94,5 @@ hindi/
 | `1` | Select 1st Option |
 | `2` | Select 2nd Option |
 | `3` | Select 3rd Option |
-| `Space` or `R` | Play / Replay Letter Sound |
+| `Space` or `R` | Play / Replay Character Sound |
 | `Enter` | Proceed to Next Question / Play Again |
-
----
-
-## 🔮 Next Steps for Platform Expansion
-
-1. **Consonants Activity ("व्यंजन पहचानो")**: Expand the question bank to include Devanagari consonants (क to ज्ञ) with progressive difficulty tiers.
-2. **Prerecorded Studio Audio**: Drop high-definition native speaker audio recordings into `src/data/` utilizing the existing `playLetterAudio` interface.
-3. **Letter Tracing ("अक्षर लिखो")**: Interactive canvas activity allowing children to trace letters with visual stroke guides.
-4. **Word Matching ("चित्र और शब्द")**: Matching vowel sounds with illustrated objects (e.g., अ ➔ अनार, आ ➔ आम).
-5. **Activity Selection Hub**: A colorful toy-box menu allowing young learners to choose between different mini-games.

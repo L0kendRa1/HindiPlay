@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Trophy, Star, RotateCcw } from 'lucide-react';
-import { ActivityStats } from '../types/activity';
+import { ActivityStats, CategoryFilter } from '../types/activity';
 
 interface RoundSummaryProps {
   stats: ActivityStats;
+  categoryFilter?: CategoryFilter;
   onRestart: () => void;
 }
 
-export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, onRestart }) => {
+export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, categoryFilter = 'all', onRestart }) => {
   useEffect(() => {
     // Launch playful confetti burst
     const count = 200;
@@ -55,12 +56,20 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, onRestart }) 
 
   let starsEarned = 1;
   let title = 'बहुत अच्छा प्रयास! 👏';
-  let message = 'आपने सभी स्वरों का अभ्यास पूरा कर लिया!';
+  
+  const categoryName =
+    categoryFilter === 'vowel'
+      ? 'स्वरों'
+      : categoryFilter === 'consonant'
+      ? 'व्यंजनों'
+      : 'अक्षरों';
+
+  let message = `आपने सभी ${categoryName} का अभ्यास पूरा कर लिया!`;
 
   if (percentage >= 80) {
     starsEarned = 3;
     title = 'शानदार! अद्भुत प्रदर्शन! 🏆';
-    message = 'आपने लगभग सभी स्वर पहली बार में सही पहचाने!';
+    message = `आपने लगभग सभी ${categoryName} पहली बार में सही पहचाने!`;
   } else if (percentage >= 50) {
     starsEarned = 2;
     title = 'शाबाश! बहुत बढ़िया! ⭐';

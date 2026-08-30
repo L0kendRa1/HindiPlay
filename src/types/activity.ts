@@ -1,20 +1,26 @@
-export interface LetterItem {
+export type CharacterCategory = 'vowel' | 'consonant' | 'matra' | 'conjunct';
+
+export type CategoryFilter = 'all' | CharacterCategory;
+
+export interface HindiCharacter {
   id: string;
-  char: string;          // Devanagari character (e.g. 'अ', 'आ')
-  name: string;          // Romanized name (e.g. 'a', 'aa')
-  pronunciationHint: string; // Phonetic hint in Hindi (e.g. 'छोटा अ')
+  char: string;                 // Devanagari character (e.g. 'अ', 'क', 'आ', 'म')
+  name: string;                 // Romanized name (e.g. 'a', 'ka', 'aa', 'ma')
+  category: CharacterCategory;  // 'vowel' | 'consonant' | 'matra' | 'conjunct'
+  subCategory?: string;         // e.g. 'sparsh', 'antahstha', 'ushma', 'hrasva', 'deergha'
+  pronunciationHint?: string;   // Phonetic hint in Hindi (e.g. 'क से कमल', 'छोटा अ')
   exampleWord?: {
-    word: string;        // e.g. 'अनार'
-    meaning: string;     // e.g. 'Pomegranate'
-    emoji: string;       // e.g. '🍎'
+    word: string;               // e.g. 'कमल'
+    meaning: string;            // e.g. 'Lotus'
+    emoji: string;              // e.g. '🪷'
   };
-  audioFile?: string;    // Future slot for prerecorded MP3/WAV
+  audioFile?: string;           // Future slot for prerecorded audio file path
 }
 
 export interface Question {
   id: string;
-  targetLetter: LetterItem;
-  options: LetterItem[]; // Typically 3 choices
+  targetCharacter: HindiCharacter;
+  options: HindiCharacter[];    // Typically 3 choices
   correctAnswerId: string;
 }
 
@@ -38,5 +44,6 @@ export interface QuizState {
   attemptsForCurrentQuestion: number;
   isAudioPlaying: boolean;
   isRoundComplete: boolean;
+  categoryFilter: CategoryFilter;
   stats: ActivityStats;
 }
