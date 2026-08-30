@@ -5,25 +5,28 @@ import { Sparkles, Smile } from 'lucide-react';
 interface FeedbackBannerProps {
   feedback: FeedbackType;
   attempts: number;
+  promptText?: string;
+  correctMessage?: string;
+  incorrectMessage?: string;
 }
 
-export const FeedbackBanner: React.FC<FeedbackBannerProps> = ({ feedback, attempts }) => {
+export const FeedbackBanner: React.FC<FeedbackBannerProps> = ({
+  feedback,
+  attempts,
+  promptText = 'कौन सा अक्षर है? सही उत्तर चुनें 👇',
+  correctMessage,
+  incorrectMessage,
+}) => {
   if (feedback === 'idle') {
     return (
-      <div className="h-16 flex items-center justify-center text-slate-500 font-bold text-base md:text-lg">
-        <span>कौन सा अक्षर है? सही उत्तर चुनें 👇</span>
+      <div className="h-16 flex items-center justify-center text-slate-600 font-bold text-base md:text-lg text-center px-2">
+        <span>{promptText}</span>
       </div>
     );
   }
 
   if (feedback === 'correct') {
-    const praiseList = [
-      'बहुत बढ़िया! 🎉',
-      'शाबाश! ⭐',
-      'शानदार! 🌟',
-      'अरे वाह! कमाल कर दिया! 🎈',
-    ];
-    const praise = praiseList[Math.floor(Math.random() * praiseList.length)] || 'बहुत बढ़िया! 🎉';
+    const praise = correctMessage || 'बहुत बढ़िया! 🎉';
 
     return (
       <div className="h-16 flex items-center justify-center animate-pop-in">
@@ -37,9 +40,10 @@ export const FeedbackBanner: React.FC<FeedbackBannerProps> = ({ feedback, attemp
 
   // Incorrect feedback
   const encouragement =
-    attempts > 1
+    incorrectMessage ||
+    (attempts > 1
       ? 'कोई बात नहीं, एक बार फिर आवाज़ सुनो और चुनो! 🎧'
-      : 'फिर से कोशिश करो 😊';
+      : 'फिर से कोशिश करो 😊');
 
   return (
     <div className="h-16 flex items-center justify-center animate-shake">

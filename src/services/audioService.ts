@@ -61,10 +61,9 @@ class AudioService {
   }
 
   /**
-   * Pronounce a Hindi letter using SpeechSynthesis.
-   * If speech synthesis fails or is not supported, falls back gracefully.
+   * Pronounce a Hindi letter or word using SpeechSynthesis.
    */
-  public playLetterAudio(letter: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
+  public playSpeechText(text: string, onStart?: () => void, onEnd?: () => void, rate: number = 0.82): Promise<void> {
     return new Promise((resolve) => {
       if (this.isMuted) {
         onStart?.();
@@ -93,12 +92,12 @@ class AudioService {
         this.initVoices();
       }
 
-      const utterance = new SpeechSynthesisUtterance(letter);
+      const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'hi-IN';
       if (this.hindiVoice) {
         utterance.voice = this.hindiVoice;
       }
-      utterance.rate = 0.82; // Slightly slowed down for clear articulation
+      utterance.rate = rate; // Slightly slowed down for clear articulation
       utterance.pitch = 1.05; // Friendly, clear pitch
 
       let hasEnded = false;
@@ -126,10 +125,31 @@ class AudioService {
       // Safety timeout in case onend doesn't trigger on some mobile browsers
       setTimeout(() => {
         cleanup();
-      }, 2500);
+      }, 3000);
 
       window.speechSynthesis.speak(utterance);
     });
+  }
+
+  /**
+   * Pronounce a Hindi character (e.g. 'आ', 'क', 'म')
+   */
+  public playLetterAudio(letter: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
+    return this.playSpeechText(letter, onStart, onEnd, 0.82);
+  }
+
+  /**
+   * Pronounce a Hindi word (e.g. 'आम', 'कमल', 'मछली')
+   */
+  public playWordAudio(word: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
+    return this.playSpeechText(word, onStart, onEnd, 0.88);
+  }
+
+  /**
+   * Pronounce a character-word association (e.g. "आ से आम", "क से कमल")
+   */
+  public playAssociationAudio(char: string, word: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
+    return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.85);
   }
 
   /**
