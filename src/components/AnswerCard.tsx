@@ -1,0 +1,83 @@
+import React from 'react';
+import { LetterItem, FeedbackType } from '../types/activity';
+import { Check, X } from 'lucide-react';
+
+interface AnswerCardProps {
+  letter: LetterItem;
+  index: number;
+  isSelected: boolean;
+  isWrong: boolean;
+  feedback: FeedbackType;
+  isQuestionAnswered: boolean;
+  onSelect: (id: string) => void;
+}
+
+export const AnswerCard: React.FC<AnswerCardProps> = ({
+  letter,
+  index,
+  isSelected,
+  isWrong,
+  feedback,
+  isQuestionAnswered,
+  onSelect,
+}) => {
+  const isCorrect = isSelected && feedback === 'correct';
+  const keyboardKeys = ['1', '2', '3'];
+
+  // Card background and border color themes
+  const colorThemes = [
+    { border: 'border-toy-blue', bg: 'bg-blue-50', hover: 'hover:border-toy-blue-dark', shadow: 'shadow-toy-blue' },
+    { border: 'border-toy-purple', bg: 'bg-purple-50', hover: 'hover:border-toy-purple-dark', shadow: 'shadow-toy-purple' },
+    { border: 'border-toy-pink', bg: 'bg-pink-50', hover: 'hover:border-toy-pink-dark', shadow: 'shadow-toy-pink' },
+  ];
+
+  const currentTheme = colorThemes[index % colorThemes.length];
+
+  let cardStyle = `bg-white border-4 ${currentTheme.border} text-slate-800 shadow-toy-lg hover:shadow-toy-xl hover:-translate-y-1 active:translate-y-1 active:shadow-toy-sm`;
+
+  if (isCorrect) {
+    cardStyle = 'bg-toy-mint border-4 border-toy-mint-dark text-white shadow-toy-lg animate-pop-in scale-105';
+  } else if (isWrong) {
+    cardStyle = 'bg-rose-50 border-4 border-rose-400 text-slate-400 opacity-60 shadow-toy-sm animate-shake cursor-not-allowed';
+  }
+
+  return (
+    <button
+      onClick={() => onSelect(letter.id)}
+      disabled={isQuestionAnswered || isWrong}
+      className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl transition-all duration-200 w-full min-h-[160px] md:min-h-[200px] focus:outline-none focus:ring-4 focus:ring-toy-yellow/70 ${cardStyle}`}
+      aria-label={`अक्षर ${letter.char}, विकल्प ${index + 1}`}
+      title={`अक्षर ${letter.char} चुनें (${keyboardKeys[index]})`}
+    >
+      {/* Keyboard Shortcut Badge */}
+      <span className="absolute top-3 left-3 w-7 h-7 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shadow-sm">
+        {keyboardKeys[index]}
+      </span>
+
+      {/* Status indicator on top right */}
+      {isCorrect && (
+        <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white text-toy-mint-dark flex items-center justify-center shadow-md animate-bounce-short">
+          <Check className="w-5 h-5 stroke-[3]" />
+        </span>
+      )}
+      {isWrong && (
+        <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-rose-200 text-rose-600 flex items-center justify-center shadow-sm">
+          <X className="w-5 h-5 stroke-[2.5]" />
+        </span>
+      )}
+
+      {/* Large Devanagari Character */}
+      <span className="text-6xl md:text-7xl lg:text-8xl font-black font-hindi leading-none select-none tracking-normal">
+        {letter.char}
+      </span>
+
+      {/* Optional example word hint on correct answer */}
+      {isCorrect && letter.exampleWord && (
+        <div className="mt-2 flex items-center gap-1.5 text-sm md:text-base font-bold bg-white/20 px-3 py-1 rounded-full text-white animate-pop-in">
+          <span>{letter.exampleWord.emoji}</span>
+          <span>{letter.exampleWord.word}</span>
+        </div>
+      )}
+    </button>
+  );
+};
