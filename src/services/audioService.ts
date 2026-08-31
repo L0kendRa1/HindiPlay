@@ -2,6 +2,13 @@
  * Audio service for Hindi Interactive Learning
  * Provides SpeechSynthesis with Hindi (hi-IN) voice support
  * and Web Audio API synthesized sound effects for instant, tactile feedback.
+ * 
+ * Features:
+ * - Chromium/WebKit GC protection (retains active utterance references to prevent mid-speech cutoffs)
+ * - Safe speech queue & rapid-click debounce
+ * - Capability-based voice selection (hi-IN priority with graceful fallbacks)
+ * - Natural calibrated rates for Devanagari learning (0.9 rate, 1.0 pitch)
+ * - Zero Unicode splitting: preserves complete words and matra units
  */
 
 class AudioService {
@@ -9,36 +16,75 @@ class AudioService {
   private isMuted: boolean = false;
   private hindiVoice: SpeechSynthesisVoice | null = null;
   private voicesLoaded: boolean = false;
+  private activeUtterances: Set<SpeechSynthesisUtterance> = new Set();
+  private isSpeakingText: boolean = false;
+  private currentSpeakingText: string | null = null;
+  private voiceChangeHandlerAttached: boolean = false;
 
   constructor() {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       this.initVoices();
-      if ('speechSynthesis' in window) {
+      if (!this.voiceChangeHandlerAttached) {
         window.speechSynthesis.onvoiceschanged = () => {
           this.initVoices();
         };
+        this.voiceChangeHandlerAttached = true;
       }
     }
   }
 
-  private initVoices() {
+  /**
+   * Capability-based voice selection for Hindi (hi-IN)
+   */
+  public initVoices() {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
+    if (voices && voices.length > 0) {
       this.voicesLoaded = true;
-      // Prioritize explicit Hindi (hi-IN) voices
-      this.hindiVoice =
-        voices.find((v) => v.lang === 'hi-IN' || v.lang === 'hi_IN') ||
-        voices.find((v) => v.lang.startsWith('hi')) ||
-        voices.find((v) => v.name.toLowerCase().includes('hindi')) ||
-        null;
+
+      let selected: SpeechSynthesisVoice | undefined;
+
+      // 1. First priority: Exact match for hi-IN / hi_IN
+      selected = voices.find(
+        (v) => v.lang === 'hi-IN' || v.lang === 'hi_IN' || v.lang.toLowerCase() === 'hi-in'
+      );
+
+      // 2. Second priority: Any voice starting with 'hi'
+      if (!selected) {
+        selected = voices.find((v) => v.lang.toLowerCase().startsWith('hi'));
+      }
+
+      // 3. Third priority: Any voice with 'hindi' or 'india' in name
+      if (!selected) {
+        selected = voices.find(
+          (v) =>
+            v.name.toLowerCase().includes('hindi') ||
+            (v.name.toLowerCase().includes('india') && v.lang.toLowerCase().includes('hi'))
+        );
+      }
+
+      // 4. Fourth priority: Marathi / Devanagari phonetics or default
+      if (!selected) {
+        selected = voices.find((v) => v.lang.toLowerCase().startsWith('mr'));
+      }
+
+      this.hindiVoice = selected ?? null;
     }
+  }
+
+  public getHindiVoice(): SpeechSynthesisVoice | null {
+    if (!this.hindiVoice && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      this.initVoices();
+    }
+    return this.hindiVoice;
   }
 
   private getAudioContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
     if (!this.audioCtx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.audioCtx = new AudioCtx();
       }
@@ -51,8 +97,8 @@ class AudioService {
 
   public setMuted(muted: boolean) {
     this.isMuted = muted;
-    if (muted && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (muted) {
+      this.stopSpeech();
     }
   }
 
@@ -61,11 +107,52 @@ class AudioService {
   }
 
   /**
-   * Pronounce a Hindi letter or word using SpeechSynthesis.
+   * Explicitly stop any active SpeechSynthesis audio.
    */
-  public playSpeechText(text: string, onStart?: () => void, onEnd?: () => void, rate: number = 0.82): Promise<void> {
+  public stopSpeech() {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (err) {
+        console.warn('Speech cancellation note:', err);
+      }
+    }
+    this.activeUtterances.clear();
+    this.isSpeakingText = false;
+    this.currentSpeakingText = null;
+  }
+
+  /**
+   * Pronounce a complete Hindi word or character using SpeechSynthesis.
+   * - Entire text is passed intact as ONE utterance.
+   * - Garbage collection protection ensures words are not cut off mid-speech.
+   * - Rapid-click debounce prevents overlapping or broken audio streams.
+   */
+  public playSpeechText(
+    text: string,
+    onStart?: () => void,
+    onEnd?: () => void,
+    rate: number = 0.90
+  ): Promise<void> {
     return new Promise((resolve) => {
+      const cleanText = text ? text.trim() : '';
+      if (!cleanText) {
+        onEnd?.();
+        resolve();
+        return;
+      }
+
       if (this.isMuted) {
+        onStart?.();
+        setTimeout(() => {
+          onEnd?.();
+          resolve();
+        }, 200);
+        return;
+      }
+
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        this.playTone(440, 0.25);
         onStart?.();
         setTimeout(() => {
           onEnd?.();
@@ -74,36 +161,44 @@ class AudioService {
         return;
       }
 
-      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        this.playTone(440, 0.3);
-        onStart?.();
-        setTimeout(() => {
-          onEnd?.();
-          resolve();
-        }, 400);
+      // Debounce: If the exact same word is already speaking, allow it to finish smoothly
+      if (this.isSpeakingText && this.currentSpeakingText === cleanText) {
         return;
       }
 
-      // Cancel ongoing utterance
-      window.speechSynthesis.cancel();
+      // If a different word was speaking, cleanly cancel it first
+      if (this.isSpeakingText && this.currentSpeakingText !== cleanText) {
+        this.stopSpeech();
+      }
 
-      // Ensure voice is selected
+      // Ensure voices are initialized
       if (!this.hindiVoice && !this.voicesLoaded) {
         this.initVoices();
       }
 
-      const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = 'hi-IN';
       if (this.hindiVoice) {
         utterance.voice = this.hindiVoice;
       }
-      utterance.rate = rate; // Slightly slowed down for clear articulation
-      utterance.pitch = 1.05; // Friendly, clear pitch
+      utterance.rate = rate; // Calibrated 0.90 for clear, natural Hindi articulation
+      utterance.pitch = 1.0; // Natural pitch
+      utterance.volume = 1.0;
 
-      let hasEnded = false;
+      // Retain strong reference to prevent Chromium garbage collection from cutting audio
+      this.activeUtterances.add(utterance);
+      this.isSpeakingText = true;
+      this.currentSpeakingText = cleanText;
+
+      let hasCleanedUp = false;
       const cleanup = () => {
-        if (!hasEnded) {
-          hasEnded = true;
+        if (!hasCleanedUp) {
+          hasCleanedUp = true;
+          this.activeUtterances.delete(utterance);
+          if (this.currentSpeakingText === cleanText) {
+            this.isSpeakingText = false;
+            this.currentSpeakingText = null;
+          }
           onEnd?.();
           resolve();
         }
@@ -118,38 +213,51 @@ class AudioService {
       };
 
       utterance.onerror = (e) => {
-        console.warn('Speech synthesis note:', e);
+        // 'canceled' errors are normal when intentionally interrupted
+        if (e.error !== 'canceled') {
+          console.warn(`Speech synthesis notice (${cleanText}):`, e.error);
+        }
         cleanup();
       };
 
-      // Safety timeout in case onend doesn't trigger on some mobile browsers
+      // Safety timer (4.5s) to guarantee resolution if mobile browsers drop onend
       setTimeout(() => {
         cleanup();
-      }, 3000);
+      }, 4500);
 
-      window.speechSynthesis.speak(utterance);
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.warn('Speech synthesis speak error:', err);
+        cleanup();
+      }
     });
   }
 
   /**
-   * Pronounce a Hindi character (e.g. 'आ', 'क', 'म')
+   * Pronounce a Hindi character (e.g. 'अ', 'आ', 'क', 'म')
    */
   public playLetterAudio(letter: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
-    return this.playSpeechText(letter, onStart, onEnd, 0.82);
+    return this.playSpeechText(letter, onStart, onEnd, 0.88);
   }
 
   /**
-   * Pronounce a Hindi word (e.g. 'आम', 'कमल', 'मछली')
+   * Pronounce a complete Hindi word (e.g. 'आम', 'कमल', 'मटर', 'माला', 'सेब')
    */
   public playWordAudio(word: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
-    return this.playSpeechText(word, onStart, onEnd, 0.88);
+    return this.playSpeechText(word, onStart, onEnd, 0.90);
   }
 
   /**
    * Pronounce a character-word association (e.g. "आ से आम", "क से कमल")
    */
-  public playAssociationAudio(char: string, word: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
-    return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.85);
+  public playAssociationAudio(
+    char: string,
+    word: string,
+    onStart?: () => void,
+    onEnd?: () => void
+  ): Promise<void> {
+    return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.88);
   }
 
   /**
@@ -174,7 +282,7 @@ class AudioService {
           osc.frequency.setValueAtTime(freq, now + idx * 0.08);
 
           gain.gain.setValueAtTime(0.001, now + idx * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.25, now + idx * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.22, now + idx * 0.08 + 0.02);
           gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
 
           osc.connect(gain);
@@ -196,7 +304,7 @@ class AudioService {
         osc.frequency.exponentialRampToValueAtTime(246.94, now + 0.25);
 
         gain.gain.setValueAtTime(0.01, now);
-        gain.gain.linearRampToValueAtTime(0.18, now + 0.04);
+        gain.gain.linearRampToValueAtTime(0.16, now + 0.04);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
 
         osc.connect(gain);
@@ -226,8 +334,11 @@ class AudioService {
             osc.frequency.setValueAtTime(freq, stepTime);
 
             gain.gain.setValueAtTime(0.001, stepTime);
-            gain.gain.exponentialRampToValueAtTime(0.18, stepTime + 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.001, stepTime + (stepIdx === chords.length - 1 ? 0.8 : 0.25));
+            gain.gain.exponentialRampToValueAtTime(0.16, stepTime + 0.03);
+            gain.gain.exponentialRampToValueAtTime(
+              0.001,
+              stepTime + (stepIdx === chords.length - 1 ? 0.8 : 0.25)
+            );
 
             osc.connect(gain);
             gain.connect(ctx.destination);
@@ -248,7 +359,7 @@ class AudioService {
         osc.frequency.setValueAtTime(600, now);
         osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
 
-        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
         osc.connect(gain);
@@ -268,7 +379,7 @@ class AudioService {
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
 
-        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.setValueAtTime(0.10, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
         osc.connect(gain);
@@ -291,7 +402,7 @@ class AudioService {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(freq, now);
 
-    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
     osc.connect(gain);

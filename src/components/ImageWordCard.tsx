@@ -1,6 +1,7 @@
 import React from 'react';
 import { PictureWordItem } from '../types/pictureMatch';
 import { FeedbackType } from '../types/activity';
+import { PictureImage } from './PictureImage';
 import { Check, X } from 'lucide-react';
 
 interface ImageWordCardProps {
@@ -46,12 +47,12 @@ export const ImageWordCard: React.FC<ImageWordCardProps> = ({
     <button
       onClick={() => onSelect(item.id)}
       disabled={isQuestionAnswered || isWrong}
-      className={`relative flex flex-col items-center justify-between p-4 md:p-6 rounded-3xl transition-all duration-200 w-full min-h-[190px] md:min-h-[230px] focus:outline-none focus:ring-4 focus:ring-toy-yellow/70 ${cardStyle}`}
+      className={`relative flex flex-col items-center justify-between p-4 md:p-5 rounded-3xl transition-all duration-200 w-full min-h-[190px] md:min-h-[230px] focus:outline-none focus:ring-4 focus:ring-toy-yellow/70 ${cardStyle}`}
       aria-label={`शब्द ${item.word}, विकल्प ${index + 1}`}
       title={`${item.word} चुनें (${keyboardKeys[index]})`}
     >
       {/* Keyboard Shortcut Badge */}
-      <span className="absolute top-3 left-3 w-7 h-7 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shadow-sm">
+      <span className="absolute top-3 left-3 w-7 h-7 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shadow-xs">
         {keyboardKeys[index]}
       </span>
 
@@ -62,16 +63,19 @@ export const ImageWordCard: React.FC<ImageWordCardProps> = ({
         </span>
       )}
       {isWrong && (
-        <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-rose-200 text-rose-600 flex items-center justify-center shadow-sm">
+        <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-rose-200 text-rose-600 flex items-center justify-center shadow-xs">
           <X className="w-5 h-5 stroke-[2.5]" />
         </span>
       )}
 
-      {/* Large Visual Illustration / Emoji */}
-      <div className="flex-1 flex items-center justify-center my-2">
-        <span className="text-6xl md:text-7xl select-none filter drop-shadow-sm transform hover:scale-110 transition-transform">
-          {item.emoji}
-        </span>
+      {/* Visual Illustration Image with Fallback */}
+      <div className="flex-1 flex items-center justify-center my-2 w-full">
+        <PictureImage
+          src={item.image}
+          alt={item.word}
+          fallbackEmoji={item.emoji}
+          sizeClassName="w-20 h-20 md:w-24 md:h-24"
+        />
       </div>
 
       {/* Hindi Word Label */}

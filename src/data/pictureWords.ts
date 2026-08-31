@@ -1,4 +1,4 @@
-import { PictureWordItem, PictureMatchQuestion } from '../types/pictureMatch';
+import { PictureWordItem, PictureMatchQuestion, PictureWordQuizQuestion } from '../types/pictureMatch';
 import { CategoryFilter, HindiCharacter } from '../types/activity';
 import { ALL_HINDI_CHARACTERS, shuffleArray } from './hindiCharacters';
 
@@ -11,7 +11,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'अनार',
     meaning: 'Pomegranate',
     emoji: '🍎',
-    image: '/images/anar.png',
+    image: '/images/words/anar.svg',
     category: 'vowel',
     hint: 'अ से अनार',
   },
@@ -22,7 +22,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'आम',
     meaning: 'Mango',
     emoji: '🥭',
-    image: '/images/aam.png',
+    image: '/images/words/aam.svg',
     category: 'vowel',
     hint: 'आ से आम',
   },
@@ -33,7 +33,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'इमली',
     meaning: 'Tamarind',
     emoji: '🌿',
-    image: '/images/imli.png',
+    image: '/images/words/imli.svg',
     category: 'vowel',
     hint: 'इ से इमली',
   },
@@ -44,7 +44,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ईख',
     meaning: 'Sugarcane',
     emoji: '🎋',
-    image: '/images/eekh.png',
+    image: '/images/words/eekh.svg',
     category: 'vowel',
     hint: 'ई से ईख',
   },
@@ -55,7 +55,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'उल्लू',
     meaning: 'Owl',
     emoji: '🦉',
-    image: '/images/ullu.png',
+    image: '/images/words/ullu.svg',
     category: 'vowel',
     hint: 'उ से उल्लू',
   },
@@ -66,7 +66,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ऊन',
     meaning: 'Wool',
     emoji: '🧶',
-    image: '/images/oon.png',
+    image: '/images/words/oon.svg',
     category: 'vowel',
     hint: 'ऊ से ऊन',
   },
@@ -77,7 +77,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ऋषि',
     meaning: 'Sage',
     emoji: '🧘',
-    image: '/images/rishi.png',
+    image: '/images/words/rishi.svg',
     category: 'vowel',
     hint: 'ऋ से ऋषि',
   },
@@ -88,7 +88,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'एक',
     meaning: 'One',
     emoji: '1️⃣',
-    image: '/images/ek.png',
+    image: '/images/words/ek.svg',
     category: 'vowel',
     hint: 'ए से एक',
   },
@@ -99,7 +99,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ऐनक',
     meaning: 'Glasses',
     emoji: '👓',
-    image: '/images/ainak.png',
+    image: '/images/words/ainak.svg',
     category: 'vowel',
     hint: 'ऐ से ऐनक',
   },
@@ -110,7 +110,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ओखली',
     meaning: 'Mortar',
     emoji: '🥣',
-    image: '/images/okhli.png',
+    image: '/images/words/okhli.svg',
     category: 'vowel',
     hint: 'ओ से ओखली',
   },
@@ -121,7 +121,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'औरत',
     meaning: 'Woman',
     emoji: '👩',
-    image: '/images/aurat.png',
+    image: '/images/words/aurat.svg',
     category: 'vowel',
     hint: 'औ से औरत',
   },
@@ -132,7 +132,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'अंगूर',
     meaning: 'Grapes',
     emoji: '🍇',
-    image: '/images/angoor.png',
+    image: '/images/words/angoor.svg',
     category: 'vowel',
     hint: 'अं से अंगूर',
   },
@@ -145,7 +145,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'कमल',
     meaning: 'Lotus',
     emoji: '🪷',
-    image: '/images/kamal.png',
+    image: '/images/words/kamal.svg',
     category: 'consonant',
     hint: 'क से कमल',
   },
@@ -156,7 +156,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'खरगोश',
     meaning: 'Rabbit',
     emoji: '🐇',
-    image: '/images/khargosh.png',
+    image: '/images/words/khargosh.svg',
     category: 'consonant',
     hint: 'ख से खरगोश',
   },
@@ -167,7 +167,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'गमला',
     meaning: 'Pot',
     emoji: '🪴',
-    image: '/images/gamla.png',
+    image: '/images/words/gamla.svg',
     category: 'consonant',
     hint: 'ग से गमला',
   },
@@ -178,7 +178,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'घड़ी',
     meaning: 'Clock',
     emoji: '⏰',
-    image: '/images/ghadi.png',
+    image: '/images/words/ghadi.svg',
     category: 'consonant',
     hint: 'घ से घड़ी',
   },
@@ -189,7 +189,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'चम्मच',
     meaning: 'Spoon',
     emoji: '🥄',
-    image: '/images/chammach.png',
+    image: '/images/words/chammach.svg',
     category: 'consonant',
     hint: 'च से चम्मच',
   },
@@ -200,7 +200,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'छाता',
     meaning: 'Umbrella',
     emoji: '☂️',
-    image: '/images/chhata.png',
+    image: '/images/words/chhata.svg',
     category: 'consonant',
     hint: 'छ से छाता',
   },
@@ -211,7 +211,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'जहाज',
     meaning: 'Ship',
     emoji: '🚢',
-    image: '/images/jahaj.png',
+    image: '/images/words/jahaj.svg',
     category: 'consonant',
     hint: 'ज से जहाज',
   },
@@ -222,7 +222,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'झंडा',
     meaning: 'Flag',
     emoji: '🚩',
-    image: '/images/jhanda.png',
+    image: '/images/words/jhanda.svg',
     category: 'consonant',
     hint: 'झ से झंडा',
   },
@@ -233,7 +233,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'टमाटर',
     meaning: 'Tomato',
     emoji: '🍅',
-    image: '/images/tamatar.png',
+    image: '/images/words/tamatar.svg',
     category: 'consonant',
     hint: 'ट से टमाटर',
   },
@@ -244,7 +244,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ठप्पा',
     meaning: 'Stamp',
     emoji: '🏷️',
-    image: '/images/thappa.png',
+    image: '/images/words/thappa.svg',
     category: 'consonant',
     hint: 'ठ से ठप्पा',
   },
@@ -255,7 +255,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'डमरू',
     meaning: 'Drum',
     emoji: '🥁',
-    image: '/images/damru.png',
+    image: '/images/words/damru.svg',
     category: 'consonant',
     hint: 'ड से डमरू',
   },
@@ -266,7 +266,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'ढक्कन',
     meaning: 'Lid',
     emoji: '🫙',
-    image: '/images/dhakkan.png',
+    image: '/images/words/dhakkan.svg',
     category: 'consonant',
     hint: 'ढ से ढक्कन',
   },
@@ -277,7 +277,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'तरबूज',
     meaning: 'Watermelon',
     emoji: '🍉',
-    image: '/images/tarbooj.png',
+    image: '/images/words/tarbooj.svg',
     category: 'consonant',
     hint: 'त से तरबूज',
   },
@@ -288,7 +288,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'थाली',
     meaning: 'Plate',
     emoji: '🍽️',
-    image: '/images/thali.png',
+    image: '/images/words/thali.svg',
     category: 'consonant',
     hint: 'थ से थाली',
   },
@@ -299,7 +299,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'दरवाजा',
     meaning: 'Door',
     emoji: '🚪',
-    image: '/images/darwaja.png',
+    image: '/images/words/darwaja.svg',
     category: 'consonant',
     hint: 'द से दरवाजा',
   },
@@ -310,7 +310,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'धनुष',
     meaning: 'Bow',
     emoji: '🏹',
-    image: '/images/dhanush.png',
+    image: '/images/words/dhanush.svg',
     category: 'consonant',
     hint: 'ध से धनुष',
   },
@@ -321,7 +321,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'नल',
     meaning: 'Tap',
     emoji: '🚰',
-    image: '/images/nal.png',
+    image: '/images/words/nal.svg',
     category: 'consonant',
     hint: 'न से नल',
   },
@@ -332,7 +332,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'पतंग',
     meaning: 'Kite',
     emoji: '🪁',
-    image: '/images/patang.png',
+    image: '/images/words/patang.svg',
     category: 'consonant',
     hint: 'प से पतंग',
   },
@@ -343,7 +343,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'फल',
     meaning: 'Fruit',
     emoji: '🍎',
-    image: '/images/phal.png',
+    image: '/images/words/phal.svg',
     category: 'consonant',
     hint: 'फ से फल',
   },
@@ -354,7 +354,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'बत्तख',
     meaning: 'Duck',
     emoji: '🦆',
-    image: '/images/battakh.png',
+    image: '/images/words/battakh.svg',
     category: 'consonant',
     hint: 'ब से बत्तख',
   },
@@ -365,7 +365,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'भालू',
     meaning: 'Bear',
     emoji: '🐻',
-    image: '/images/bhalu.png',
+    image: '/images/words/bhalu.svg',
     category: 'consonant',
     hint: 'भ से भालू',
   },
@@ -376,7 +376,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'मछली',
     meaning: 'Fish',
     emoji: '🐟',
-    image: '/images/machhli.png',
+    image: '/images/words/machhli.svg',
     category: 'consonant',
     hint: 'म से मछली',
   },
@@ -387,7 +387,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'यज्ञ',
     meaning: 'Sacred fire',
     emoji: '🔥',
-    image: '/images/yagya.png',
+    image: '/images/words/yagya.svg',
     category: 'consonant',
     hint: 'य से यज्ञ',
   },
@@ -398,7 +398,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'रथ',
     meaning: 'Chariot',
     emoji: '🏎️',
-    image: '/images/rath.png',
+    image: '/images/words/rath.svg',
     category: 'consonant',
     hint: 'र से रथ',
   },
@@ -409,7 +409,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'लट्टू',
     meaning: 'Spinning Top',
     emoji: '🪀',
-    image: '/images/lattu.png',
+    image: '/images/words/lattu.svg',
     category: 'consonant',
     hint: 'ल से लट्टू',
   },
@@ -420,7 +420,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'वृक्ष',
     meaning: 'Tree',
     emoji: '🌳',
-    image: '/images/vriksh.png',
+    image: '/images/words/vriksh.svg',
     category: 'consonant',
     hint: 'व से वृक्ष',
   },
@@ -431,7 +431,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'शलजम',
     meaning: 'Turnip',
     emoji: '🪴',
-    image: '/images/shaljam.png',
+    image: '/images/words/shaljam.svg',
     category: 'consonant',
     hint: 'श से शलजम',
   },
@@ -442,7 +442,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'षट्कोण',
     meaning: 'Hexagon',
     emoji: '⬡',
-    image: '/images/shatkon.png',
+    image: '/images/words/shatkon.svg',
     category: 'consonant',
     hint: 'ष से षट्कोण',
   },
@@ -453,7 +453,7 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'सेब',
     meaning: 'Apple',
     emoji: '🍎',
-    image: '/images/seb.png',
+    image: '/images/words/seb.svg',
     category: 'consonant',
     hint: 'स से सेब',
   },
@@ -464,21 +464,41 @@ export const HINDI_PICTURE_WORDS: PictureWordItem[] = [
     word: 'हाथी',
     meaning: 'Elephant',
     emoji: '🐘',
-    image: '/images/hathi.png',
+    image: '/images/words/hathi.svg',
     category: 'consonant',
     hint: 'ह से हाथी',
   },
 ];
 
 /**
- * Filter picture-word items by category.
+ * Validates that a PictureWordItem has complete, non-empty metadata and a valid image path.
+ */
+export function validatePictureWordItem(item: PictureWordItem): boolean {
+  if (!item) return false;
+  if (!item.id || !item.word || !item.character || !item.emoji) return false;
+  if (!item.image || typeof item.image !== 'string' || !item.image.startsWith('/images/words/')) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Filter picture-word items by category, strictly including only validated entries.
  */
 export function getPictureWordsByCategory(filter: CategoryFilter = 'all'): PictureWordItem[] {
-  if (filter === 'all') {
-    return HINDI_PICTURE_WORDS;
+  let pool = HINDI_PICTURE_WORDS;
+  if (filter !== 'all') {
+    pool = pool.filter((item) => item.category === filter);
   }
-  return HINDI_PICTURE_WORDS.filter((item) => item.category === filter);
+  // Enforce validation so broken items never appear in playable pools
+  return pool.filter(validatePictureWordItem);
 }
+
+/**
+ * Alias for getPictureWordsByCategory for explicit clarity.
+ */
+export const getValidatedPictureWords = getPictureWordsByCategory;
+
 
 export interface PictureMatchRoundOptions {
   count?: number;
@@ -487,10 +507,10 @@ export interface PictureMatchRoundOptions {
 }
 
 /**
- * Generates a full round for Picture-Word matching.
+ * Generates a full round for Picture-Word matching (Task 2).
  * - Targets a character & its corresponding word.
  * - Selects 2 distractor picture words from the same category where possible.
- * - Guarantees 0 duplicate options.
+ * - Guarantees 0 duplicate options and validated image assets.
  */
 export function generatePictureMatchRound(options: PictureMatchRoundOptions = {}): PictureMatchQuestion[] {
   const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
@@ -520,7 +540,7 @@ export function generatePictureMatchRound(options: PictureMatchRoundOptions = {}
     if (sameCategoryCandidates.length >= optionsCount - 1) {
       distractors = shuffleArray(sameCategoryCandidates).slice(0, optionsCount - 1);
     } else {
-      const fallbackPool = HINDI_PICTURE_WORDS.filter((item) => item.id !== targetWord.id);
+      const fallbackPool = HINDI_PICTURE_WORDS.filter((item) => item.id !== targetWord.id && validatePictureWordItem(item));
       distractors = shuffleArray(fallbackPool).slice(0, optionsCount - 1);
     }
 
@@ -532,6 +552,46 @@ export function generatePictureMatchRound(options: PictureMatchRoundOptions = {}
       targetWord,
       options: roundOptions,
       correctAnswerId: targetWord.id,
+    };
+  });
+}
+
+/**
+ * Generates a full round for Picture-to-Word Recognition Quiz (Task 5).
+ * - Target is an illustrated picture prompt.
+ * - Options are 3 distinct Hindi word choices (1 correct + 2 distractors).
+ * - Guarantees 0 duplicate options, randomized correct answer position, and validated image assets.
+ */
+export function generatePictureWordQuizRound(options: PictureMatchRoundOptions = {}): PictureWordQuizQuestion[] {
+  const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
+
+  const candidatePool = getPictureWordsByCategory(categoryFilter);
+  if (candidatePool.length === 0) {
+    return [];
+  }
+
+  const shuffledTargets = shuffleArray(candidatePool);
+  const selectedTargets = shuffledTargets.slice(0, Math.min(count, shuffledTargets.length));
+
+  return selectedTargets.map((targetItem, idx) => {
+    // Pick distractors from matching category candidates
+    const sameCategoryCandidates = candidatePool.filter((item) => item.id !== targetItem.id);
+    let distractors: PictureWordItem[] = [];
+
+    if (sameCategoryCandidates.length >= optionsCount - 1) {
+      distractors = shuffleArray(sameCategoryCandidates).slice(0, optionsCount - 1);
+    } else {
+      const fallbackPool = HINDI_PICTURE_WORDS.filter((item) => item.id !== targetItem.id && validatePictureWordItem(item));
+      distractors = shuffleArray(fallbackPool).slice(0, optionsCount - 1);
+    }
+
+    const roundOptions = shuffleArray([targetItem, ...distractors]);
+
+    return {
+      id: `pwq_q_${idx + 1}_${targetItem.id}`,
+      targetItem,
+      options: roundOptions,
+      correctAnswerId: targetItem.id,
     };
   });
 }

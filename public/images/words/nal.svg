@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Water Tap (नल) -->
+    <!-- Handle -->
+    <rect x="42" y="12" width="20" height="6" rx="2" fill="#dc2626" />
+    <rect x="50" y="18" width="4" height="10" fill="#94a3b8" />
+    <!-- Pipe & Spout -->
+    <path d="M 20 40 L 54 40 C 62 40 66 44 66 52 L 66 65" stroke="#64748b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <path d="M 20 40 L 54 40 C 62 40 66 44 66 52 L 66 65" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <!-- Water Drop -->
+    <path d="M 66 74 C 62 82 70 82 66 74 Z" fill="#38bdf8" />
+    <circle cx="66" cy="84" r="5" fill="#38bdf8" />
+  </svg>

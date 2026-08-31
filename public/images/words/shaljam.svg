@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Turnip (शलजम) -->
+    <!-- Leaves -->
+    <path d="M 50 30 C 40 10 25 15 28 5 C 38 10 46 22 50 30 Z" fill="#16a34a" />
+    <path d="M 50 30 C 60 10 75 15 72 5 C 62 10 54 22 50 30 Z" fill="#15803d" />
+    <path d="M 50 30 L 50 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
+    <!-- Root Body -->
+    <circle cx="50" cy="58" r="30" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" />
+    <!-- Purple Top half -->
+    <path d="M 22 50 C 24 32 76 32 78 50 C 65 54 35 54 22 50 Z" fill="#9333ea" />
+    <!-- Root Tip Tail -->
+    <path d="M 50 88 Q 50 96 54 98" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" fill="none" />
+  </svg>

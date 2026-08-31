@@ -33,3 +33,26 @@ export interface PictureMatchState {
   categoryFilter: CategoryFilter;
   stats: ActivityStats;
 }
+
+// --- Task 5: Picture-to-Word Recognition Quiz Types ---
+
+export interface PictureWordQuizQuestion {
+  id: string;
+  targetItem: PictureWordItem;   // The illustrated picture/emoji prompt
+  options: PictureWordItem[];    // 3 Hindi word choices (1 correct + 2 distractors)
+  correctAnswerId: string;
+}
+
+export interface PictureWordQuizState {
+  questions: PictureWordQuizQuestion[];
+  currentIndex: number;
+  currentQuestion: PictureWordQuizQuestion | null;
+  selectedOptionId: string | null;
+  wrongOptionIds: string[];
+  feedback: FeedbackType;
+  attempts: number;
+  isSolved: boolean;
+  isRoundComplete: boolean;
+  categoryFilter: CategoryFilter;
+  stats: ActivityStats;
+}

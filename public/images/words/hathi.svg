@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Elephant (हाथी) -->
+    <!-- Body -->
+    <ellipse cx="58" cy="60" rx="30" ry="24" fill="#94a3b8" />
+    <!-- Legs -->
+    <rect x="42" y="70" width="10" height="22" rx="3" fill="#64748b" />
+    <rect x="64" y="70" width="10" height="22" rx="3" fill="#64748b" />
+    <!-- Head -->
+    <circle cx="34" cy="48" r="18" fill="#94a3b8" />
+    <!-- Trunk (curved up) -->
+    <path d="M 24 54 C 18 60 14 74 20 80 C 26 84 30 76 26 70" stroke="#94a3b8" stroke-width="7" stroke-linecap="round" fill="none" />
+    <!-- Tusk -->
+    <path d="M 28 60 Q 20 65 24 72" stroke="#fef08a" stroke-width="3" stroke-linecap="round" fill="none" />
+    <!-- Big Ear -->
+    <ellipse cx="44" cy="46" rx="10" ry="14" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2" />
+    <!-- Eye -->
+    <circle cx="30" cy="42" r="2.5" fill="#1e293b" />
+  </svg>

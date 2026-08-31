@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-import { Volume2, VolumeX, Star, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Star, Sparkles, Home } from 'lucide-react';
 import { audioService } from '../services/audioService';
 import { CategoryFilter } from '../types/activity';
 
 interface HeaderProps {
   score: number;
   streak: number;
-  categoryFilter: CategoryFilter;
-  onSelectCategory: (category: CategoryFilter) => void;
+  categoryFilter?: CategoryFilter;
+  onSelectCategory?: (category: CategoryFilter) => void;
+  title?: string;
+  subtitle?: string;
+  onBackToLibrary?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   score,
   streak,
-  categoryFilter,
+  categoryFilter = 'all',
   onSelectCategory,
+  title = 'HindiPlay',
+  subtitle = 'हिंदी बाल मंच',
+  onBackToLibrary,
 }) => {
   const [isMuted, setIsMuted] = useState<boolean>(() => audioService.getIsMuted());
 
@@ -28,25 +34,33 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const categories: { id: CategoryFilter; label: string; emoji: string }[] = [
-    { id: 'all', label: 'सभी अक्षर', emoji: '🌟' },
+    { id: 'all', label: 'सभी', emoji: '🌟' },
     { id: 'vowel', label: 'स्वर', emoji: '🅰️' },
     { id: 'consonant', label: 'व्यंजन', emoji: '🅱️' },
   ];
 
   return (
-    <header className="w-full max-w-4xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
-      {/* Brand & Activity Title */}
+    <header className="w-full max-w-5xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+      {/* Brand / Title & Home Button */}
       <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-toy-yellow to-toy-orange flex items-center justify-center shadow-toy-sm text-2xl transform -rotate-3 hover:rotate-0 transition-transform">
-            🎨
-          </div>
+        <div className="flex items-center gap-2.5">
+          {onBackToLibrary && (
+            <button
+              onClick={onBackToLibrary}
+              className="flex items-center gap-1.5 bg-white border-2 border-slate-200 text-slate-700 px-3 py-2 rounded-2xl font-black text-xs md:text-sm shadow-toy-sm hover:border-toy-orange hover:text-toy-orange-dark active:scale-95 transition-all"
+              title="गतिविधि सूची पर वापस जाएँ"
+            >
+              <Home className="w-4 h-4 text-toy-orange" />
+              <span className="hidden xs:inline">गतिविधियाँ</span>
+            </button>
+          )}
+
           <div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
-              अक्षर पहचानो
+            <h1 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+              {title}
             </h1>
-            <p className="text-xs md:text-sm font-semibold text-toy-orange-dark flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 inline" /> हिंदी वर्णमाला सीखो
+            <p className="text-xs font-bold text-toy-orange-dark flex items-center gap-1">
+              <Sparkles className="w-3 h-3 inline" /> {subtitle}
             </p>
           </div>
         </div>
@@ -71,26 +85,28 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center/Sub: Category Filter Pills */}
-      <nav aria-label="अक्षर श्रेणी" className="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-        {categories.map((cat) => {
-          const isActive = categoryFilter === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => onSelectCategory(cat.id)}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs md:text-sm transition-all duration-200 flex items-center gap-1.5 ${
-                isActive
-                  ? 'bg-white text-toy-blue-dark shadow-toy-sm border border-toy-blue scale-105'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <span>{cat.emoji}</span>
-              <span>{cat.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+      {/* Center/Sub: Category Filter Pills (if onSelectCategory provided) */}
+      {onSelectCategory && (
+        <nav aria-label="अक्षर श्रेणी" className="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          {categories.map((cat) => {
+            const isActive = categoryFilter === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => onSelectCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-xl font-bold text-xs md:text-sm transition-all duration-200 flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-white text-toy-blue-dark shadow-toy-sm border border-toy-blue scale-105'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <span>{cat.emoji}</span>
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       {/* Desktop Controls: Score & Sound Toggle */}
       <div className="hidden sm:flex items-center gap-3">

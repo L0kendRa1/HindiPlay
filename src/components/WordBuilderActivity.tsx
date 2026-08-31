@@ -10,7 +10,11 @@ import { WordResultCard } from './WordResultCard';
 import { WordLengthSelector } from './WordLengthSelector';
 import { ArrowRight, Sparkles, Compass, Search, SlidersHorizontal } from 'lucide-react';
 
-export const WordBuilderActivity: React.FC = () => {
+interface WordBuilderActivityProps {
+  onBackToLibrary?: () => void;
+}
+
+export const WordBuilderActivity: React.FC<WordBuilderActivityProps> = ({ onBackToLibrary }) => {
   const {
     mode,
     setMode,
@@ -145,10 +149,20 @@ export const WordBuilderActivity: React.FC = () => {
   if (isRoundComplete && mode === 'guided') {
     return (
       <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
-        <Header score={stats.score} streak={stats.streak} categoryFilter="all" onSelectCategory={() => {}} />
+        <Header
+          score={stats.score}
+          streak={stats.streak}
+          title="शब्द बनाओ"
+          subtitle="अक्षर जोड़कर शब्द बनाओ"
+          onBackToLibrary={onBackToLibrary}
+        />
         <main className="flex-1 flex items-center justify-center py-6">
           <div className="flex flex-col items-center">
-            <RoundSummary stats={stats} onRestart={restartQuiz} />
+            <RoundSummary
+              stats={stats}
+              onRestart={restartQuiz}
+              onBackToLibrary={onBackToLibrary}
+            />
             <button
               onClick={returnToDifficultySelector}
               className="mt-4 flex items-center gap-2 text-sm font-extrabold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-2xl shadow-xs hover:bg-slate-50 transition-all"
@@ -169,7 +183,13 @@ export const WordBuilderActivity: React.FC = () => {
   if (selectedUnitCount === null) {
     return (
       <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
-        <Header score={stats.score} streak={stats.streak} categoryFilter="all" onSelectCategory={() => {}} />
+        <Header
+          score={stats.score}
+          streak={stats.streak}
+          title="शब्द बनाओ"
+          subtitle="अक्षर जोड़कर शब्द बनाओ"
+          onBackToLibrary={onBackToLibrary}
+        />
         <main className="flex-1 flex items-center justify-center py-6">
           <WordLengthSelector
             options={availableWordLengths}
@@ -186,7 +206,13 @@ export const WordBuilderActivity: React.FC = () => {
   return (
     <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
       {/* Top Header */}
-      <Header score={stats.score} streak={stats.streak} categoryFilter="all" onSelectCategory={() => {}} />
+      <Header
+        score={stats.score}
+        streak={stats.streak}
+        title="शब्द बनाओ"
+        subtitle="अक्षर जोड़कर शब्द बनाओ"
+        onBackToLibrary={onBackToLibrary}
+      />
 
       {/* Main Container */}
       <main className="flex-1 flex flex-col items-center justify-start max-w-4xl w-full mx-auto px-4 py-3">

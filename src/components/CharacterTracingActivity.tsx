@@ -8,7 +8,11 @@ import { TracingCanvas } from './TracingCanvas';
 import { StrokeGuideBar } from './StrokeGuideBar';
 import { ArrowRight, RotateCcw, Volume2 } from 'lucide-react';
 
-export const CharacterTracingActivity: React.FC = () => {
+interface CharacterTracingActivityProps {
+  onBackToLibrary?: () => void;
+}
+
+export const CharacterTracingActivity: React.FC<CharacterTracingActivityProps> = ({ onBackToLibrary }) => {
   const {
     characters,
     currentIndex,
@@ -89,9 +93,19 @@ export const CharacterTracingActivity: React.FC = () => {
   if (isRoundComplete) {
     return (
       <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
-        <Header score={stats.score} streak={stats.streak} categoryFilter="all" onSelectCategory={() => {}} />
+        <Header
+          score={stats.score}
+          streak={stats.streak}
+          title="अक्षर लिखो"
+          subtitle="स्ट्रोक देखकर अक्षर लिखो"
+          onBackToLibrary={onBackToLibrary}
+        />
         <main className="flex-1 flex items-center justify-center py-6">
-          <RoundSummary stats={stats} onRestart={restartTracing} />
+          <RoundSummary
+            stats={stats}
+            onRestart={restartTracing}
+            onBackToLibrary={onBackToLibrary}
+          />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">
           हिंदी बाल मंच • Toy Theater Inspired Prototype
@@ -103,7 +117,13 @@ export const CharacterTracingActivity: React.FC = () => {
   return (
     <div className="min-h-screen bg-toy-canvas flex flex-col justify-between">
       {/* Top Header */}
-      <Header score={stats.score} streak={stats.streak} categoryFilter="all" onSelectCategory={() => {}} />
+      <Header
+        score={stats.score}
+        streak={stats.streak}
+        title="अक्षर लिखो"
+        subtitle="स्ट्रोक देखकर अक्षर लिखो"
+        onBackToLibrary={onBackToLibrary}
+      />
 
       {/* Main Tracing View */}
       <main className="flex-1 flex flex-col items-center justify-start max-w-4xl w-full mx-auto px-4 py-2">

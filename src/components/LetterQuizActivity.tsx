@@ -8,7 +8,11 @@ import { FeedbackBanner } from './FeedbackBanner';
 import { RoundSummary } from './RoundSummary';
 import { ArrowRight } from 'lucide-react';
 
-export const LetterQuizActivity: React.FC = () => {
+interface LetterQuizActivityProps {
+  onBackToLibrary?: () => void;
+}
+
+export const LetterQuizActivity: React.FC<LetterQuizActivityProps> = ({ onBackToLibrary }) => {
   const {
     currentQuestion,
     currentIndex,
@@ -99,12 +103,16 @@ export const LetterQuizActivity: React.FC = () => {
           streak={stats.streak}
           categoryFilter={categoryFilter}
           onSelectCategory={changeCategoryFilter}
+          title="अक्षर पहचानो"
+          subtitle="ध्वनि सुनकर सही अक्षर चुनो"
+          onBackToLibrary={onBackToLibrary}
         />
         <main className="flex-1 flex items-center justify-center py-6">
           <RoundSummary
             stats={stats}
             categoryFilter={categoryFilter}
             onRestart={() => restartQuiz()}
+            onBackToLibrary={onBackToLibrary}
           />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">
@@ -126,6 +134,9 @@ export const LetterQuizActivity: React.FC = () => {
         streak={stats.streak}
         categoryFilter={categoryFilter}
         onSelectCategory={changeCategoryFilter}
+        title="अक्षर पहचानो"
+        subtitle="ध्वनि सुनकर सही अक्षर चुनो"
+        onBackToLibrary={onBackToLibrary}
       />
 
       {/* Main Play Area */}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Door (दरवाजा) -->
+    <!-- Frame -->
+    <rect x="22" y="12" width="56" height="80" rx="4" fill="#78350f" />
+    <!-- Door Panel -->
+    <rect x="28" y="18" width="44" height="74" rx="2" fill="#b45309" />
+    <!-- Inset Panels -->
+    <rect x="34" y="24" width="32" height="28" rx="2" fill="#d97706" />
+    <rect x="34" y="58" width="32" height="28" rx="2" fill="#d97706" />
+    <!-- Handle -->
+    <circle cx="68" cy="56" r="4" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5" />
+  </svg>

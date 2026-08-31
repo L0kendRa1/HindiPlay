@@ -1,15 +1,21 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Trophy, Star, RotateCcw } from 'lucide-react';
+import { Trophy, Star, RotateCcw, Home } from 'lucide-react';
 import { ActivityStats, CategoryFilter } from '../types/activity';
 
 interface RoundSummaryProps {
   stats: ActivityStats;
   categoryFilter?: CategoryFilter;
   onRestart: () => void;
+  onBackToLibrary?: () => void;
 }
 
-export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, categoryFilter = 'all', onRestart }) => {
+export const RoundSummary: React.FC<RoundSummaryProps> = ({
+  stats,
+  categoryFilter = 'all',
+  onRestart,
+  onBackToLibrary,
+}) => {
   useEffect(() => {
     // Launch playful confetti burst
     const count = 200;
@@ -62,14 +68,14 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, categoryFilte
       ? 'स्वरों'
       : categoryFilter === 'consonant'
       ? 'व्यंजनों'
-      : 'अक्षरों';
+      : 'प्रश्नों';
 
-  let message = `आपने सभी ${categoryName} का अभ्यास पूरा कर लिया!`;
+  let message = `आपने अभ्यास पूरा कर लिया!`;
 
   if (percentage >= 80) {
     starsEarned = 3;
     title = 'शानदार! अद्भुत प्रदर्शन! 🏆';
-    message = `आपने लगभग सभी ${categoryName} पहली बार में सही पहचाने!`;
+    message = `आपने लगभग सभी ${categoryName} पहली बार में सही किए!`;
   } else if (percentage >= 50) {
     starsEarned = 2;
     title = 'शाबाश! बहुत बढ़िया! ⭐';
@@ -77,19 +83,19 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, categoryFilte
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto px-4 py-8 animate-pop-in">
+    <div className="w-full max-w-xl mx-auto px-4 py-8 animate-pop-in font-hindi">
       <div className="bg-white rounded-3xl border-4 border-toy-yellow p-8 text-center shadow-toy-xl relative overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-toy-yellow/20 rounded-full blur-xl pointer-events-none" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-toy-sky/20 rounded-full blur-xl pointer-events-none" />
 
         {/* Trophy / Badge Icon */}
-        <div className="inline-flex p-4 rounded-3xl bg-gradient-to-br from-toy-yellow to-toy-orange text-white shadow-toy-md mb-4 transform hover:scale-110 transition-transform">
+        <div className="inline-flex p-4 rounded-3xl bg-gradient-to-br from-toy-yellow to-toy-orange text-white shadow-toy-md mb-4 transform hover:scale-110 transition-transform select-none">
           <Trophy className="w-16 h-16" />
         </div>
 
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 mb-2">
+        <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-2">
           {title}
         </h2>
         <p className="text-slate-600 font-bold text-base md:text-lg mb-6">
@@ -139,14 +145,26 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({ stats, categoryFilte
           </div>
         </div>
 
-        {/* Play Again Button */}
-        <button
-          onClick={onRestart}
-          className="w-full max-w-sm mx-auto flex items-center justify-center gap-3 bg-gradient-to-b from-toy-mint to-toy-mint-dark text-white text-xl md:text-2xl font-extrabold px-8 py-4 rounded-3xl border-4 border-emerald-600 shadow-toy-lg hover:shadow-toy-xl hover:-translate-y-1 active:translate-y-1 active:shadow-toy-sm transition-all"
-        >
-          <RotateCcw className="w-6 h-6 stroke-[3]" />
-          <span>फिर से खेलें</span>
-        </button>
+        {/* Action Buttons: Play Again & Return to Library */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md mx-auto">
+          <button
+            onClick={onRestart}
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-b from-toy-mint to-toy-mint-dark text-white text-lg md:text-xl font-extrabold px-6 py-3.5 rounded-2xl border-4 border-emerald-600 shadow-toy-md hover:shadow-toy-lg hover:-translate-y-0.5 active:translate-y-0.5 transition-all"
+          >
+            <RotateCcw className="w-5 h-5 stroke-[3]" />
+            <span>फिर से खेलें</span>
+          </button>
+
+          {onBackToLibrary && (
+            <button
+              onClick={onBackToLibrary}
+              className="w-full flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 hover:text-slate-900 text-lg md:text-xl font-extrabold px-6 py-3.5 rounded-2xl shadow-toy-sm hover:bg-slate-50 active:scale-95 transition-all"
+            >
+              <Home className="w-5 h-5 text-toy-orange" />
+              <span>गतिविधियाँ</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Sacred Fire / Yagya (यज्ञ) -->
+    <!-- Havan Kund (Base) -->
+    <polygon points="20,68 80,68 68,90 32,90" fill="#b45309" stroke="#78350f" stroke-width="3" />
+    <polygon points="26,68 74,68 64,84 36,84" fill="#ea580c" />
+    <!-- Wood Logs -->
+    <line x1="32" y1="66" x2="68" y2="66" stroke="#451a03" stroke-width="6" stroke-linecap="round" />
+    <!-- Holy Flames -->
+    <path d="M 50 20 C 35 35 38 55 50 64 C 62 55 65 35 50 20 Z" fill="#ef4444" />
+    <path d="M 50 32 C 42 42 44 54 50 60 C 56 54 58 42 50 32 Z" fill="#f59e0b" />
+    <path d="M 50 42 C 46 48 46 54 50 58 C 54 54 54 48 50 42 Z" fill="#fef08a" />
+  </svg>

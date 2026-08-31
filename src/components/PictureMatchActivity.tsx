@@ -9,10 +9,10 @@ import { RoundSummary } from './RoundSummary';
 import { ArrowRight } from 'lucide-react';
 
 interface PictureMatchActivityProps {
-  onBackToMenu?: () => void;
+  onBackToLibrary?: () => void;
 }
 
-export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = () => {
+export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = ({ onBackToLibrary }) => {
   const {
     currentQuestion,
     currentIndex,
@@ -103,12 +103,16 @@ export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = () => {
           streak={stats.streak}
           categoryFilter={categoryFilter}
           onSelectCategory={changeCategoryFilter}
+          title="अक्षर और चित्र मिलाओ"
+          subtitle="अक्षर को सही चित्र से मिलाओ"
+          onBackToLibrary={onBackToLibrary}
         />
         <main className="flex-1 flex items-center justify-center py-6">
           <RoundSummary
             stats={stats}
             categoryFilter={categoryFilter}
             onRestart={() => restartQuiz()}
+            onBackToLibrary={onBackToLibrary}
           />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">
@@ -133,6 +137,9 @@ export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = () => {
         streak={stats.streak}
         categoryFilter={categoryFilter}
         onSelectCategory={changeCategoryFilter}
+        title="अक्षर और चित्र मिलाओ"
+        subtitle="अक्षर को सही चित्र से मिलाओ"
+        onBackToLibrary={onBackToLibrary}
       />
 
       {/* Main Play Area */}
