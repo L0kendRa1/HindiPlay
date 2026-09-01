@@ -17,7 +17,14 @@ export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
 
 export interface ActivityMeta {
   id: string;
-  activityCode: 'letter-quiz' | 'picture-match' | 'word-builder' | 'tracing' | 'picture-word-quiz' | 'matra-lab';
+  activityCode:
+    | 'letter-quiz'
+    | 'picture-match'
+    | 'word-builder'
+    | 'tracing'
+    | 'picture-word-quiz'
+    | 'matra-lab'
+    | 'word-picture-quiz';
   title: string;
   subtitle: string;
   description: string;
@@ -66,7 +73,7 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     objective: 'अक्षर से शब्द व चित्र संबंध (Letter to vocabulary association)',
     categories: ['letters', 'pictures'],
     categoryDisplayLabel: 'चित्र मिलान',
-    icon: '🥭',
+    icon: '🖼️',
     theme: {
       bg: 'bg-sky-50/70',
       border: 'border-toy-sky',
@@ -146,7 +153,7 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     objective: 'चित्र से शब्द पठन (Visual object recognition to Hindi word reading)',
     categories: ['words', 'pictures'],
     categoryDisplayLabel: 'चित्र-शब्द पठन',
-    icon: '🖼️',
+    icon: '🎨',
     theme: {
       bg: 'bg-orange-50/70',
       border: 'border-toy-orange',
@@ -156,6 +163,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 1,
     tags: ['चित्र', 'शब्द', 'पहचान', 'पठन'],
+  },
+  {
+    id: 'act_word_picture_quiz',
+    activityCode: 'word-picture-quiz',
+    title: 'शब्द देखकर चित्र चुनो',
+    subtitle: 'हिन्दी शब्द पढ़कर सही चित्र चुनो',
+    description: 'हिन्दी शब्द पढ़कर 3 चित्रों में से सही चित्र चुनें और शब्द-अर्थ का संबंध समझें।',
+    objective: 'शब्द से चित्र व अर्थ संबंध (Hindi word reading to visual meaning association)',
+    categories: ['words', 'pictures'],
+    categoryDisplayLabel: 'शब्द-चित्र पहचान',
+    icon: '🥭',
+    theme: {
+      bg: 'bg-indigo-50/70',
+      border: 'border-toy-purple',
+      badgeBg: 'bg-toy-purple',
+      badgeText: 'text-white',
+      buttonGradient: 'from-toy-purple to-indigo-600',
+    },
+    difficultyStars: 2,
+    tags: ['शब्द', 'चित्र', 'पठन', 'पहचान', 'अर्थ'],
   },
 ];
 

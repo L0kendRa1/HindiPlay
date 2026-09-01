@@ -8,6 +8,7 @@ import { WordBuilderActivity } from './components/WordBuilderActivity';
 import { CharacterTracingActivity } from './components/CharacterTracingActivity';
 import { PictureWordQuizActivity } from './components/PictureWordQuizActivity';
 import { MatraLabActivity } from './components/MatraLabActivity';
+import { WordPictureQuizActivity } from './components/WordPictureQuizActivity';
 
 import { audioService } from './services/audioService';
 
@@ -87,6 +88,9 @@ export function App() {
           )}
           {activeActivity.activityCode === 'matra-lab' && (
             <MatraLabActivity onBackToLibrary={handleBackToLibrary} />
+          )}
+          {activeActivity.activityCode === 'word-picture-quiz' && (
+            <WordPictureQuizActivity onBackToLibrary={handleBackToLibrary} />
           )}
         </div>
       )}

@@ -1,4 +1,9 @@
-import { PictureWordItem, PictureMatchQuestion, PictureWordQuizQuestion } from '../types/pictureMatch';
+import {
+  PictureWordItem,
+  PictureMatchQuestion,
+  PictureWordQuizQuestion,
+  WordPictureQuizQuestion,
+} from '../types/pictureMatch';
 import { CategoryFilter, HindiCharacter } from '../types/activity';
 import { ALL_HINDI_CHARACTERS, shuffleArray } from './hindiCharacters';
 
@@ -595,3 +600,44 @@ export function generatePictureWordQuizRound(options: PictureMatchRoundOptions =
     };
   });
 }
+
+/**
+ * Generates a full round for Word-to-Picture Recognition Quiz (Task 7).
+ * - Target is a Hindi Word prompt (e.g. 'आम', 'कमल', 'तरबूज').
+ * - Options are 3 distinct illustrated Picture choices (1 correct + 2 distractors).
+ * - Guarantees 0 duplicate options, randomized correct answer position, and validated image assets.
+ */
+export function generateWordPictureQuizRound(options: PictureMatchRoundOptions = {}): WordPictureQuizQuestion[] {
+  const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
+
+  const candidatePool = getPictureWordsByCategory(categoryFilter);
+  if (candidatePool.length === 0) {
+    return [];
+  }
+
+  const shuffledTargets = shuffleArray(candidatePool);
+  const selectedTargets = shuffledTargets.slice(0, Math.min(count, shuffledTargets.length));
+
+  return selectedTargets.map((targetItem, idx) => {
+    // Pick distractors from matching category candidates
+    const sameCategoryCandidates = candidatePool.filter((item) => item.id !== targetItem.id);
+    let distractors: PictureWordItem[] = [];
+
+    if (sameCategoryCandidates.length >= optionsCount - 1) {
+      distractors = shuffleArray(sameCategoryCandidates).slice(0, optionsCount - 1);
+    } else {
+      const fallbackPool = HINDI_PICTURE_WORDS.filter((item) => item.id !== targetItem.id && validatePictureWordItem(item));
+      distractors = shuffleArray(fallbackPool).slice(0, optionsCount - 1);
+    }
+
+    const roundOptions = shuffleArray([targetItem, ...distractors]);
+
+    return {
+      id: `wpq_q_${idx + 1}_${targetItem.id}`,
+      targetItem,
+      options: roundOptions,
+      correctAnswerId: targetItem.id,
+    };
+  });
+}
+

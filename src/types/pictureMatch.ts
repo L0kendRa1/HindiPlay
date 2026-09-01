@@ -56,3 +56,27 @@ export interface PictureWordQuizState {
   categoryFilter: CategoryFilter;
   stats: ActivityStats;
 }
+
+// --- Task 7: Word-to-Picture Recognition Quiz Types ---
+
+export interface WordPictureQuizQuestion {
+  id: string;
+  targetItem: PictureWordItem;   // The Hindi word prompt (e.g. word: 'आम')
+  options: PictureWordItem[];    // 3 Picture choices (1 correct + 2 distractors)
+  correctAnswerId: string;
+}
+
+export interface WordPictureQuizState {
+  questions: WordPictureQuizQuestion[];
+  currentIndex: number;
+  currentQuestion: WordPictureQuizQuestion | null;
+  selectedOptionId: string | null;
+  wrongOptionIds: string[];
+  feedback: FeedbackType;
+  attempts: number;
+  isSolved: boolean;
+  isRoundComplete: boolean;
+  categoryFilter: CategoryFilter;
+  stats: ActivityStats;
+}
+
