@@ -22,14 +22,14 @@ HindiPlay uses a structured **Educational Activity Library** flow:
                    [ शुरू करें ]
                           ↓
                Active Gameplay Screen
-         (Tasks 1, 2, 3, 4, 5, 6, 7, or 8)
+         (Tasks 1, 2, 3, 4, 5, 6, 7, 8, or 9)
                           ↓
              [ साफ़ करें ] [ गतिविधियाँ ]
 ```
 
 ---
 
-## 🎮 Registered Activities (8 Total)
+## 🎮 Registered Activities (9 Total)
 
 ### 1. **"अक्षर पहचानो" (Letter Recognition)**
 - **Categories**: `अक्षर (Letters)`
@@ -71,7 +71,15 @@ HindiPlay uses a structured **Educational Activity Library** flow:
   - **आसान (Easy)**: 4 pairs (8 cards, 2×4 grid)
   - **मध्यम (Medium)**: 6 pairs (12 cards, 3×4 grid)
   - **कठिन (Hard)**: 8 pairs (16 cards, 4×4 grid)
-- **Features**: 3D flip card animations, atomic board lock against rapid clicks, pronunciation on match, moves & score tracking, and celebratory completion modal.
+
+### 9. **"वाक्य बनाओ" (Hindi Sentence Builder)**
+- **Categories**: `शब्द (Words)`
+- **Goal**: Understand Hindi word order (Subject-Object-Verb) and construct simple, meaningful Hindi sentences by arranging shuffled Devanagari word cards into the correct sequence.
+- **Difficulty Levels**:
+  - **आसान (Easy)**: 3–4 word sentences (`यह आम है।`, `राम खेलता है।`)
+  - **मध्यम (Medium)**: 4–5 word sentences (`राम स्कूल जाता है।`, `सीमा पानी पीती है।`)
+  - **कठिन (Hard)**: 5–7 word sentences (`राम रोज स्कूल जाता है।`, `बच्चे मैदान में खेल रहे हैं।`)
+- **Features**: Child-friendly tap-to-place / tap-to-undo interaction, hints, instant sequence checking, whole-sentence speech audio, score & streak tracking, and celebratory completion screen.
 
 ---
 
@@ -87,14 +95,15 @@ hindi/
 ├── src/
 │   ├── App.tsx                  # Root state machine (Library -> Preview -> Gameplay)
 │   ├── data/
-│   │   ├── activityRegistry.ts  # Centralized Activity Registry (8 activities & 6 categories)
+│   │   ├── activityRegistry.ts  # Centralized Activity Registry (9 activities & 6 categories)
 │   │   ├── vowels.ts            # Vowel dataset (13 Devanagari vowels)
 │   │   ├── consonants.ts        # Consonant dataset (33 Devanagari consonants)
 │   │   ├── hindiCharacters.ts   # Master character collection & round generator
 │   │   ├── pictureWords.ts      # 42-item vocabulary dataset & validation engine
 │   │   ├── wordBuilder.ts       # WordBuilder dictionary (2, 3, 4-unit words)
 │   │   ├── characterStrokes.ts  # Normalized stroke dataset for representative characters
-│   │   └── matras.ts            # 9 Devanagari matras & starter consonants
+│   │   ├── matras.ts            # 9 Devanagari matras & starter consonants
+│   │   └── sentences.ts         # Curated Hindi sentence dataset across 3 difficulties (Task 9)
 │   ├── services/
 │   │   ├── audioService.ts      # SpeechSynthesis (hi-IN) + Web Audio API synthesizer
 │   │   ├── strokeEvaluation.ts  # Resampling, Euclidean metrics, and forgiving evaluator
@@ -103,7 +112,8 @@ hindi/
 │   │   ├── activity.ts          # Core platform types
 │   │   ├── pictureMatch.ts      # Picture/word quiz types (Tasks 2, 5, 7)
 │   │   ├── wordBuilder.ts       # Devanagari unit & dictionary types (Task 3)
-│   │   └── memoryGame.ts        # Memory game types & difficulty configurations (Task 8)
+│   │   ├── memoryGame.ts        # Memory game types & difficulty configurations (Task 8)
+│   │   └── sentenceBuilder.ts   # Sentence builder types & difficulty configurations (Task 9)
 │   ├── hooks/
 │   │   ├── useLetterQuiz.ts     # Activity 1 state & game loop
 │   │   ├── usePictureMatch.ts   # Activity 2 state & game loop
@@ -112,7 +122,8 @@ hindi/
 │   │   ├── usePictureWordQuiz.ts # Activity 5 state & picture-to-word loop
 │   │   ├── useMatraLab.ts       # Activity 6 state & discovery sandbox
 │   │   ├── useWordPictureQuiz.ts# Activity 7 state & word-to-picture loop
-│   │   └── useMemoryGame.ts     # Activity 8 state & flip card state machine
+│   │   ├── useMemoryGame.ts     # Activity 8 state & flip card state machine
+│   │   └── useSentenceBuilder.ts# Activity 9 state & sentence construction loop
 │   └── components/
 │       ├── ActivityLibrary.tsx      # Activity Library Home with Categories & Search
 │       ├── ActivityCard.tsx         # Large 3D Tactile Activity Card
@@ -141,6 +152,10 @@ hindi/
 │       ├── MemoryCard.tsx           # 3D tactile flip card (Activity 8)
 │       ├── MemoryDifficultySelector.tsx # Difficulty selector (Activity 8)
 │       ├── MemoryGameActivity.tsx   # Task 8 Memory Game Activity Container
+│       ├── SentenceWordCard.tsx     # 3D tactile word card (Activity 9)
+│       ├── SentenceConstructionArea.tsx # Sentence construction tray (Activity 9)
+│       ├── SentenceDifficultySelector.tsx # Difficulty selector (Activity 9)
+│       ├── SentenceBuilderActivity.tsx # Task 9 Sentence Builder Activity Container
 │       ├── FeedbackBanner.tsx       # Encouraging visual feedback messages
 │       └── RoundSummary.tsx         # Celebratory end-of-round score modal + confetti
 ```

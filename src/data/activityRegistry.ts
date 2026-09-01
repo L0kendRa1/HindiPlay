@@ -25,7 +25,8 @@ export interface ActivityMeta {
     | 'picture-word-quiz'
     | 'matra-lab'
     | 'word-picture-quiz'
-    | 'memory-match';
+    | 'memory-match'
+    | 'sentence-builder';
   title: string;
   subtitle: string;
   description: string;
@@ -204,6 +205,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 2,
     tags: ['स्मृति', 'जोड़े', 'शब्द', 'चित्र', 'कार्ड', 'याद'],
+  },
+  {
+    id: 'act_sentence_builder',
+    activityCode: 'sentence-builder',
+    title: 'वाक्य बनाओ',
+    subtitle: 'शब्दों को सही क्रम में लगाकर वाक्य बनाओ',
+    description: 'शफ़ल किए गए शब्दों को सही क्रम में लगाकर सुंदर और सही हिन्दी वाक्य बनाएँ।',
+    objective: 'वाक्य संरचना व शब्द क्रम (Hindi sentence structure & word order)',
+    categories: ['words'],
+    categoryDisplayLabel: 'वाक्य निर्माण',
+    icon: '📜',
+    theme: {
+      bg: 'bg-teal-50/70',
+      border: 'border-toy-mint',
+      badgeBg: 'bg-toy-mint',
+      badgeText: 'text-white',
+      buttonGradient: 'from-toy-mint to-teal-600',
+    },
+    difficultyStars: 2,
+    tags: ['वाक्य', 'शब्द', 'क्रम', 'निर्माण', 'भाषा'],
   },
 ];
 
