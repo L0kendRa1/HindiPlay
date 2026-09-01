@@ -9,6 +9,7 @@ import { CharacterTracingActivity } from './components/CharacterTracingActivity'
 import { PictureWordQuizActivity } from './components/PictureWordQuizActivity';
 import { MatraLabActivity } from './components/MatraLabActivity';
 import { WordPictureQuizActivity } from './components/WordPictureQuizActivity';
+import { MemoryGameActivity } from './components/MemoryGameActivity';
 
 import { audioService } from './services/audioService';
 
@@ -91,6 +92,9 @@ export function App() {
           )}
           {activeActivity.activityCode === 'word-picture-quiz' && (
             <WordPictureQuizActivity onBackToLibrary={handleBackToLibrary} />
+          )}
+          {activeActivity.activityCode === 'memory-match' && (
+            <MemoryGameActivity onBackToLibrary={handleBackToLibrary} />
           )}
         </div>
       )}

@@ -24,7 +24,8 @@ export interface ActivityMeta {
     | 'tracing'
     | 'picture-word-quiz'
     | 'matra-lab'
-    | 'word-picture-quiz';
+    | 'word-picture-quiz'
+    | 'memory-match';
   title: string;
   subtitle: string;
   description: string;
@@ -183,6 +184,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 2,
     tags: ['शब्द', 'चित्र', 'पठन', 'पहचान', 'अर्थ'],
+  },
+  {
+    id: 'act_memory_match',
+    activityCode: 'memory-match',
+    title: 'याद करो और मिलाओ',
+    subtitle: 'चित्र और शब्द के जोड़े याद करके मिलाओ',
+    description: 'चित्र और हिन्दी शब्दों के कार्ड पलटें और सही जोड़े ढूँढें।',
+    objective: 'शब्द और चित्र का सही जोड़ा पहचानना और याद रखना (Hindi word-to-picture memory & association)',
+    categories: ['words', 'pictures'],
+    categoryDisplayLabel: 'स्मृति खेल',
+    icon: '🎴',
+    theme: {
+      bg: 'bg-rose-50/70',
+      border: 'border-pink-400',
+      badgeBg: 'bg-pink-500',
+      badgeText: 'text-white',
+      buttonGradient: 'from-pink-500 to-rose-600',
+    },
+    difficultyStars: 2,
+    tags: ['स्मृति', 'जोड़े', 'शब्द', 'चित्र', 'कार्ड', 'याद'],
   },
 ];
 

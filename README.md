@@ -1,6 +1,6 @@
 # 🎨 HindiPlay (हिंदी बाल मंच) — Interactive Hindi Learning Platform
 
-An educational Hindi learning activity library inspired by the "learn by doing" philosophy of **Toy Theater**, designed specifically for young Hindi learners (ages 5–8) with explicit pedagogical Devanagari learning units, stroke tracing, and dedicated vector image illustration assets.
+An educational Hindi learning activity library inspired by the "learn by doing" philosophy of **Toy Theater**, designed specifically for young Hindi learners (ages 5–8) with explicit pedagogical Devanagari learning units, stroke tracing, vector illustrations, and interactive reinforcement games.
 
 ---
 
@@ -22,14 +22,14 @@ HindiPlay uses a structured **Educational Activity Library** flow:
                    [ शुरू करें ]
                           ↓
                Active Gameplay Screen
-         (Task 1, 2, 3, 4, 5, 6, or 7)
+         (Tasks 1, 2, 3, 4, 5, 6, 7, or 8)
                           ↓
              [ साफ़ करें ] [ गतिविधियाँ ]
 ```
 
 ---
 
-## 🎮 Registered Activities (7 Total)
+## 🎮 Registered Activities (8 Total)
 
 ### 1. **"अक्षर पहचानो" (Letter Recognition)**
 - **Categories**: `अक्षर (Letters)`
@@ -62,8 +62,16 @@ HindiPlay uses a structured **Educational Activity Library** flow:
 
 ### 7. **"शब्द देखकर चित्र चुनो" (Word → Picture Recognition)**
 - **Categories**: `शब्द (Words)`, `चित्र (Pictures)`
-- **Goal**: Reverses Task 5 by presenting a prominent Hindi word prompt (e.g. `आम`, `कमल`, `माला`, `तरबूज`) with optional audio pronunciation, prompting the learner to recognize the word's visual meaning and select the matching illustrated picture card from 3 options.
-- **Features**: 3D tactile vector image cards, keyboard shortcuts (`1`, `2`, `3`), forgiving multi-attempt retry loop, word reveal upon solving, and clean question resets.
+- **Goal**: Connect Hindi words with their visual meanings by reading the word and picking the correct picture from 3 choices.
+
+### 8. **"याद करो और मिलाओ" (Hindi Memory Matching Game)**
+- **Categories**: `शब्द (Words)`, `चित्र (Pictures)`
+- **Goal**: Reinforce vocabulary memory by flipping cards to match Devanagari word cards with their corresponding illustrated picture cards (`कमल ↔ 🪷`, `मछली ↔ 🐟`, `आम ↔ 🥭`).
+- **Difficulty Levels**:
+  - **आसान (Easy)**: 4 pairs (8 cards, 2×4 grid)
+  - **मध्यम (Medium)**: 6 pairs (12 cards, 3×4 grid)
+  - **कठिन (Hard)**: 8 pairs (16 cards, 4×4 grid)
+- **Features**: 3D flip card animations, atomic board lock against rapid clicks, pronunciation on match, moves & score tracking, and celebratory completion modal.
 
 ---
 
@@ -79,7 +87,7 @@ hindi/
 ├── src/
 │   ├── App.tsx                  # Root state machine (Library -> Preview -> Gameplay)
 │   ├── data/
-│   │   ├── activityRegistry.ts  # Centralized Activity Registry (7 activities & 6 categories)
+│   │   ├── activityRegistry.ts  # Centralized Activity Registry (8 activities & 6 categories)
 │   │   ├── vowels.ts            # Vowel dataset (13 Devanagari vowels)
 │   │   ├── consonants.ts        # Consonant dataset (33 Devanagari consonants)
 │   │   ├── hindiCharacters.ts   # Master character collection & round generator
@@ -91,6 +99,11 @@ hindi/
 │   │   ├── audioService.ts      # SpeechSynthesis (hi-IN) + Web Audio API synthesizer
 │   │   ├── strokeEvaluation.ts  # Resampling, Euclidean metrics, and forgiving evaluator
 │   │   └── hindiUnitComposer.ts # Pure Devanagari consonant+matra composition engine
+│   ├── types/
+│   │   ├── activity.ts          # Core platform types
+│   │   ├── pictureMatch.ts      # Picture/word quiz types (Tasks 2, 5, 7)
+│   │   ├── wordBuilder.ts       # Devanagari unit & dictionary types (Task 3)
+│   │   └── memoryGame.ts        # Memory game types & difficulty configurations (Task 8)
 │   ├── hooks/
 │   │   ├── useLetterQuiz.ts     # Activity 1 state & game loop
 │   │   ├── usePictureMatch.ts   # Activity 2 state & game loop
@@ -98,7 +111,8 @@ hindi/
 │   │   ├── useCharacterTracing.ts # Activity 4 state & tracing progression
 │   │   ├── usePictureWordQuiz.ts # Activity 5 state & picture-to-word loop
 │   │   ├── useMatraLab.ts       # Activity 6 state & discovery sandbox
-│   │   └── useWordPictureQuiz.ts# Activity 7 state & word-to-picture loop
+│   │   ├── useWordPictureQuiz.ts# Activity 7 state & word-to-picture loop
+│   │   └── useMemoryGame.ts     # Activity 8 state & flip card state machine
 │   └── components/
 │       ├── ActivityLibrary.tsx      # Activity Library Home with Categories & Search
 │       ├── ActivityCard.tsx         # Large 3D Tactile Activity Card
@@ -124,6 +138,9 @@ hindi/
 │       ├── MatraSelector.tsx        # 2-row grid of matra buttons with vowel badges (Activity 6)
 │       ├── MatraResultCard.tsx      # Live Devanagari syllable display & equation (Activity 6)
 │       ├── MatraLabActivity.tsx     # Task 6 Matra Lab Activity Container
+│       ├── MemoryCard.tsx           # 3D tactile flip card (Activity 8)
+│       ├── MemoryDifficultySelector.tsx # Difficulty selector (Activity 8)
+│       ├── MemoryGameActivity.tsx   # Task 8 Memory Game Activity Container
 │       ├── FeedbackBanner.tsx       # Encouraging visual feedback messages
 │       └── RoundSummary.tsx         # Celebratory end-of-round score modal + confetti
 ```
