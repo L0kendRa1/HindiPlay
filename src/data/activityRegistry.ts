@@ -1,4 +1,4 @@
-export type ActivityCategoryKey = 'all' | 'letters' | 'words' | 'writing' | 'pictures';
+export type ActivityCategoryKey = 'all' | 'letters' | 'words' | 'writing' | 'pictures' | 'matras';
 
 export interface ActivityCategory {
   id: ActivityCategoryKey;
@@ -10,13 +10,14 @@ export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
   { id: 'all', label: 'सभी', emoji: '🌟' },
   { id: 'letters', label: 'अक्षर', emoji: '🔤' },
   { id: 'words', label: 'शब्द', emoji: '🧩' },
+  { id: 'matras', label: 'मात्राएँ', emoji: '🪷' },
   { id: 'writing', label: 'लिखना', emoji: '✏️' },
   { id: 'pictures', label: 'चित्र', emoji: '🖼️' },
 ];
 
 export interface ActivityMeta {
   id: string;
-  activityCode: 'letter-quiz' | 'picture-match' | 'word-builder' | 'tracing' | 'picture-word-quiz';
+  activityCode: 'letter-quiz' | 'picture-match' | 'word-builder' | 'tracing' | 'picture-word-quiz' | 'matra-lab';
   title: string;
   subtitle: string;
   description: string;
@@ -83,7 +84,7 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     subtitle: 'अक्षर जोड़कर नए शब्द बनाओ',
     description: 'अक्षर और मात्राओं की इकाइयों को सही क्रम में जोड़कर शब्द बनाएँ या नए शब्द खोजें।',
     objective: 'अक्षर संयोजन व शब्द निर्माण (Devanagari unit combination & word building)',
-    categories: ['words'],
+    categories: ['words', 'matras'],
     categoryDisplayLabel: 'शब्द निर्माण',
     icon: '🧩',
     theme: {
@@ -95,6 +96,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 2,
     tags: ['शब्द', 'मात्राएँ', 'निर्माण', 'खोज'],
+  },
+  {
+    id: 'act_matra_lab',
+    activityCode: 'matra-lab',
+    title: 'मात्रा प्रयोगशाला',
+    subtitle: 'अक्षर और मात्राएँ जोड़कर नए शब्दांश बनाओ',
+    description: 'व्यंजन और मात्राओं को मिलाकर नए शब्दांश (जैसे म + ा ➔ मा) बनाएँ और उनका शुद्ध उच्चारण सुनें।',
+    objective: 'मात्रा संयोजन व शब्दांश निर्माण (Devanagari matra exploration & syllable construction)',
+    categories: ['letters', 'words', 'matras'],
+    categoryDisplayLabel: 'मात्रा प्रयोग',
+    icon: '🧪',
+    theme: {
+      bg: 'bg-teal-50/70',
+      border: 'border-toy-mint',
+      badgeBg: 'bg-toy-mint',
+      badgeText: 'text-white',
+      buttonGradient: 'from-toy-mint to-teal-600',
+    },
+    difficultyStars: 2,
+    tags: ['मात्राएँ', 'अक्षर', 'संयोजन', 'शब्दांश', 'प्रयोगशाला'],
   },
   {
     id: 'act_tracing',

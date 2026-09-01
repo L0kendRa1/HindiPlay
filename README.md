@@ -22,28 +22,14 @@ HindiPlay uses a structured **Educational Activity Library** flow:
                    [ शुरू करें ]
                           ↓
                Active Gameplay Screen
-           (Task 1, 2, 3, 4, or 5)
+         (Task 1, 2, 3, 4, 5, or 6)
                           ↓
-                 Round Completion
-                          ↓
-             [ फिर से खेलें ] [ गतिविधियाँ ]
+             [ साफ़ करें ] [ गतिविधियाँ ]
 ```
 
 ---
 
-## 🖼️ Picture-Word Vector Assets & Visual Quality
-
-All 42 vocabulary items in `src/data/pictureWords.ts` have dedicated, high-contrast, child-friendly vector SVG illustrations located in `public/images/words/`:
-- **Vowels (12)**: `anar.svg` (अनार), `aam.svg` (आम), `imli.svg` (इमली), `eekh.svg` (ईख), `ullu.svg` (उल्लू), `oon.svg` (ऊन), `rishi.svg` (ऋषि), `ek.svg` (एक), `ainak.svg` (ऐनक), `okhli.svg` (ओखली), `aurat.svg` (औरत), `angoor.svg` (अंगूर).
-- **Consonants (30)**: `kamal.svg` (कमल), `khargosh.svg` (खरगोश), `gamla.svg` (गमला), `ghadi.svg` (घड़ी), `chammach.svg` (चम्मच), `chhata.svg` (छाता), `jahaj.svg` (जहाज), `jhanda.svg` (झंडा), `tamatar.svg` (टमाटर), `thappa.svg` (ठप्पा), `damru.svg` (डमरू), `dhakkan.svg` (ढक्कन), `tarbooj.svg` (तरबूज), `thali.svg` (थाली), `darwaja.svg` (दरवाजा), `dhanush.svg` (धनुष), `nal.svg` (नल), `patang.svg` (पतंग), `phal.svg` (फल), `battakh.svg` (बत्तख), `bhalu.svg` (भालू), `machhli.svg` (मछली), `yagya.svg` (यज्ञ), `rath.svg` (रथ), `lattu.svg` (लट्टू), `vriksh.svg` (वृक्ष), `shaljam.svg` (शलजम), `shatkon.svg` (षट्कोण), `seb.svg` (सेब), `hathi.svg` (हाथी).
-
-### Visual Rendering Architecture:
-- `<PictureImage />` component with `object-fit: contain`, instant skeleton placeholders, error boundary, and graceful emoji fallback (`🖼️`). Empty rectangular boxes are **never** shown.
-- `validatePictureWordItem()` ensures broken items are filtered out before generating playable rounds.
-
----
-
-## 🎮 Registered Activities
+## 🎮 Registered Activities (6 Total)
 
 ### 1. **"अक्षर पहचानो" (Letter Recognition)**
 - **Categories**: `अक्षर (Letters)`
@@ -56,7 +42,7 @@ All 42 vocabulary items in `src/data/pictureWords.ts` have dedicated, high-contr
 - **Coverage**: 42 illustrated word cards with spoken associations (*"आ से आम"*).
 
 ### 3. **"शब्द बनाओ और खोजो" (Word Building & Discovery with Difficulty Selection)**
-- **Categories**: `शब्द (Words)`
+- **Categories**: `शब्द (Words)`, `मात्राएँ (Matras)`
 - **Goal**: Understand how base consonants and vowel signs (मात्राएँ) combine into explicit learning units to form words (`म + ा ➔ मा`, `मा + ला ➔ माला`).
 - **Difficulty Selection**: User-selected word length (`2 अक्षर ⭐`, `3 अक्षर ⭐⭐`, `4 अक्षर ⭐⭐⭐`) based on explicit `unitCount`.
 
@@ -68,6 +54,16 @@ All 42 vocabulary items in `src/data/pictureWords.ts` have dedicated, high-contr
 ### 5. **"चित्र देखकर शब्द पहचानो" (Picture-to-Word Recognition)**
 - **Categories**: `शब्द (Words)`, `चित्र (Pictures)`
 - **Goal**: Connect a familiar illustrated object/image with the correct Hindi word from 3 options (e.g. 🥭 ➔ `[ आम ]`, `[ कमल ]`, `[ घर ]`).
+
+### 6. **"मात्रा प्रयोगशाला" (Matra Lab — Interactive Discovery)**
+- **Categories**: `अक्षर (Letters)`, `शब्द (Words)`, `मात्राएँ (Matras)`
+- **Goal**: Interactive sandbox teaching how consonants and matras combine into new Devanagari learning units (`म + ा = मा`, `क + ि = कि`, `म + ु = मु`).
+- **Features**:
+  - Direct selection of starter consonants (`म`, `क`, `ग`, `न`, `ल`, `ब`, `स`, `र`, `त`, `प`).
+  - Selection of 9 standard dependent vowel signs (`ा`, `ि`, `ी`, `ु`, `ू`, `े`, `ै`, `ो`, `ौ`) plus base form.
+  - Live combination equation (`म + ा = मा`) with vowel relationship badges (`"आ की मात्रा"`).
+  - Intact single-utterance pronunciation via `audioService`.
+  - Exploration badge counter tracking discovered syllable units.
 
 ---
 
@@ -83,22 +79,25 @@ hindi/
 ├── src/
 │   ├── App.tsx                  # Root state machine (Library -> Preview -> Gameplay)
 │   ├── data/
-│   │   ├── activityRegistry.ts  # Centralized Activity Registry & Category Filter
+│   │   ├── activityRegistry.ts  # Centralized Activity Registry (6 activities & 6 categories)
 │   │   ├── vowels.ts            # Vowel dataset (13 Devanagari vowels)
 │   │   ├── consonants.ts        # Consonant dataset (33 Devanagari consonants)
 │   │   ├── hindiCharacters.ts   # Master character collection & round generator
 │   │   ├── pictureWords.ts      # 42-item vocabulary dataset & validation engine
 │   │   ├── wordBuilder.ts       # WordBuilder dictionary (2, 3, 4-unit words)
-│   │   └── characterStrokes.ts  # Normalized stroke dataset for representative characters
+│   │   ├── characterStrokes.ts  # Normalized stroke dataset for representative characters
+│   │   └── matras.ts            # 9 Devanagari matras & starter consonants
 │   ├── services/
 │   │   ├── audioService.ts      # SpeechSynthesis (hi-IN) + Web Audio API synthesizer
-│   │   └── strokeEvaluation.ts  # Resampling, Euclidean metrics, and forgiving evaluator
+│   │   ├── strokeEvaluation.ts  # Resampling, Euclidean metrics, and forgiving evaluator
+│   │   └── hindiUnitComposer.ts # Pure Devanagari consonant+matra composition engine
 │   ├── hooks/
 │   │   ├── useLetterQuiz.ts     # Activity 1 state & game loop
 │   │   ├── usePictureMatch.ts   # Activity 2 state & game loop
 │   │   ├── useWordBuilder.ts    # Activity 3 state & game loop
 │   │   ├── useCharacterTracing.ts # Activity 4 state & tracing progression
-│   │   └── usePictureWordQuiz.ts # Activity 5 state & picture-word quiz loop
+│   │   ├── usePictureWordQuiz.ts # Activity 5 state & picture-word quiz loop
+│   │   └── useMatraLab.ts       # Activity 6 state & discovery sandbox
 │   └── components/
 │       ├── ActivityLibrary.tsx      # Activity Library Home with Categories & Search
 │       ├── ActivityCard.tsx         # Large 3D Tactile Activity Card
@@ -117,6 +116,10 @@ hindi/
 │       ├── StrokeGuideBar.tsx       # Stroke step indicator (①, ②, ③) (Activity 4)
 │       ├── WordOptionCard.tsx       # 3D Devanagari word choice card (Activity 5)
 │       ├── PicturePromptCard.tsx    # Illustrated picture prompt card with audio (Activity 5)
+│       ├── ConsonantSelector.tsx    # Tactile consonant buttons (Activity 6)
+│       ├── MatraSelector.tsx        # 2-row grid of matra buttons with vowel badges (Activity 6)
+│       ├── MatraResultCard.tsx      # Live Devanagari syllable display & equation (Activity 6)
+│       ├── MatraLabActivity.tsx     # Task 6 Matra Lab Activity Container
 │       ├── FeedbackBanner.tsx       # Encouraging visual feedback messages
 │       └── RoundSummary.tsx         # Celebratory end-of-round score modal + confetti
 ```

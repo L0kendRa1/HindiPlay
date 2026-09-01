@@ -4,8 +4,8 @@ import { audioService } from '../services/audioService';
 import { CategoryFilter } from '../types/activity';
 
 interface HeaderProps {
-  score: number;
-  streak: number;
+  score?: number;
+  streak?: number;
   categoryFilter?: CategoryFilter;
   onSelectCategory?: (category: CategoryFilter) => void;
   title?: string;
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   score,
-  streak,
+  streak = 0,
   categoryFilter = 'all',
   onSelectCategory,
   title = 'HindiPlay',
@@ -67,10 +67,12 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile-only Sound & Score */}
         <div className="flex items-center gap-2 sm:hidden">
-          <div className="flex items-center gap-1 bg-white border-2 border-toy-yellow px-2.5 py-1 rounded-full shadow-toy-sm font-bold text-sm text-slate-800">
-            <Star className="w-4 h-4 text-toy-yellow fill-toy-yellow" />
-            <span>{score}</span>
-          </div>
+          {score !== undefined && (
+            <div className="flex items-center gap-1 bg-white border-2 border-toy-yellow px-2.5 py-1 rounded-full shadow-toy-sm font-bold text-sm text-slate-800">
+              <Star className="w-4 h-4 text-toy-yellow fill-toy-yellow" />
+              <span>{score}</span>
+            </div>
+          )}
           <button
             onClick={handleToggleSound}
             className={`w-9 h-9 rounded-xl flex items-center justify-center border-2 transition-all ${
@@ -111,18 +113,20 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Desktop Controls: Score & Sound Toggle */}
       <div className="hidden sm:flex items-center gap-3">
         {/* Score Pill */}
-        <div
-          className="flex items-center gap-1.5 bg-white border-2 border-toy-yellow px-3.5 py-1.5 rounded-full shadow-toy-sm font-bold text-slate-800 transition-transform hover:scale-105"
-          aria-label={`स्कोर: ${score}`}
-        >
-          <Star className="w-5 h-5 text-toy-yellow fill-toy-yellow animate-bounce-short" />
-          <span className="text-base md:text-lg">{score}</span>
-          {streak > 1 && (
-            <span className="ml-1 text-xs bg-toy-orange text-white px-2 py-0.5 rounded-full font-extrabold animate-pulse">
-              🔥 {streak}x
-            </span>
-          )}
-        </div>
+        {score !== undefined && (
+          <div
+            className="flex items-center gap-1.5 bg-white border-2 border-toy-yellow px-3.5 py-1.5 rounded-full shadow-toy-sm font-bold text-slate-800 transition-transform hover:scale-105"
+            aria-label={`स्कोर: ${score}`}
+          >
+            <Star className="w-5 h-5 text-toy-yellow fill-toy-yellow animate-bounce-short" />
+            <span className="text-base md:text-lg">{score}</span>
+            {streak > 1 && (
+              <span className="ml-1 text-xs bg-toy-orange text-white px-2 py-0.5 rounded-full font-extrabold animate-pulse">
+                🔥 {streak}x
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Sound Toggle Button */}
         <button
