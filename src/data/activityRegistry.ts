@@ -26,7 +26,8 @@ export interface ActivityMeta {
     | 'matra-lab'
     | 'word-picture-quiz'
     | 'memory-match'
-    | 'sentence-builder';
+    | 'sentence-builder'
+    | 'reading-comprehension';
   title: string;
   subtitle: string;
   description: string;
@@ -225,6 +226,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 2,
     tags: ['वाक्य', 'शब्द', 'क्रम', 'निर्माण', 'भाषा'],
+  },
+  {
+    id: 'act_reading_comprehension',
+    activityCode: 'reading-comprehension',
+    title: 'कहानी पढ़ो और समझो',
+    subtitle: 'छोटी हिंदी कहानी पढ़ो, सुनो और सवालों के जवाब दो',
+    description: 'सुंदर कहानियाँ पढ़ें, भारतीय हिन्दी में सुनें और समझकर सवालों के सही जवाब दें।',
+    objective: 'पठन कौशल व अर्थ ग्रहण (Hindi reading comprehension & listening skills)',
+    categories: ['words'],
+    categoryDisplayLabel: 'पठन व समझ',
+    icon: '📖',
+    theme: {
+      bg: 'bg-amber-50/70',
+      border: 'border-amber-400',
+      badgeBg: 'bg-amber-500',
+      badgeText: 'text-white',
+      buttonGradient: 'from-amber-500 to-orange-500',
+    },
+    difficultyStars: 2,
+    tags: ['कहानी', 'पठन', 'समझ', 'सवाल', 'उत्तर', 'वाचन'],
   },
 ];
 

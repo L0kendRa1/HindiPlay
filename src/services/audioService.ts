@@ -1,14 +1,15 @@
 /**
  * Audio service for Hindi Interactive Learning
- * Provides SpeechSynthesis with Hindi (hi-IN) voice support
+ * Provides SpeechSynthesis with Hindi (hi-IN) Indian voice prioritization
  * and Web Audio API synthesized sound effects for instant, tactile feedback.
  * 
  * Features:
  * - Chromium/WebKit GC protection (retains active utterance references to prevent mid-speech cutoffs)
  * - Safe speech queue & rapid-click debounce
- * - Capability-based voice selection (hi-IN priority with graceful fallbacks)
- * - Natural calibrated rates for Devanagari learning (0.9 rate, 1.0 pitch)
- * - Zero Unicode splitting: preserves complete words and matra units
+ * - Priority-based Indian Hindi voice selection (hi-IN, Google हिन्दी, Microsoft Hemant/Kalpana, Lekha, etc.)
+ * - Asynchronous voiceschanged listener handling
+ * - Natural calibrated rates for Devanagari learning and story reading
+ * - Zero Unicode splitting: preserves complete words, sentences, and matra units
  */
 
 class AudioService {
@@ -34,7 +35,7 @@ class AudioService {
   }
 
   /**
-   * Capability-based voice selection for Hindi (hi-IN)
+   * Capability-based Indian Hindi voice selection prioritizing 'hi-IN' native voices.
    */
   public initVoices() {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -44,28 +45,48 @@ class AudioService {
 
       let selected: SpeechSynthesisVoice | undefined;
 
-      // 1. First priority: Exact match for hi-IN / hi_IN
-      selected = voices.find(
-        (v) => v.lang === 'hi-IN' || v.lang === 'hi_IN' || v.lang.toLowerCase() === 'hi-in'
-      );
+      // 1. First priority: Exact match for hi-IN or hi_IN with native Indian voice naming
+      selected = voices.find((v) => {
+        const lang = (v.lang || '').toLowerCase();
+        const name = (v.name || '').toLowerCase();
+        const isHiIn = lang === 'hi-in' || lang === 'hi_in';
+        const isIndianHindiName =
+          name.includes('hindi') ||
+          name.includes('हिन्दी') ||
+          name.includes('hemant') ||
+          name.includes('kalpana') ||
+          name.includes('swara') ||
+          name.includes('madhur') ||
+          name.includes('lekha') ||
+          name.includes('neerja');
+        return isHiIn && isIndianHindiName;
+      });
 
-      // 2. Second priority: Any voice starting with 'hi'
-      if (!selected) {
-        selected = voices.find((v) => v.lang.toLowerCase().startsWith('hi'));
-      }
-
-      // 3. Third priority: Any voice with 'hindi' or 'india' in name
+      // 2. Second priority: Any voice with lang 'hi-IN' or 'hi_IN'
       if (!selected) {
         selected = voices.find(
-          (v) =>
-            v.name.toLowerCase().includes('hindi') ||
-            (v.name.toLowerCase().includes('india') && v.lang.toLowerCase().includes('hi'))
+          (v) => (v.lang || '').toLowerCase() === 'hi-in' || (v.lang || '').toLowerCase() === 'hi_in'
         );
       }
 
-      // 4. Fourth priority: Marathi / Devanagari phonetics or default
+      // 3. Third priority: Any voice starting with 'hi'
       if (!selected) {
-        selected = voices.find((v) => v.lang.toLowerCase().startsWith('mr'));
+        selected = voices.find((v) => (v.lang || '').toLowerCase().startsWith('hi'));
+      }
+
+      // 4. Fourth priority: Any voice whose name contains 'hindi' or 'india'
+      if (!selected) {
+        selected = voices.find(
+          (v) =>
+            (v.name || '').toLowerCase().includes('hindi') ||
+            (v.name || '').toLowerCase().includes('हिन्दी') ||
+            ((v.name || '').toLowerCase().includes('india') && (v.lang || '').toLowerCase().includes('hi'))
+        );
+      }
+
+      // 5. Fifth priority: Marathi / Devanagari phonetics as closest sister language
+      if (!selected) {
+        selected = voices.find((v) => (v.lang || '').toLowerCase().startsWith('mr'));
       }
 
       this.hindiVoice = selected ?? null;
@@ -77,6 +98,10 @@ class AudioService {
       this.initVoices();
     }
     return this.hindiVoice;
+  }
+
+  public isSpeaking(): boolean {
+    return this.isSpeakingText;
   }
 
   private getAudioContext(): AudioContext | null {
@@ -123,9 +148,9 @@ class AudioService {
   }
 
   /**
-   * Pronounce a complete Hindi word or character using SpeechSynthesis.
-   * - Entire text is passed intact as ONE utterance.
-   * - Garbage collection protection ensures words are not cut off mid-speech.
+   * Pronounce a complete Hindi text using SpeechSynthesis.
+   * - Entire text is passed intact as ONE natural utterance.
+   * - Garbage collection protection ensures words/sentences are not cut off mid-speech.
    * - Rapid-click debounce prevents overlapping or broken audio streams.
    */
   public playSpeechText(
@@ -161,12 +186,12 @@ class AudioService {
         return;
       }
 
-      // Debounce: If the exact same word is already speaking, allow it to finish smoothly
+      // Debounce: If the exact same text is already speaking, allow it to finish smoothly
       if (this.isSpeakingText && this.currentSpeakingText === cleanText) {
         return;
       }
 
-      // If a different word was speaking, cleanly cancel it first
+      // If a different text was speaking, cleanly cancel it first
       if (this.isSpeakingText && this.currentSpeakingText !== cleanText) {
         this.stopSpeech();
       }
@@ -181,7 +206,7 @@ class AudioService {
       if (this.hindiVoice) {
         utterance.voice = this.hindiVoice;
       }
-      utterance.rate = rate; // Calibrated 0.90 for clear, natural Hindi articulation
+      utterance.rate = rate; // Calibrated 0.88-0.90 for clear, natural Indian Hindi articulation
       utterance.pitch = 1.0; // Natural pitch
       utterance.volume = 1.0;
 
@@ -220,10 +245,11 @@ class AudioService {
         cleanup();
       };
 
-      // Safety timer (4.5s) to guarantee resolution if mobile browsers drop onend
+      // Dynamic safety timer scaled to text length (min 5s, ~120ms per character for long stories)
+      const maxDuration = Math.max(5000, cleanText.length * 150);
       setTimeout(() => {
         cleanup();
-      }, 4500);
+      }, maxDuration);
 
       try {
         window.speechSynthesis.speak(utterance);
@@ -258,6 +284,20 @@ class AudioService {
     onEnd?: () => void
   ): Promise<void> {
     return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.88);
+  }
+
+  /**
+   * Read a complete Hindi story naturally in Indian Hindi (hi-IN)
+   */
+  public playStoryAudio(
+    storyTextOrParagraphs: string | string[],
+    onStart?: () => void,
+    onEnd?: () => void
+  ): Promise<void> {
+    const fullText = Array.isArray(storyTextOrParagraphs)
+      ? storyTextOrParagraphs.join(' ')
+      : storyTextOrParagraphs;
+    return this.playSpeechText(fullText, onStart, onEnd, 0.88);
   }
 
   /**

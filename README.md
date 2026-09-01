@@ -22,14 +22,14 @@ HindiPlay uses a structured **Educational Activity Library** flow:
                    [ शुरू करें ]
                           ↓
                Active Gameplay Screen
-         (Tasks 1, 2, 3, 4, 5, 6, 7, 8, or 9)
+         (Tasks 1, 2, 3, 4, 5, 6, 7, 8, 9, or 10)
                           ↓
              [ साफ़ करें ] [ गतिविधियाँ ]
 ```
 
 ---
 
-## 🎮 Registered Activities (9 Total)
+## 🎮 Registered Activities (10 Total)
 
 ### 1. **"अक्षर पहचानो" (Letter Recognition)**
 - **Categories**: `अक्षर (Letters)`
@@ -79,7 +79,15 @@ HindiPlay uses a structured **Educational Activity Library** flow:
   - **आसान (Easy)**: 3–4 word sentences (`यह आम है।`, `राम खेलता है।`)
   - **मध्यम (Medium)**: 4–5 word sentences (`राम स्कूल जाता है।`, `सीमा पानी पीती है।`)
   - **कठिन (Hard)**: 5–7 word sentences (`राम रोज स्कूल जाता है।`, `बच्चे मैदान में खेल रहे हैं।`)
-- **Features**: Child-friendly tap-to-place / tap-to-undo interaction, hints, instant sequence checking, whole-sentence speech audio, score & streak tracking, and celebratory completion screen.
+
+### 10. **"कहानी पढ़ो और समझो" (Hindi Reading & Comprehension)**
+- **Categories**: `शब्द (Words)`
+- **Goal**: Develop Hindi reading fluency and comprehension through engaging child-friendly stories with optional Indian Hindi (`hi-IN`) narration and comprehension questions (`अक्षर → शब्द → वाक्य → कहानी → समझ`).
+- **Difficulty Levels**:
+  - **आसान (Easy)**: 3–4 short sentences, 2 comprehension questions (`रवि की गेंद`, `सीमा का बगीचा`, `कमल का फूल`, `नटखट बिल्ली`, `सूरज और चिड़िया`)
+  - **मध्यम (Medium)**: 5–6 sentences, 3 comprehension questions (`मोहन का नया स्कूल`, `बारिश का दिन`, `मीठा आम का पेड़`, `दादी की कहानी`, `जंगल का नन्हा हाथी`)
+  - **कठिन (Hard)**: 7–10 sentences, 4 comprehension questions (`रोहन और नन्हीं गिलहरी`, `मेहनती किसान और फसल`, `सच्चे मित्र और मेला`, `सूरज और ठंडी हवा`, `सुंदर बाग और मधुमक्खी`)
+- **Features**: High-contrast large Devanagari typography, full-story Indian Hindi audio narration (`[ 🔊 कहानी सुनो ]` / `[ ⏹ रोकें ]`), comprehension questions testing story recall (who/what/where/why), encouraging feedback, and round summary.
 
 ---
 
@@ -95,7 +103,7 @@ hindi/
 ├── src/
 │   ├── App.tsx                  # Root state machine (Library -> Preview -> Gameplay)
 │   ├── data/
-│   │   ├── activityRegistry.ts  # Centralized Activity Registry (9 activities & 6 categories)
+│   │   ├── activityRegistry.ts  # Centralized Activity Registry (10 activities & 6 categories)
 │   │   ├── vowels.ts            # Vowel dataset (13 Devanagari vowels)
 │   │   ├── consonants.ts        # Consonant dataset (33 Devanagari consonants)
 │   │   ├── hindiCharacters.ts   # Master character collection & round generator
@@ -103,9 +111,10 @@ hindi/
 │   │   ├── wordBuilder.ts       # WordBuilder dictionary (2, 3, 4-unit words)
 │   │   ├── characterStrokes.ts  # Normalized stroke dataset for representative characters
 │   │   ├── matras.ts            # 9 Devanagari matras & starter consonants
-│   │   └── sentences.ts         # Curated Hindi sentence dataset across 3 difficulties (Task 9)
+│   │   ├── sentences.ts         # Curated Hindi sentence dataset across 3 difficulties (Task 9)
+│   │   └── readingStories.ts    # Curated Hindi reading comprehension stories (Task 10)
 │   ├── services/
-│   │   ├── audioService.ts      # SpeechSynthesis (hi-IN) + Web Audio API synthesizer
+│   │   ├── audioService.ts      # SpeechSynthesis (hi-IN) Indian Hindi prioritization + Web Audio SFX
 │   │   ├── strokeEvaluation.ts  # Resampling, Euclidean metrics, and forgiving evaluator
 │   │   └── hindiUnitComposer.ts # Pure Devanagari consonant+matra composition engine
 │   ├── types/
@@ -113,7 +122,8 @@ hindi/
 │   │   ├── pictureMatch.ts      # Picture/word quiz types (Tasks 2, 5, 7)
 │   │   ├── wordBuilder.ts       # Devanagari unit & dictionary types (Task 3)
 │   │   ├── memoryGame.ts        # Memory game types & difficulty configurations (Task 8)
-│   │   └── sentenceBuilder.ts   # Sentence builder types & difficulty configurations (Task 9)
+│   │   ├── sentenceBuilder.ts   # Sentence builder types & difficulty configurations (Task 9)
+│   │   └── readingComprehension.ts # Reading comprehension types & configurations (Task 10)
 │   ├── hooks/
 │   │   ├── useLetterQuiz.ts     # Activity 1 state & game loop
 │   │   ├── usePictureMatch.ts   # Activity 2 state & game loop
@@ -123,7 +133,8 @@ hindi/
 │   │   ├── useMatraLab.ts       # Activity 6 state & discovery sandbox
 │   │   ├── useWordPictureQuiz.ts# Activity 7 state & word-to-picture loop
 │   │   ├── useMemoryGame.ts     # Activity 8 state & flip card state machine
-│   │   └── useSentenceBuilder.ts# Activity 9 state & sentence construction loop
+│   │   ├── useSentenceBuilder.ts# Activity 9 state & sentence construction loop
+│   │   └── useReadingComprehension.ts # Activity 10 state & reading comprehension loop
 │   └── components/
 │       ├── ActivityLibrary.tsx      # Activity Library Home with Categories & Search
 │       ├── ActivityCard.tsx         # Large 3D Tactile Activity Card
@@ -156,6 +167,10 @@ hindi/
 │       ├── SentenceConstructionArea.tsx # Sentence construction tray (Activity 9)
 │       ├── SentenceDifficultySelector.tsx # Difficulty selector (Activity 9)
 │       ├── SentenceBuilderActivity.tsx # Task 9 Sentence Builder Activity Container
+│       ├── StoryReader.tsx          # Large typography story reader with audio controls (Activity 10)
+│       ├── StoryQuestionCard.tsx    # Multiple choice comprehension question card (Activity 10)
+│       ├── StoryDifficultySelector.tsx # Difficulty selector (Activity 10)
+│       ├── ReadingComprehensionActivity.tsx # Task 10 Activity Container
 │       ├── FeedbackBanner.tsx       # Encouraging visual feedback messages
 │       └── RoundSummary.tsx         # Celebratory end-of-round score modal + confetti
 ```

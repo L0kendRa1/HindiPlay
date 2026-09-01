@@ -11,6 +11,7 @@ import { MatraLabActivity } from './components/MatraLabActivity';
 import { WordPictureQuizActivity } from './components/WordPictureQuizActivity';
 import { MemoryGameActivity } from './components/MemoryGameActivity';
 import { SentenceBuilderActivity } from './components/SentenceBuilderActivity';
+import { ReadingComprehensionActivity } from './components/ReadingComprehensionActivity';
 
 import { audioService } from './services/audioService';
 
@@ -99,6 +100,9 @@ export function App() {
           )}
           {activeActivity.activityCode === 'sentence-builder' && (
             <SentenceBuilderActivity onBackToLibrary={handleBackToLibrary} />
+          )}
+          {activeActivity.activityCode === 'reading-comprehension' && (
+            <ReadingComprehensionActivity onBackToLibrary={handleBackToLibrary} />
           )}
         </div>
       )}
