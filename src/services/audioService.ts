@@ -2,14 +2,16 @@
  * Audio service for Hindi Interactive Learning
  * Provides SpeechSynthesis with Hindi (hi-IN) Indian voice prioritization
  * and Web Audio API synthesized sound effects for instant, tactile feedback.
- * 
+ *
  * Features:
  * - Chromium/WebKit GC protection (retains active utterance references to prevent mid-speech cutoffs)
+ * - Chromium 15-second speech bug workaround (pause/resume keepalive)
  * - Safe speech queue & rapid-click debounce
- * - Priority-based Indian Hindi voice selection (hi-IN, Google हिन्दी, Microsoft Hemant/Kalpana, Lekha, etc.)
- * - Asynchronous voiceschanged listener handling
+ * - Priority-based Indian Hindi voice selection (hi-IN, Google हिन्दी, Microsoft Hemant/Kalpana, etc.)
+ * - Asynchronous voiceschanged listener with Promise-based resolution
  * - Natural calibrated rates for Devanagari learning and story reading
  * - Zero Unicode splitting: preserves complete words, sentences, and matra units
+ * - Development diagnostics via getVoiceDiagnostics()
  */
 
 class AudioService {
@@ -22,20 +24,53 @@ class AudioService {
   private currentSpeakingText: string | null = null;
   private voiceChangeHandlerAttached: boolean = false;
 
+  /** Promise that resolves once voices are available (or immediately if already loaded) */
+  private voicesReadyPromise: Promise<void>;
+  private voicesReadyResolve: (() => void) | null = null;
+
+  /** Chromium long-speech keepalive timer handle */
+  private keepAliveInterval: ReturnType<typeof setInterval> | null = null;
+
+  /** Default speech rate for Hindi pronunciation */
+  private defaultRate: number = 0.88;
+
+  /** Default pitch for Hindi pronunciation */
+  private defaultPitch: number = 1.0;
+
   constructor() {
+    // Create a deferred promise for voice readiness
+    this.voicesReadyPromise = new Promise<void>((resolve) => {
+      this.voicesReadyResolve = resolve;
+    });
+
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      // Try immediate load (works on Firefox and some others)
       this.initVoices();
+
+      // Handle asynchronous voice loading (Chromium/WebKit pattern)
       if (!this.voiceChangeHandlerAttached) {
         window.speechSynthesis.onvoiceschanged = () => {
           this.initVoices();
         };
         this.voiceChangeHandlerAttached = true;
       }
+    } else {
+      // No speech synthesis available — resolve immediately so callers don't hang
+      this.voicesReadyResolve?.();
+      this.voicesReadyResolve = null;
     }
   }
 
   /**
    * Capability-based Indian Hindi voice selection prioritizing 'hi-IN' native voices.
+   *
+   * Priority cascade:
+   *   1. hi-IN voice with known Indian Hindi voice name (Google हिन्दी, Microsoft Hemant, etc.)
+   *   2. Any voice with lang exactly 'hi-IN' or 'hi_IN'
+   *   3. Any voice whose lang starts with 'hi'
+   *   4. Any voice whose name contains 'hindi' or 'हिन्दी'
+   *   5. Marathi voice as closest Devanagari sister language
+   *   6. Browser default (null — SpeechSynthesis uses its own default)
    */
   public initVoices() {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -74,7 +109,7 @@ class AudioService {
         selected = voices.find((v) => (v.lang || '').toLowerCase().startsWith('hi'));
       }
 
-      // 4. Fourth priority: Any voice whose name contains 'hindi' or 'india'
+      // 4. Fourth priority: Any voice whose name contains 'hindi' or 'हिन्दी'
       if (!selected) {
         selected = voices.find(
           (v) =>
@@ -89,8 +124,37 @@ class AudioService {
         selected = voices.find((v) => (v.lang || '').toLowerCase().startsWith('mr'));
       }
 
+      const previousVoiceName = this.hindiVoice?.name;
       this.hindiVoice = selected ?? null;
+
+      // Log voice selection in development only (safe check for Vite/non-Vite environments)
+      const isDev = typeof (import.meta as { env?: { DEV?: boolean } }).env?.DEV !== 'undefined'
+        ? (import.meta as { env?: { DEV?: boolean } }).env!.DEV
+        : false;
+      if (isDev && this.hindiVoice && this.hindiVoice.name !== previousVoiceName) {
+        console.info(
+          `[AudioService] Hindi voice selected: "${this.hindiVoice.name}" (lang: ${this.hindiVoice.lang}, localService: ${this.hindiVoice.localService})`
+        );
+      } else if (isDev && !this.hindiVoice && previousVoiceName !== undefined) {
+        console.warn(
+          `[AudioService] No Hindi voice available. Using browser default. ${voices.length} voices found.`
+        );
+      }
+
+      // Resolve the voicesReady promise so any waiting callers proceed
+      if (this.voicesReadyResolve) {
+        this.voicesReadyResolve();
+        this.voicesReadyResolve = null;
+      }
     }
+  }
+
+  /**
+   * Returns a Promise that resolves once voices have been loaded.
+   * Safe to call multiple times — returns the same shared promise.
+   */
+  public waitForVoices(): Promise<void> {
+    return this.voicesReadyPromise;
   }
 
   public getHindiVoice(): SpeechSynthesisVoice | null {
@@ -98,6 +162,52 @@ class AudioService {
       this.initVoices();
     }
     return this.hindiVoice;
+  }
+
+  /**
+   * Development diagnostics: returns detailed info about current voice selection.
+   * Call `audioService.getVoiceDiagnostics()` in browser console during dev.
+   */
+  public getVoiceDiagnostics(): {
+    selectedVoice: { name: string; lang: string; localService: boolean } | null;
+    voicesLoaded: boolean;
+    totalVoicesAvailable: number;
+    allHindiVoices: Array<{ name: string; lang: string; localService: boolean }>;
+    isSpeaking: boolean;
+    isMuted: boolean;
+    defaultRate: number;
+  } {
+    const allVoices =
+      typeof window !== 'undefined' && 'speechSynthesis' in window
+        ? window.speechSynthesis.getVoices()
+        : [];
+
+    const hindiVoices = allVoices.filter(
+      (v) =>
+        (v.lang || '').toLowerCase().startsWith('hi') ||
+        (v.name || '').toLowerCase().includes('hindi') ||
+        (v.name || '').toLowerCase().includes('हिन्दी')
+    );
+
+    return {
+      selectedVoice: this.hindiVoice
+        ? {
+            name: this.hindiVoice.name,
+            lang: this.hindiVoice.lang,
+            localService: this.hindiVoice.localService,
+          }
+        : null,
+      voicesLoaded: this.voicesLoaded,
+      totalVoicesAvailable: allVoices.length,
+      allHindiVoices: hindiVoices.map((v) => ({
+        name: v.name,
+        lang: v.lang,
+        localService: v.localService,
+      })),
+      isSpeaking: this.isSpeakingText,
+      isMuted: this.isMuted,
+      defaultRate: this.defaultRate,
+    };
   }
 
   public isSpeaking(): boolean {
@@ -131,10 +241,47 @@ class AudioService {
     return this.isMuted;
   }
 
+  /** Configure default speech rate (0.1 – 2.0). Default: 0.90 */
+  public setDefaultRate(rate: number) {
+    this.defaultRate = Math.max(0.1, Math.min(2.0, rate));
+  }
+
+  public getDefaultRate(): number {
+    return this.defaultRate;
+  }
+
+  /**
+   * Start the Chromium long-speech keepalive.
+   * Chromium pauses SpeechSynthesis after ~15 seconds. This periodically
+   * pause/resumes to keep the speech alive without audible interruption.
+   */
+  private startKeepAlive() {
+    this.stopKeepAlive();
+    this.keepAliveInterval = setInterval(() => {
+      if (
+        typeof window !== 'undefined' &&
+        'speechSynthesis' in window &&
+        window.speechSynthesis.speaking &&
+        !window.speechSynthesis.paused
+      ) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 10000); // Every 10 seconds, well before the ~15s Chromium cutoff
+  }
+
+  private stopKeepAlive() {
+    if (this.keepAliveInterval !== null) {
+      clearInterval(this.keepAliveInterval);
+      this.keepAliveInterval = null;
+    }
+  }
+
   /**
    * Explicitly stop any active SpeechSynthesis audio.
    */
   public stopSpeech() {
+    this.stopKeepAlive();
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       try {
         window.speechSynthesis.cancel();
@@ -152,12 +299,13 @@ class AudioService {
    * - Entire text is passed intact as ONE natural utterance.
    * - Garbage collection protection ensures words/sentences are not cut off mid-speech.
    * - Rapid-click debounce prevents overlapping or broken audio streams.
+   * - Chromium keepalive prevents 15-second timeout on long texts.
    */
   public playSpeechText(
     text: string,
     onStart?: () => void,
     onEnd?: () => void,
-    rate: number = 0.90
+    rate?: number
   ): Promise<void> {
     return new Promise((resolve) => {
       const cleanText = text ? text.trim() : '';
@@ -186,92 +334,121 @@ class AudioService {
         return;
       }
 
-      // Debounce: If the exact same text is already speaking, allow it to finish smoothly
+      // Debounce: If the exact same text is already speaking, let it finish
       if (this.isSpeakingText && this.currentSpeakingText === cleanText) {
+        resolve();
         return;
       }
 
       // If a different text was speaking, cleanly cancel it first
       if (this.isSpeakingText && this.currentSpeakingText !== cleanText) {
         this.stopSpeech();
+        // Small delay after cancel to let the browser's speech engine reset.
+        // Without this, some browsers (especially Chromium) may silently drop
+        // the next utterance that is queued immediately after cancel().
+        setTimeout(() => {
+          this.speakUtterance(cleanText, onStart, onEnd, rate, resolve);
+        }, 50);
+        return;
       }
 
-      // Ensure voices are initialized
-      if (!this.hindiVoice && !this.voicesLoaded) {
-        this.initVoices();
-      }
-
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'hi-IN';
-      if (this.hindiVoice) {
-        utterance.voice = this.hindiVoice;
-      }
-      utterance.rate = rate; // Calibrated 0.88-0.90 for clear, natural Indian Hindi articulation
-      utterance.pitch = 1.0; // Natural pitch
-      utterance.volume = 1.0;
-
-      // Retain strong reference to prevent Chromium garbage collection from cutting audio
-      this.activeUtterances.add(utterance);
-      this.isSpeakingText = true;
-      this.currentSpeakingText = cleanText;
-
-      let hasCleanedUp = false;
-      const cleanup = () => {
-        if (!hasCleanedUp) {
-          hasCleanedUp = true;
-          this.activeUtterances.delete(utterance);
-          if (this.currentSpeakingText === cleanText) {
-            this.isSpeakingText = false;
-            this.currentSpeakingText = null;
-          }
-          onEnd?.();
-          resolve();
-        }
-      };
-
-      utterance.onstart = () => {
-        onStart?.();
-      };
-
-      utterance.onend = () => {
-        cleanup();
-      };
-
-      utterance.onerror = (e) => {
-        // 'canceled' errors are normal when intentionally interrupted
-        if (e.error !== 'canceled') {
-          console.warn(`Speech synthesis notice (${cleanText}):`, e.error);
-        }
-        cleanup();
-      };
-
-      // Dynamic safety timer scaled to text length (min 5s, ~120ms per character for long stories)
-      const maxDuration = Math.max(5000, cleanText.length * 150);
-      setTimeout(() => {
-        cleanup();
-      }, maxDuration);
-
-      try {
-        window.speechSynthesis.speak(utterance);
-      } catch (err) {
-        console.warn('Speech synthesis speak error:', err);
-        cleanup();
-      }
+      this.speakUtterance(cleanText, onStart, onEnd, rate, resolve);
     });
+  }
+
+  /**
+   * Internal: creates and speaks a SpeechSynthesisUtterance.
+   * Separated from playSpeechText to allow delayed invocation after cancel().
+   */
+  private speakUtterance(
+    cleanText: string,
+    onStart: (() => void) | undefined,
+    onEnd: (() => void) | undefined,
+    rate: number | undefined,
+    resolve: () => void
+  ) {
+    // Ensure voices are initialized
+    if (!this.hindiVoice && !this.voicesLoaded) {
+      this.initVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'hi-IN';
+    if (this.hindiVoice) {
+      utterance.voice = this.hindiVoice;
+    }
+    utterance.rate = rate ?? this.defaultRate;
+    utterance.pitch = this.defaultPitch;
+    utterance.volume = 1.0;
+
+    // Retain strong reference to prevent Chromium garbage collection from cutting audio
+    this.activeUtterances.add(utterance);
+    this.isSpeakingText = true;
+    this.currentSpeakingText = cleanText;
+
+    let hasCleanedUp = false;
+    const cleanup = () => {
+      if (!hasCleanedUp) {
+        hasCleanedUp = true;
+        this.stopKeepAlive();
+        this.activeUtterances.delete(utterance);
+        if (this.currentSpeakingText === cleanText) {
+          this.isSpeakingText = false;
+          this.currentSpeakingText = null;
+        }
+        onEnd?.();
+        resolve();
+      }
+    };
+
+    utterance.onstart = () => {
+      // Start the Chromium keepalive for longer texts
+      if (cleanText.length > 30) {
+        this.startKeepAlive();
+      }
+      onStart?.();
+    };
+
+    utterance.onend = () => {
+      cleanup();
+    };
+
+    utterance.onerror = (e) => {
+      // 'canceled' and 'interrupted' errors are normal when intentionally interrupted
+      if (e.error !== 'canceled' && e.error !== 'interrupted') {
+        console.warn(`Speech synthesis notice (${cleanText.substring(0, 30)}...):`, e.error);
+      }
+      cleanup();
+    };
+
+    // Dynamic safety timer scaled to text length
+    // Minimum 5s for short words, ~200ms per character for long story text
+    // This is a backstop only — normal cleanup happens via onend/onerror
+    const maxDuration = Math.max(5000, cleanText.length * 200);
+    setTimeout(() => {
+      cleanup();
+    }, maxDuration);
+
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('Speech synthesis speak error:', err);
+      cleanup();
+    }
   }
 
   /**
    * Pronounce a Hindi character (e.g. 'अ', 'आ', 'क', 'म')
    */
   public playLetterAudio(letter: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
-    return this.playSpeechText(letter, onStart, onEnd, 0.88);
+    return this.playSpeechText(letter, onStart, onEnd, 0.85);
   }
 
   /**
-   * Pronounce a complete Hindi word (e.g. 'आम', 'कमल', 'मटर', 'माला', 'सेब')
+   * Pronounce a complete Hindi word (e.g. 'आम', 'कमल', 'माला', 'सेब')
    */
   public playWordAudio(word: string, onStart?: () => void, onEnd?: () => void): Promise<void> {
-    return this.playSpeechText(word, onStart, onEnd, 0.90);
+    return this.playSpeechText(word, onStart, onEnd, 0.88);
   }
 
   /**
@@ -283,11 +460,12 @@ class AudioService {
     onStart?: () => void,
     onEnd?: () => void
   ): Promise<void> {
-    return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.88);
+    return this.playSpeechText(`${char} से ${word}`, onStart, onEnd, 0.85);
   }
 
   /**
-   * Read a complete Hindi story naturally in Indian Hindi (hi-IN)
+   * Read a complete Hindi story naturally in Indian Hindi (hi-IN).
+   * Uses Chromium keepalive for long paragraphs.
    */
   public playStoryAudio(
     storyTextOrParagraphs: string | string[],
@@ -297,7 +475,7 @@ class AudioService {
     const fullText = Array.isArray(storyTextOrParagraphs)
       ? storyTextOrParagraphs.join(' ')
       : storyTextOrParagraphs;
-    return this.playSpeechText(fullText, onStart, onEnd, 0.88);
+    return this.playSpeechText(fullText, onStart, onEnd, 0.85);
   }
 
   /**

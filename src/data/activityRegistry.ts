@@ -27,7 +27,8 @@ export interface ActivityMeta {
     | 'word-picture-quiz'
     | 'memory-match'
     | 'sentence-builder'
-    | 'reading-comprehension';
+    | 'reading-comprehension'
+    | 'reading-practice';
   title: string;
   subtitle: string;
   description: string;
@@ -246,6 +247,26 @@ export const ACTIVITIES_REGISTRY: ActivityMeta[] = [
     },
     difficultyStars: 2,
     tags: ['कहानी', 'पठन', 'समझ', 'सवाल', 'उत्तर', 'वाचन'],
+  },
+  {
+    id: 'act_reading_practice',
+    activityCode: 'reading-practice',
+    title: 'पढ़कर सुनाओ',
+    subtitle: 'हिंदी शब्द और वाक्य पढ़कर बोलें',
+    description: 'हिन्दी शब्द या वाक्य पढ़ें और माइक में बोलकर सुनाएँ। ब्राउज़र आपकी आवाज़ पहचानेगा।',
+    objective: 'पठन अभ्यास व उच्चारण (Hindi reading aloud practice with speech recognition)',
+    categories: ['words'],
+    categoryDisplayLabel: 'पठन अभ्यास',
+    icon: '📖',
+    theme: {
+      bg: 'bg-violet-50/70',
+      border: 'border-violet-400',
+      badgeBg: 'bg-violet-500',
+      badgeText: 'text-white',
+      buttonGradient: 'from-violet-500 to-purple-600',
+    },
+    difficultyStars: 2,
+    tags: ['पठन', 'बोलना', 'उच्चारण', 'माइक', 'आवाज़', 'पढ़ना'],
   },
 ];
 
