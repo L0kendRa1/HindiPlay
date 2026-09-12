@@ -4,6 +4,7 @@ const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
 const contentRoutes = require('./routes/content.routes');
 const progressRoutes = require('./routes/progress.routes');
+const gamificationRoutes = require('./routes/gamification.routes');
 const { notFoundHandler, errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -39,6 +40,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/content/hindi', contentRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/gamification', gamificationRoutes);
 
 // 4. 404 & Centralized Error Handlers
 app.use(notFoundHandler);

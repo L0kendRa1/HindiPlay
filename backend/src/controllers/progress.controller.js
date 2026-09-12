@@ -1,9 +1,10 @@
 const Progress = require('../models/progress.model');
+const gamificationService = require('../services/gamification.service');
 
 const MAX_PAGE_LIMIT = 50;
 
 /**
- * @desc    Save a new learning activity attempt/result
+ * @desc    Save a new learning activity attempt/result and award gamification rewards
  * @route   POST /api/progress
  * @access  Private (Authenticated users only)
  */
@@ -108,12 +109,29 @@ exports.createProgress = async (req, res, next) => {
       completed,
       timeSpentSeconds,
       metadata: typeof metadata === 'object' && metadata !== null ? metadata : {},
+      gamificationProcessed: false,
     });
 
+    // 9. Automatically process gamification rewards (XP, stars, streak, badges)
+    const rewards = await gamificationService.processGamificationForProgress(progress);
+
+    const progressObj = progress.toJSON ? progress.toJSON() : progress.toObject();
+
+    // Return unified payload preserving backward compatibility and new rewards summary
     res.status(201).json({
       success: true,
       message: 'Progress saved successfully',
-      data: progress,
+      data: {
+        ...progressObj,
+        progress: progressObj,
+        rewards: {
+          xpEarned: rewards.xpEarned,
+          starsEarned: rewards.starsEarned,
+          currentStreak: rewards.currentStreak,
+          longestStreak: rewards.longestStreak,
+          newBadges: rewards.newBadges,
+        },
+      },
     });
   } catch (error) {
     next(error);
