@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useWordBuilder } from '../hooks/useWordBuilder';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { Header } from './Header';
 import { ProgressBar } from './ProgressBar';
 import { FeedbackBanner } from './FeedbackBanner';
@@ -52,6 +54,29 @@ export const WordBuilderActivity: React.FC<WordBuilderActivityProps> = ({ onBack
     checkDiscoveryWord,
   } = useWordBuilder();
 
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when round completes in guided mode
+  useEffect(() => {
+    if (isRoundComplete && mode === 'guided') {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'word-builder',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, mode, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartQuiz();
+  };
+
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Auto-focus next button on solve
@@ -86,7 +111,7 @@ export const WordBuilderActivity: React.FC<WordBuilderActivityProps> = ({ onBack
       if (isRoundComplete) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          restartQuiz();
+          handleRestart();
         }
         return;
       }
@@ -160,8 +185,11 @@ export const WordBuilderActivity: React.FC<WordBuilderActivityProps> = ({ onBack
           <div className="flex flex-col items-center">
             <RoundSummary
               stats={stats}
-              onRestart={restartQuiz}
+              onRestart={handleRestart}
               onBackToLibrary={onBackToLibrary}
+              rewards={rewards}
+              isSubmitting={isSubmitting}
+              submitError={error}
             />
             <button
               onClick={returnToDifficultySelector}

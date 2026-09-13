@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { usePictureMatch } from '../hooks/usePictureMatch';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { Header } from './Header';
 import { ProgressBar } from './ProgressBar';
 import { AudioButton } from './AudioButton';
@@ -33,6 +35,29 @@ export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = ({ onBa
     changeCategoryFilter,
   } = usePictureMatch();
 
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'picture-match',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartQuiz();
+  };
+
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Auto-focus next button on correct answer
@@ -52,7 +77,7 @@ export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = ({ onBa
       if (isRoundComplete) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          restartQuiz();
+          handleRestart();
         }
         return;
       }
@@ -111,8 +136,11 @@ export const PictureMatchActivity: React.FC<PictureMatchActivityProps> = ({ onBa
           <RoundSummary
             stats={stats}
             categoryFilter={categoryFilter}
-            onRestart={() => restartQuiz()}
+            onRestart={handleRestart}
             onBackToLibrary={onBackToLibrary}
+            rewards={rewards}
+            isSubmitting={isSubmitting}
+            submitError={error}
           />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">

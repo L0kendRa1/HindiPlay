@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useReadingPractice, RecognitionState } from '../hooks/useReadingPractice';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { ReadingPracticeDifficulty } from '../data/readingPractice';
 import { Header } from './Header';
+import { RewardFeedback } from './RewardFeedback';
 import {
   Mic,
   MicOff,
@@ -72,6 +75,35 @@ export const ReadingPracticeActivity: React.FC<ReadingPracticeActivityProps> = (
     pronounceWord,
   } = useReadingPractice();
 
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when reading round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'reading-practice',
+        score: score,
+        total: totalItems,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, score, totalItems, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartRound();
+  };
+
+  const handleSelectDifficulty = (newDiff: ReadingPracticeDifficulty) => {
+    timer.resetTimer();
+    resetProgress();
+    setDifficulty(newDiff);
+  };
+
   const isListening = recognitionState === 'listening';
   const status = getStatusIndicator(recognitionState, comparisonResult?.isCorrect);
 
@@ -119,7 +151,7 @@ export const ReadingPracticeActivity: React.FC<ReadingPracticeActivityProps> = (
               आपने बहुत अच्छा प्रयास किया। रोज़ अभ्यास करने से आपका पठन और बेहतर होगा।
             </p>
 
-            <div className="bg-violet-50 rounded-2xl p-4 mb-6 border border-violet-200">
+            <div className="bg-violet-50 rounded-2xl p-4 mb-4 border border-violet-200">
               <span className="text-xs font-bold text-violet-600 uppercase tracking-wider">
                 आपका स्कोर (पहली बार में सही)
               </span>
@@ -128,9 +160,16 @@ export const ReadingPracticeActivity: React.FC<ReadingPracticeActivityProps> = (
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            {/* Authenticated Reward Feedback */}
+            <RewardFeedback
+              rewards={rewards}
+              isSubmitting={isSubmitting}
+              error={error}
+            />
+
+            <div className="flex flex-col gap-3 mt-4">
               <button
-                onClick={restartRound}
+                onClick={handleRestart}
                 className="w-full py-3.5 bg-gradient-to-r from-violet-500 to-purple-600 text-white font-extrabold rounded-2xl shadow-toy-sm hover:scale-105 transition-transform"
               >
                 🔄 फिर से खेलें
@@ -164,7 +203,7 @@ export const ReadingPracticeActivity: React.FC<ReadingPracticeActivityProps> = (
           {DIFFICULTY_OPTIONS.map((opt) => (
             <button
               key={opt.key}
-              onClick={() => setDifficulty(opt.key)}
+              onClick={() => handleSelectDifficulty(opt.key)}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-extrabold text-sm transition-all duration-200 ${
                 difficulty === opt.key
                   ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-toy-sm scale-105'

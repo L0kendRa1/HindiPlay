@@ -2,12 +2,18 @@ import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Trophy, Star, RotateCcw, Home } from 'lucide-react';
 import { ActivityStats, CategoryFilter } from '../types/activity';
+import { RewardFeedback } from './RewardFeedback';
+import type { RewardSummary } from '../types/api';
 
-interface RoundSummaryProps {
+export interface RoundSummaryProps {
   stats: ActivityStats;
   categoryFilter?: CategoryFilter;
   onRestart: () => void;
   onBackToLibrary?: () => void;
+  rewards?: RewardSummary | null;
+  isSubmitting?: boolean;
+  submitError?: string | null;
+  children?: React.ReactNode;
 }
 
 export const RoundSummary: React.FC<RoundSummaryProps> = ({
@@ -15,6 +21,10 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({
   categoryFilter = 'all',
   onRestart,
   onBackToLibrary,
+  rewards,
+  isSubmitting,
+  submitError,
+  children,
 }) => {
   useEffect(() => {
     // Launch playful confetti burst
@@ -144,6 +154,14 @@ export const RoundSummary: React.FC<RoundSummaryProps> = ({
             </span>
           </div>
         </div>
+
+        {/* Authenticated Reward Feedback */}
+        <RewardFeedback
+          rewards={rewards}
+          isSubmitting={isSubmitting}
+          error={submitError}
+        />
+        {children}
 
         {/* Action Buttons: Play Again & Return to Library */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md mx-auto">

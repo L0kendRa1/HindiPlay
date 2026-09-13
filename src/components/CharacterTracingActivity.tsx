@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useCharacterTracing } from '../hooks/useCharacterTracing';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { Header } from './Header';
 import { ProgressBar } from './ProgressBar';
 import { FeedbackBanner } from './FeedbackBanner';
@@ -36,6 +38,29 @@ export const CharacterTracingActivity: React.FC<CharacterTracingActivityProps> =
     restartTracing,
   } = useCharacterTracing();
 
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when tracing round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'tracing',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartTracing();
+  };
+
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Auto-focus next button on completion
@@ -55,7 +80,7 @@ export const CharacterTracingActivity: React.FC<CharacterTracingActivityProps> =
       if (isRoundComplete) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          restartTracing();
+          handleRestart();
         }
         return;
       }
@@ -103,8 +128,11 @@ export const CharacterTracingActivity: React.FC<CharacterTracingActivityProps> =
         <main className="flex-1 flex items-center justify-center py-6">
           <RoundSummary
             stats={stats}
-            onRestart={restartTracing}
+            onRestart={handleRestart}
             onBackToLibrary={onBackToLibrary}
+            rewards={rewards}
+            isSubmitting={isSubmitting}
+            submitError={error}
           />
         </main>
         <footer className="py-4 text-center text-xs text-slate-400 font-medium">

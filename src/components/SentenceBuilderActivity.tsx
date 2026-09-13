@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSentenceBuilder } from '../hooks/useSentenceBuilder';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { SentenceWordCard } from './SentenceWordCard';
 import { SentenceConstructionArea } from './SentenceConstructionArea';
 import { SentenceDifficultySelector } from './SentenceDifficultySelector';
@@ -40,6 +42,29 @@ export const SentenceBuilderActivity: React.FC<SentenceBuilderActivityProps> = (
     restartRound,
     setDifficulty,
   } = useSentenceBuilder();
+
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when sentence builder round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'sentence-builder',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartRound();
+  };
 
   if (!currentQuestion) {
     return (
@@ -233,8 +258,11 @@ export const SentenceBuilderActivity: React.FC<SentenceBuilderActivityProps> = (
       {isRoundComplete && (
         <RoundSummary
           stats={stats}
-          onRestart={restartRound}
+          onRestart={handleRestart}
           onBackToLibrary={onBackToLibrary}
+          rewards={rewards}
+          isSubmitting={isSubmitting}
+          submitError={error}
         />
       )}
     </div>

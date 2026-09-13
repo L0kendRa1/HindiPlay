@@ -6,13 +6,18 @@ import {
   filterActivities,
 } from '../data/activityRegistry';
 import { ActivityCard } from './ActivityCard';
+import { UserProfileBar } from './UserProfileBar';
 import { Search, Sparkles, X } from 'lucide-react';
 
 interface ActivityLibraryProps {
   onSelectActivity: (activity: ActivityMeta) => void;
+  onLoginClick?: () => void;
 }
 
-export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({ onSelectActivity }) => {
+export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({
+  onSelectActivity,
+  onLoginClick,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<ActivityCategoryKey>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -24,7 +29,7 @@ export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({ onSelectActivi
     <div className="min-h-screen bg-toy-canvas flex flex-col justify-between font-hindi">
       {/* Top Brand Header */}
       <header className="w-full bg-white/90 backdrop-blur border-b-2 border-slate-200 sticky top-0 z-30 shadow-xs">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
           {/* Logo / Brand Name */}
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-tr from-toy-orange to-toy-yellow flex items-center justify-center text-white shadow-toy-sm text-2xl select-none">
@@ -40,25 +45,31 @@ export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({ onSelectActivi
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative w-full sm:w-64 md:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="गतिविधि खोजें..."
-              className="w-full pl-9 pr-8 py-2 rounded-2xl border-2 border-slate-200 focus:border-toy-sky bg-slate-50 text-xs md:text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white transition-colors"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full"
-                title="साफ़ करें"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+          {/* Right Actions: Search + UserProfileBar */}
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-1 sm:flex-initial justify-end">
+            {/* Search Bar */}
+            <div className="relative w-full sm:w-48 md:w-60">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="गतिविधि खोजें..."
+                className="w-full pl-9 pr-8 py-2 rounded-2xl border-2 border-slate-200 focus:border-toy-sky bg-slate-50 text-xs md:text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full"
+                  title="साफ़ करें"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Profile / Login Control */}
+            <UserProfileBar onLoginClick={onLoginClick} />
           </div>
         </div>
       </header>

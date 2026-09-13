@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMemoryGame } from '../hooks/useMemoryGame';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { MemoryCard } from './MemoryCard';
 import { MemoryDifficultySelector } from './MemoryDifficultySelector';
 import { Header } from './Header';
-import { MEMORY_DIFFICULTIES } from '../types/memoryGame';
+import { RewardFeedback } from './RewardFeedback';
+import { MEMORY_DIFFICULTIES, MemoryDifficulty } from '../types/memoryGame';
 import { RotateCcw, Sparkles, Trophy, Star, Home } from 'lucide-react';
 
 interface MemoryGameActivityProps {
@@ -27,6 +30,35 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({ onBackTo
     restartGame,
   } = useMemoryGame('easy');
 
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when memory game completes
+  useEffect(() => {
+    if (isGameComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'memory-match',
+        score: score,
+        total: totalPairs * 20,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isGameComplete, score, totalPairs, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartGame();
+  };
+
+  const handleSelectDifficulty = (newDiff: MemoryDifficulty) => {
+    timer.resetTimer();
+    resetProgress();
+    setDifficulty(newDiff);
+  };
+
   const config = MEMORY_DIFFICULTIES[difficulty];
 
   return (
@@ -44,7 +76,7 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({ onBackTo
         {/* Difficulty Selector */}
         <MemoryDifficultySelector
           currentDifficulty={difficulty}
-          onSelectDifficulty={setDifficulty}
+          onSelectDifficulty={handleSelectDifficulty}
           disabled={isChecking}
         />
 
@@ -91,7 +123,7 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({ onBackTo
         {/* Bottom Actions Bar */}
         <div className="w-full max-w-2xl flex items-center justify-between mt-3 pt-2">
           <button
-            onClick={restartGame}
+            onClick={handleRestart}
             disabled={isChecking}
             className="inline-flex items-center gap-1.5 bg-white border-2 border-slate-300 text-slate-700 px-4 py-2 rounded-2xl font-black text-xs md:text-sm shadow-toy-sm hover:bg-slate-100 hover:border-slate-400 active:scale-95 transition-all"
             title="नया गेम शुरू करें"
@@ -149,10 +181,17 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({ onBackTo
               </div>
             </div>
 
+            {/* Authenticated Reward Feedback */}
+            <RewardFeedback
+              rewards={rewards}
+              isSubmitting={isSubmitting}
+              error={error}
+            />
+
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={restartGame}
+                onClick={handleRestart}
                 className="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-toy-yellow to-toy-orange text-slate-900 font-black text-base shadow-toy-md hover:shadow-toy-lg active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <RotateCcw className="w-5 h-5" />

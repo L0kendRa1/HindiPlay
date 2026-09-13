@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useReadingComprehension } from '../hooks/useReadingComprehension';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { StoryReader } from './StoryReader';
 import { StoryQuestionCard } from './StoryQuestionCard';
 import { StoryDifficultySelector } from './StoryDifficultySelector';
@@ -40,6 +42,29 @@ export const ReadingComprehensionActivity: React.FC<ReadingComprehensionActivity
     restartRound,
     setDifficulty,
   } = useReadingComprehension();
+
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when comprehension round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'reading-comprehension',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartRound();
+  };
 
   if (!currentStory || !currentQuestion) {
     return (
@@ -163,8 +188,11 @@ export const ReadingComprehensionActivity: React.FC<ReadingComprehensionActivity
       {isRoundComplete && (
         <RoundSummary
           stats={stats}
-          onRestart={restartRound}
+          onRestart={handleRestart}
           onBackToLibrary={onBackToLibrary}
+          rewards={rewards}
+          isSubmitting={isSubmitting}
+          submitError={error}
         />
       )}
     </div>

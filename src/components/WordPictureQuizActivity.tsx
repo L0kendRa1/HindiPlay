@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useWordPictureQuiz } from '../hooks/useWordPictureQuiz';
+import { useActivityProgress } from '../hooks/useActivityProgress';
+import { useActivityTimer } from '../hooks/useActivityTimer';
 import { WordPromptCard } from './WordPromptCard';
 import { PictureOptionCard } from './PictureOptionCard';
 import { Header } from './Header';
@@ -30,6 +32,29 @@ export const WordPictureQuizActivity: React.FC<WordPictureQuizActivityProps> = (
     restartRound,
     setCategoryFilter,
   } = useWordPictureQuiz();
+
+  const { submitProgress, resetProgress, isSubmitting, error, rewards } = useActivityProgress();
+  const timer = useActivityTimer();
+
+  // Submit progress when round completes
+  useEffect(() => {
+    if (isRoundComplete) {
+      const elapsed = timer.stopTimer();
+      submitProgress({
+        activityId: 'word-picture-quiz',
+        score: stats.score,
+        total: stats.totalQuestions * 10,
+        completed: true,
+        timeSpentSeconds: elapsed,
+      });
+    }
+  }, [isRoundComplete, stats.score, stats.totalQuestions, submitProgress, timer]);
+
+  const handleRestart = () => {
+    timer.resetTimer();
+    resetProgress();
+    restartRound();
+  };
 
   if (!currentQuestion) {
     return (
@@ -116,8 +141,11 @@ export const WordPictureQuizActivity: React.FC<WordPictureQuizActivityProps> = (
       {isRoundComplete && (
         <RoundSummary
           stats={stats}
-          onRestart={restartRound}
+          onRestart={handleRestart}
           onBackToLibrary={onBackToLibrary}
+          rewards={rewards}
+          isSubmitting={isSubmitting}
+          submitError={error}
         />
       )}
     </div>
