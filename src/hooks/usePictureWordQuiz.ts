@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { PictureWordQuizQuestion, PictureWordItem } from '../types/pictureMatch';
 import { CategoryFilter, FeedbackType, ActivityStats } from '../types/activity';
-import { generatePictureWordQuizRound } from '../data/pictureWords';
+import { generatePictureWordQuizRound, mapBackendWordToPictureWordItem } from '../data/pictureWords';
 import { audioService } from '../services/audioService';
+import { useRecentContent } from './useRecentContent';
+import * as contentService from '../services/contentService';
 
 const TOTAL_ROUND_QUESTIONS = 10;
 
@@ -17,10 +19,63 @@ export function usePictureWordQuiz(options: UsePictureWordQuizOptions = {}) {
     initialCategory = 'all',
   } = options;
 
+  const { recentItems, recordRecent } = useRecentContent('picture-word-quiz');
+
   const [categoryFilter, setCategoryFilterState] = useState<CategoryFilter>(initialCategory);
   const [questions, setQuestions] = useState<PictureWordQuizQuestion[]>(() =>
-    generatePictureWordQuizRound({ count: totalQuestions, categoryFilter: initialCategory })
+    generatePictureWordQuizRound({
+      count: totalQuestions,
+      categoryFilter: initialCategory,
+      recentIds: recentItems,
+    })
   );
+
+  // Attempt async dynamic selection from backend with instant local fallback
+  useEffect(() => {
+    let cancelled = false;
+
+    contentService
+      .getRandomWords({
+        count: totalQuestions,
+        activityId: 'picture-word-quiz',
+        category: categoryFilter,
+        hasImage: true,
+        exclude: recentItems.slice(0, 30).join(','),
+      })
+      .then((res) => {
+        if (cancelled || !res?.data || res.data.length === 0) return;
+
+        // Convert backend words to valid PictureWordItems
+        const dynamicItems: PictureWordItem[] = res.data
+          .map(mapBackendWordToPictureWordItem)
+          .filter((item): item is PictureWordItem => item !== null);
+
+        if (dynamicItems.length >= 3) {
+          // Construct round from dynamic items
+          const dynamicQuestions: PictureWordQuizQuestion[] = dynamicItems.map((targetItem, idx) => {
+            const distractors = dynamicItems.filter((it) => it.id !== targetItem.id).slice(0, 2);
+            const roundOptions = [targetItem, ...distractors].sort(() => Math.random() - 0.5);
+
+            return {
+              id: `pwq_dyn_${idx + 1}_${targetItem.id}`,
+              targetItem,
+              options: roundOptions,
+              correctAnswerId: targetItem.id,
+            };
+          });
+
+          setQuestions(dynamicQuestions);
+          recordRecent(dynamicItems.map((it) => it.word));
+        }
+      })
+      .catch(() => {
+        // Silent catch: local fallback is already rendered and working smoothly
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [categoryFilter, totalQuestions]); // eslint-disable-line react-hooks/exhaustive-deps
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [wrongOptionIds, setWrongOptionIds] = useState<string[]>([]);
@@ -127,6 +182,7 @@ export function usePictureWordQuiz(options: UsePictureWordQuizOptions = {}) {
       const newQuestions = generatePictureWordQuizRound({
         count: totalQuestions,
         categoryFilter: newFilter,
+        recentIds: recentItems,
       });
       setQuestions(newQuestions);
       setCurrentIndex(0);
@@ -145,7 +201,7 @@ export function usePictureWordQuiz(options: UsePictureWordQuizOptions = {}) {
         bestStreak: 0,
       });
     },
-    [totalQuestions]
+    [totalQuestions, recentItems]
   );
 
   const restartQuiz = useCallback(() => {
@@ -153,6 +209,7 @@ export function usePictureWordQuiz(options: UsePictureWordQuizOptions = {}) {
     const newQuestions = generatePictureWordQuizRound({
       count: totalQuestions,
       categoryFilter,
+      recentIds: recentItems,
     });
     setQuestions(newQuestions);
     setCurrentIndex(0);
@@ -170,7 +227,7 @@ export function usePictureWordQuiz(options: UsePictureWordQuizOptions = {}) {
       streak: 0,
       bestStreak: 0,
     });
-  }, [totalQuestions, categoryFilter]);
+  }, [totalQuestions, categoryFilter, recentItems]);
 
   return {
     questions,

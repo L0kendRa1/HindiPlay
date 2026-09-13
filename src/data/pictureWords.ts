@@ -509,6 +509,38 @@ export interface PictureMatchRoundOptions {
   count?: number;
   optionsCount?: number;
   categoryFilter?: CategoryFilter;
+  recentIds?: string[];
+}
+
+/**
+ * Maps a backend Hindi word to a frontend PictureWordItem if valid image data is present.
+ */
+export function mapBackendWordToPictureWordItem(backendWord: {
+  _id?: string;
+  word: string;
+  meaning?: string;
+  category?: string;
+  image?: { url: string; alt?: string } | null;
+  letters?: string[];
+}): PictureWordItem | null {
+  if (!backendWord || !backendWord.word || !backendWord.image || !backendWord.image.url) {
+    return null;
+  }
+
+  // Find existing local item to preserve character mapping/emojis if available
+  const existing = HINDI_PICTURE_WORDS.find((item) => item.word === backendWord.word);
+
+  return {
+    id: backendWord._id || existing?.id || `pw_dyn_${backendWord.word}`,
+    character: existing?.character || (backendWord.letters && backendWord.letters[0]) || backendWord.word[0],
+    characterId: existing?.characterId || 'dynamic',
+    word: backendWord.word,
+    meaning: backendWord.meaning || existing?.meaning || '',
+    emoji: existing?.emoji || '🎨',
+    image: backendWord.image.url,
+    category: existing?.category || 'consonant',
+    hint: existing?.hint || `${backendWord.word[0]} से ${backendWord.word}`,
+  };
 }
 
 /**
@@ -516,17 +548,24 @@ export interface PictureMatchRoundOptions {
  * - Targets a character & its corresponding word.
  * - Selects 2 distractor picture words from the same category where possible.
  * - Guarantees 0 duplicate options and validated image assets.
+ * - Respects recentIds to avoid immediate repetition across rounds.
  */
 export function generatePictureMatchRound(options: PictureMatchRoundOptions = {}): PictureMatchQuestion[] {
-  const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
+  const { count = 10, optionsCount = 3, categoryFilter = 'all', recentIds = [] } = options;
 
   const candidatePool = getPictureWordsByCategory(categoryFilter);
   if (candidatePool.length === 0) {
     return [];
   }
 
-  const shuffledTargets = shuffleArray(candidatePool);
-  const selectedTargets = shuffledTargets.slice(0, Math.min(count, shuffledTargets.length));
+  // Educational variety: prefer items not in recentIds first
+  const recentSet = new Set(recentIds);
+  const freshCandidates = candidatePool.filter((item) => !recentSet.has(item.id) && !recentSet.has(item.word));
+  const candidateOrder = freshCandidates.length >= count
+    ? shuffleArray(freshCandidates)
+    : [...shuffleArray(freshCandidates), ...shuffleArray(candidatePool.filter((item) => recentSet.has(item.id) || recentSet.has(item.word)))];
+
+  const selectedTargets = candidateOrder.slice(0, Math.min(count, candidateOrder.length));
 
   return selectedTargets.map((targetWord, idx) => {
     // Find matching HindiCharacter object
@@ -568,15 +607,20 @@ export function generatePictureMatchRound(options: PictureMatchRoundOptions = {}
  * - Guarantees 0 duplicate options, randomized correct answer position, and validated image assets.
  */
 export function generatePictureWordQuizRound(options: PictureMatchRoundOptions = {}): PictureWordQuizQuestion[] {
-  const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
+  const { count = 10, optionsCount = 3, categoryFilter = 'all', recentIds = [] } = options;
 
   const candidatePool = getPictureWordsByCategory(categoryFilter);
   if (candidatePool.length === 0) {
     return [];
   }
 
-  const shuffledTargets = shuffleArray(candidatePool);
-  const selectedTargets = shuffledTargets.slice(0, Math.min(count, shuffledTargets.length));
+  const recentSet = new Set(recentIds);
+  const freshCandidates = candidatePool.filter((item) => !recentSet.has(item.id) && !recentSet.has(item.word));
+  const candidateOrder = freshCandidates.length >= count
+    ? shuffleArray(freshCandidates)
+    : [...shuffleArray(freshCandidates), ...shuffleArray(candidatePool.filter((item) => recentSet.has(item.id) || recentSet.has(item.word)))];
+
+  const selectedTargets = candidateOrder.slice(0, Math.min(count, candidateOrder.length));
 
   return selectedTargets.map((targetItem, idx) => {
     // Pick distractors from matching category candidates
@@ -606,17 +650,23 @@ export function generatePictureWordQuizRound(options: PictureMatchRoundOptions =
  * - Target is a Hindi Word prompt (e.g. 'आम', 'कमल', 'तरबूज').
  * - Options are 3 distinct illustrated Picture choices (1 correct + 2 distractors).
  * - Guarantees 0 duplicate options, randomized correct answer position, and validated image assets.
+ * - Respects recentIds to avoid immediate repetition across rounds.
  */
 export function generateWordPictureQuizRound(options: PictureMatchRoundOptions = {}): WordPictureQuizQuestion[] {
-  const { count = 10, optionsCount = 3, categoryFilter = 'all' } = options;
+  const { count = 10, optionsCount = 3, categoryFilter = 'all', recentIds = [] } = options;
 
   const candidatePool = getPictureWordsByCategory(categoryFilter);
   if (candidatePool.length === 0) {
     return [];
   }
 
-  const shuffledTargets = shuffleArray(candidatePool);
-  const selectedTargets = shuffledTargets.slice(0, Math.min(count, shuffledTargets.length));
+  const recentSet = new Set(recentIds);
+  const freshCandidates = candidatePool.filter((item) => !recentSet.has(item.id) && !recentSet.has(item.word));
+  const candidateOrder = freshCandidates.length >= count
+    ? shuffleArray(freshCandidates)
+    : [...shuffleArray(freshCandidates), ...shuffleArray(candidatePool.filter((item) => recentSet.has(item.id) || recentSet.has(item.word)))];
+
+  const selectedTargets = candidateOrder.slice(0, Math.min(count, candidateOrder.length));
 
   return selectedTargets.map((targetItem, idx) => {
     // Pick distractors from matching category candidates

@@ -84,43 +84,33 @@ exports.getWords = async (req, res, next) => {
   }
 };
 
+const contentSelectionService = require('../services/contentSelection.service');
+
 /**
- * @desc    Get random unique Hindi words for activities
+ * @desc    Get random unique Hindi words for activities with smart selection
  * @route   GET /api/content/hindi/words/random
  * @access  Public
  */
 exports.getRandomWords = async (req, res, next) => {
   try {
-    let {
+    const {
       count = 5,
       category,
       difficulty,
       hasImage,
+      exclude,
+      activityId,
     } = req.query;
 
-    const safeCount = Math.min(MAX_RANDOM_COUNT, Math.max(1, parseInt(count, 10) || 5));
-
-    const matchFilter = { isActive: true };
-
-    if (category) {
-      matchFilter.category = category.trim();
-    }
-
-    if (difficulty && ['easy', 'medium', 'hard'].includes(difficulty.toLowerCase())) {
-      matchFilter.difficulty = difficulty.toLowerCase();
-    }
-
-    if (hasImage === 'true') {
-      matchFilter.image = { $ne: null };
-    } else if (hasImage === 'false') {
-      matchFilter.image = null;
-    }
-
-    const words = await HindiWord.aggregate([
-      { $match: matchFilter },
-      { $sample: { size: safeCount } },
-      { $project: { __v: 0 } },
-    ]);
+    const words = await contentSelectionService.selectWords({
+      count,
+      category,
+      difficulty,
+      hasImage,
+      exclude,
+      activityId,
+      userId: req.user ? req.user._id : undefined,
+    });
 
     res.status(200).json({
       success: true,
