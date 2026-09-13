@@ -12,11 +12,13 @@ import { Search, Sparkles, X } from 'lucide-react';
 interface ActivityLibraryProps {
   onSelectActivity: (activity: ActivityMeta) => void;
   onLoginClick?: () => void;
+  onProgressClick?: () => void;
 }
 
 export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({
   onSelectActivity,
   onLoginClick,
+  onProgressClick,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ActivityCategoryKey>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -69,7 +71,10 @@ export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({
             </div>
 
             {/* Profile / Login Control */}
-            <UserProfileBar onLoginClick={onLoginClick} />
+            <UserProfileBar
+              onLoginClick={onLoginClick}
+              onProgressClick={onProgressClick}
+            />
           </div>
         </div>
       </header>

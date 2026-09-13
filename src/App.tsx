@@ -17,10 +17,11 @@ import { MemoryGameActivity } from './components/MemoryGameActivity';
 import { SentenceBuilderActivity } from './components/SentenceBuilderActivity';
 import { ReadingComprehensionActivity } from './components/ReadingComprehensionActivity';
 import { ReadingPracticeActivity } from './components/ReadingPracticeActivity';
+import { LearnerDashboard } from './components/LearnerDashboard';
 
 import { audioService } from './services/audioService';
 
-type AppView = 'auth-entry' | 'login' | 'register' | 'library' | 'playing';
+type AppView = 'auth-entry' | 'login' | 'register' | 'library' | 'playing' | 'dashboard';
 
 export function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -58,7 +59,12 @@ export function App() {
           setCurrentView('library');
         }
       } else if (!isGuest) {
-        if (currentView !== 'playing' && currentView !== 'login' && currentView !== 'register') {
+        if (
+          currentView !== 'playing' &&
+          currentView !== 'login' &&
+          currentView !== 'register' &&
+          currentView !== 'dashboard'
+        ) {
           setCurrentView('auth-entry');
         }
       }
@@ -130,6 +136,12 @@ export function App() {
     setPreviewActivity(null);
   }, []);
 
+  // Dashboard navigation
+  const handleGoToDashboard = useCallback(() => {
+    audioService.stopSpeech();
+    setCurrentView('dashboard');
+  }, []);
+
   // 0. Loading Screen during token validation
   if (isLoading) {
     return (
@@ -177,6 +189,7 @@ export function App() {
           <ActivityLibrary
             onSelectActivity={handleSelectActivity}
             onLoginClick={handleGoToLogin}
+            onProgressClick={handleGoToDashboard}
           />
 
           {/* Activity Preview Modal (Opened when an activity is clicked) */}
@@ -190,7 +203,16 @@ export function App() {
         </>
       )}
 
-      {/* 5. Active Gameplay Screen (Launched only after "शुरू करें") */}
+      {/* 5. Learner Dashboard Screen */}
+      {currentView === 'dashboard' && (
+        <LearnerDashboard
+          onBackToLibrary={handleBackToLibrary}
+          onLoginClick={handleGoToLogin}
+          onContinueGuest={handleContinueGuest}
+        />
+      )}
+
+      {/* 6. Active Gameplay Screen (Launched only after "शुरू करें") */}
       {currentView === 'playing' && activeActivity && (
         <div key={`${activeActivity.activityCode}_${sessionKey}`}>
           {activeActivity.activityCode === 'letter-quiz' && (
