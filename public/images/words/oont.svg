@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Camel (ऊँट) -->
+    <!-- Hump in background -->
+    <path d="M 52 50 Q 64 24 76 52 Z" fill="#d97706" />
+    <!-- Long Curved Neck -->
+    <path d="M 28 62 C 34 50 38 34 32 24 C 36 22 44 24 46 36 C 48 48 46 64 42 74 Z" fill="#f59e0b" />
+    <!-- Head -->
+    <ellipse cx="28" cy="22" rx="14" ry="9" fill="#f59e0b" />
+    <!-- Little Ear -->
+    <polygon points="34,16 38,8 40,16" fill="#b45309" />
+    <!-- Eye with eyelashes -->
+    <circle cx="26" cy="20" r="3" fill="#1e293b" />
+    <path d="M 23 17 Q 27 15 30 18" stroke="#78350f" stroke-width="1.5" fill="none" />
+    <!-- Muzzle & Smile -->
+    <ellipse cx="18" cy="24" rx="6" ry="5" fill="#fef3c7" />
+    <ellipse cx="16" cy="23" rx="1.5" ry="2" fill="#78350f" />
+    <path d="M 16 26 Q 20 28 22 25" stroke="#78350f" stroke-width="1.5" fill="none" />
+    <!-- Blanket/Saddle on Hump -->
+    <path d="M 58 40 Q 64 34 70 40 L 72 50 L 56 50 Z" fill="#ef4444" />
+    <circle cx="64" cy="45" r="2" fill="#fde047" />
+  </svg>

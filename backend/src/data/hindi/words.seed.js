@@ -1,5 +1,5 @@
 /**
- * Curated Hindi Words Seed Data (Expanded)
+ * Curated Hindi Words Seed Data (Expanded with Full Image System)
  * Total: 216 words across 17 child-friendly categories.
  * Strict adherence to Hindi akshara learning units and verified image assets.
  */
@@ -26,7 +26,9 @@ const HINDI_WORDS_SEED = [
     ],
     "image": {
       "url": "/images/words/imli.svg",
-      "alt": "इमली का चित्र"
+      "alt": "इमली का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     },
     "audioText": "इमली",
     "tags": [
@@ -53,7 +55,9 @@ const HINDI_WORDS_SEED = [
     "matras": [],
     "image": {
       "url": "/images/words/phal.svg",
-      "alt": "ताजे फल"
+      "alt": "ताजे फल",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     },
     "audioText": "फल",
     "tags": [
@@ -87,7 +91,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "आम",
     "image": {
       "url": "/images/words/aam.svg",
-      "alt": "आम का चित्र"
+      "alt": "आम का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -119,7 +125,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "अनार",
     "image": {
       "url": "/images/words/anar.svg",
-      "alt": "अनार का चित्र"
+      "alt": "अनार का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -150,7 +158,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "अंगूर",
     "image": {
       "url": "/images/words/angoor.svg",
-      "alt": "अंगूर का गुच्छा"
+      "alt": "अंगूर का गुच्छा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -183,7 +193,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "तरबूज",
     "image": {
       "url": "/images/words/tarbooj.svg",
-      "alt": "तरबूज का टुकड़ा"
+      "alt": "तरबूज का टुकड़ा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -210,7 +222,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ईख",
     "image": {
       "url": "/images/words/eekh.svg",
-      "alt": "ईख का पौधा"
+      "alt": "ईख का पौधा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -239,7 +253,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "केला",
     "audioText": "केला",
-    "image": null
+    "image": {
+      "url": "/images/words/kela.svg",
+      "alt": "मीठा पीला केला",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "सेब",
@@ -267,7 +286,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "सेब",
     "image": {
       "url": "/images/words/seb.svg",
-      "alt": "लाल सेब"
+      "alt": "लाल सेब",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -297,7 +318,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "संतरा",
     "audioText": "संतरा",
-    "image": null
+    "image": {
+      "url": "/images/words/santara.svg",
+      "alt": "रसीला संतरा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "पपीता",
@@ -327,7 +353,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "पपीता",
     "audioText": "पपीता",
-    "image": null
+    "image": {
+      "url": "/images/words/papeeta.svg",
+      "alt": "मीठा पपीता",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "अमरूद",
@@ -356,7 +387,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "अमरूद",
     "audioText": "अमरूद",
-    "image": null
+    "image": {
+      "url": "/images/words/amrood.svg",
+      "alt": "ताजा अमरूद",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "जामुन",
@@ -529,7 +565,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "टमाटर",
     "image": {
       "url": "/images/words/tamatar.svg",
-      "alt": "लाल टमाटर"
+      "alt": "लाल टमाटर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -556,7 +594,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "मटर",
     "audioText": "मटर",
-    "image": null
+    "image": {
+      "url": "/images/words/matar.svg",
+      "alt": "हरी मटर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "शलजम",
@@ -585,7 +628,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "शलजम",
     "image": {
       "url": "/images/words/shaljam.svg",
-      "alt": "शलजम का चित्र"
+      "alt": "शलजम का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -614,7 +659,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "गाजर",
     "audioText": "गाजर",
-    "image": null
+    "image": {
+      "url": "/images/words/gajar.svg",
+      "alt": "लाल गाजर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "पालक",
@@ -668,7 +718,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "आलू",
     "audioText": "आलू",
-    "image": null
+    "image": {
+      "url": "/images/words/aaloo.svg",
+      "alt": "गोल आलू",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "प्याज",
@@ -695,7 +750,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "प्याज",
     "audioText": "प्याज",
-    "image": null
+    "image": {
+      "url": "/images/words/pyaaz.svg",
+      "alt": "बैंगनी प्याज",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बैंगन",
@@ -723,7 +783,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "बैंगन",
     "audioText": "बैंगन",
-    "image": null
+    "image": {
+      "url": "/images/words/baingan.svg",
+      "alt": "चमकदार बैंगन",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "खीरा",
@@ -779,7 +844,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "मूली",
     "audioText": "मूली",
-    "image": null
+    "image": {
+      "url": "/images/words/mooli.svg",
+      "alt": "सफेद मूली",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "गोभी",
@@ -950,7 +1020,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "मछली",
     "image": {
       "url": "/images/words/machhli.svg",
-      "alt": "रंग-बिरंगी मछली"
+      "alt": "रंग-बिरंगी मछली",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -981,7 +1053,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "भालू",
     "image": {
       "url": "/images/words/bhalu.svg",
-      "alt": "जंगल का भालू"
+      "alt": "जंगल का भालू",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1012,7 +1086,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "हाथी",
     "image": {
       "url": "/images/words/hathi.svg",
-      "alt": "बड़ा हाथी"
+      "alt": "बड़ा हाथी",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1045,7 +1121,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "खरगोश",
     "image": {
       "url": "/images/words/khargosh.svg",
-      "alt": "खरगोश का चित्र"
+      "alt": "खरगोश का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1073,7 +1151,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "शेर",
     "audioText": "शेर",
-    "image": null
+    "image": {
+      "url": "/images/words/sher.svg",
+      "alt": "बब्बर शेर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "चीता",
@@ -1101,7 +1184,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "चीता",
     "audioText": "चीता",
-    "image": null
+    "image": {
+      "url": "/images/words/cheeta.svg",
+      "alt": "तेज दौड़ता चीता",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "हिरण",
@@ -1155,7 +1243,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "बंदर",
     "audioText": "बंदर",
-    "image": null
+    "image": {
+      "url": "/images/words/bandar.svg",
+      "alt": "नटखट बंदर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "गाय",
@@ -1181,7 +1274,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "गाय",
     "audioText": "गाय",
-    "image": null
+    "image": {
+      "url": "/images/words/gaay.svg",
+      "alt": "सफेद गाय",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बकरी",
@@ -1209,7 +1307,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "बकरी",
     "audioText": "बकरी",
-    "image": null
+    "image": {
+      "url": "/images/words/bakri.svg",
+      "alt": "प्यारी बकरी",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "घोड़ा",
@@ -1237,7 +1340,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "घोड़ा",
     "audioText": "घोड़ा",
-    "image": null
+    "image": {
+      "url": "/images/words/ghoda.svg",
+      "alt": "दौड़ता घोड़ा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "कुत्ता",
@@ -1267,7 +1375,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कुत्ता",
     "audioText": "कुत्ता",
-    "image": null
+    "image": {
+      "url": "/images/words/kutta.svg",
+      "alt": "वफादार कुत्ता",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बिल्ली",
@@ -1297,7 +1410,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "बिल्ली",
     "audioText": "बिल्ली",
-    "image": null
+    "image": {
+      "url": "/images/words/billi.svg",
+      "alt": "प्यारी बिल्ली",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "ऊँट",
@@ -1321,7 +1439,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "ऊँट",
     "audioText": "ऊँट",
-    "image": null
+    "image": {
+      "url": "/images/words/oont.svg",
+      "alt": "रेगिस्तान का ऊँट",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "गिलहरी",
@@ -1380,7 +1503,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कछुआ",
     "audioText": "कछुआ",
-    "image": null
+    "image": {
+      "url": "/images/words/kachhua.svg",
+      "alt": "धीमा कछुआ",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "मेंढक",
@@ -1436,7 +1564,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "चूहा",
     "audioText": "चूहा",
-    "image": null
+    "image": {
+      "url": "/images/words/chooha.svg",
+      "alt": "छोटा चूहा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बत्तख",
@@ -1465,7 +1598,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "बत्तख",
     "image": {
       "url": "/images/words/battakh.svg",
-      "alt": "सफेद बत्तख"
+      "alt": "सफेद बत्तख",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1496,7 +1631,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "उल्लू",
     "image": {
       "url": "/images/words/ullu.svg",
-      "alt": "उल्लू का चित्र"
+      "alt": "उल्लू का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1525,7 +1662,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "तोता",
     "audioText": "तोता",
-    "image": null
+    "image": {
+      "url": "/images/words/tota.svg",
+      "alt": "हरा तोता",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "मोर",
@@ -1552,7 +1694,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "मोर",
     "audioText": "मोर",
-    "image": null
+    "image": {
+      "url": "/images/words/mor.svg",
+      "alt": "राष्ट्रीय पक्षी मोर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "कौआ",
@@ -1578,7 +1725,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कौआ",
     "audioText": "कौआ",
-    "image": null
+    "image": {
+      "url": "/images/words/kauwa.svg",
+      "alt": "काला कौआ",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "कबूतर",
@@ -1608,7 +1760,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कबूतर",
     "audioText": "कबूतर",
-    "image": null
+    "image": {
+      "url": "/images/words/kabootar.svg",
+      "alt": "सलेटी कबूतर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "चिड़िया",
@@ -1639,7 +1796,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "चिड़िया",
     "audioText": "चिड़िया",
-    "image": null
+    "image": {
+      "url": "/images/words/chidiya.svg",
+      "alt": "छोटी चिड़िया",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "कोयल",
@@ -1691,7 +1853,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "हंस",
     "audioText": "हंस",
-    "image": null
+    "image": {
+      "url": "/images/words/hans.svg",
+      "alt": "सफेद हंस",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बगुला",
@@ -1803,7 +1970,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "कमल",
     "image": {
       "url": "/images/words/kamal.svg",
-      "alt": "कमल का फूल"
+      "alt": "कमल का फूल",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1834,7 +2003,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "गमला",
     "image": {
       "url": "/images/words/gamla.svg",
-      "alt": "फूलों का गमला"
+      "alt": "फूलों का गमला",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1916,7 +2087,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "वृक्ष",
     "image": {
       "url": "/images/words/vriksh.svg",
-      "alt": "हरा-भरा वृक्ष"
+      "alt": "हरा-भरा वृक्ष",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -1945,7 +2118,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "सूरज",
     "audioText": "सूरज",
-    "image": null
+    "image": {
+      "url": "/images/words/sooraj.svg",
+      "alt": "चमकता सूरज",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "चाँद",
@@ -1972,7 +2150,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "चाँद",
     "audioText": "चाँद",
-    "image": null
+    "image": {
+      "url": "/images/words/chand.svg",
+      "alt": "रात का चाँद",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "तारा",
@@ -2557,7 +2740,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "घर",
     "audioText": "घर",
-    "image": null
+    "image": {
+      "url": "/images/words/ghar.svg",
+      "alt": "सुंदर घर",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "नल",
@@ -2583,7 +2771,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "नल",
     "image": {
       "url": "/images/words/nal.svg",
-      "alt": "पानी का नल"
+      "alt": "पानी का नल",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2613,7 +2803,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "चम्मच",
     "image": {
       "url": "/images/words/chammach.svg",
-      "alt": "चम्मच का चित्र"
+      "alt": "चम्मच का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2643,7 +2835,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "छाता",
     "image": {
       "url": "/images/words/chhata.svg",
-      "alt": "रंग-बिरंगा छाता"
+      "alt": "रंग-बिरंगा छाता",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2674,7 +2868,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "थाली",
     "image": {
       "url": "/images/words/thali.svg",
-      "alt": "भोजन की थाली"
+      "alt": "भोजन की थाली",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2703,7 +2899,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "घड़ी",
     "image": {
       "url": "/images/words/ghadi.svg",
-      "alt": "दीवार घड़ी"
+      "alt": "दीवार घड़ी",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2736,7 +2934,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "दरवाजा",
     "image": {
       "url": "/images/words/darwaja.svg",
-      "alt": "घर का दरवाजा"
+      "alt": "घर का दरवाजा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -2794,7 +2994,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "दीपक",
     "audioText": "दीपक",
-    "image": null
+    "image": {
+      "url": "/images/words/deepak.svg",
+      "alt": "जलती मिट्टी का दीपक",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "ताला",
@@ -2821,7 +3026,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "ताला",
     "audioText": "ताला",
-    "image": null
+    "image": {
+      "url": "/images/words/taala.svg",
+      "alt": "लोहे का ताला",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "चाबी",
@@ -2849,7 +3059,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "चाबी",
     "audioText": "चाबी",
-    "image": null
+    "image": {
+      "url": "/images/words/chaabi.svg",
+      "alt": "सुनहरी चाबी",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "पंखा",
@@ -2990,7 +3205,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "किताब",
     "audioText": "किताब",
-    "image": null
+    "image": {
+      "url": "/images/words/kitaab.svg",
+      "alt": "खुली किताब",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "कलम",
@@ -3016,7 +3236,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कलम",
     "audioText": "कलम",
-    "image": null
+    "image": {
+      "url": "/images/words/kalam.svg",
+      "alt": "लिखने की कलम",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बस्ता",
@@ -3392,7 +3617,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "जहाज",
     "image": {
       "url": "/images/words/jahaj.svg",
-      "alt": "पानी का जहाज"
+      "alt": "पानी का जहाज",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3419,7 +3646,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "रथ",
     "image": {
       "url": "/images/words/rath.svg",
-      "alt": "सुंदर रथ"
+      "alt": "सुंदर रथ",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3447,7 +3676,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "कार",
     "audioText": "कार",
-    "image": null
+    "image": {
+      "url": "/images/words/car.svg",
+      "alt": "लाल कार",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "बस",
@@ -3471,7 +3705,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "बस",
     "audioText": "बस",
-    "image": null
+    "image": {
+      "url": "/images/words/bus.svg",
+      "alt": "पीली बस",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "नाव",
@@ -3497,7 +3736,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "नाव",
     "audioText": "नाव",
-    "image": null
+    "image": {
+      "url": "/images/words/naav.svg",
+      "alt": "पानी में नाव",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "रेलगाड़ी",
@@ -3531,7 +3775,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "रेलगाड़ी",
     "audioText": "रेलगाड़ी",
-    "image": null
+    "image": {
+      "url": "/images/words/railgaadi.svg",
+      "alt": "छुक-छुक रेलगाड़ी",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "साइकिल",
@@ -3562,7 +3811,12 @@ const HINDI_WORDS_SEED = [
     ],
     "normalizedWord": "साइकिल",
     "audioText": "साइकिल",
-    "image": null
+    "image": {
+      "url": "/images/words/cycle.svg",
+      "alt": "दो पहियों की साइकिल",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
+    }
   },
   {
     "word": "विमान",
@@ -3742,7 +3996,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "पतंग",
     "image": {
       "url": "/images/words/patang.svg",
-      "alt": "उड़ती पतंग"
+      "alt": "उड़ती पतंग",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3773,7 +4029,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "लट्टू",
     "image": {
       "url": "/images/words/lattu.svg",
-      "alt": "घूमता लट्टू"
+      "alt": "घूमता लट्टू",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3804,7 +4062,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "डमरू",
     "image": {
       "url": "/images/words/damru.svg",
-      "alt": "शिवजी का डमरू"
+      "alt": "शिवजी का डमरू",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3834,7 +4094,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ढक्कन",
     "image": {
       "url": "/images/words/dhakkan.svg",
-      "alt": "बर्तन का ढक्कन"
+      "alt": "बर्तन का ढक्कन",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3865,7 +4127,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "धनुष",
     "image": {
       "url": "/images/words/dhanush.svg",
-      "alt": "धनुष-बाण"
+      "alt": "धनुष-बाण",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3895,7 +4159,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "झंडा",
     "image": {
       "url": "/images/words/jhanda.svg",
-      "alt": "तिरंगा झंडा"
+      "alt": "तिरंगा झंडा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3924,7 +4190,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ऐनक",
     "image": {
       "url": "/images/words/ainak.svg",
-      "alt": "ऐनक का चित्र"
+      "alt": "ऐनक का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3955,7 +4223,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ओखली",
     "image": {
       "url": "/images/words/okhli.svg",
-      "alt": "ओखली का चित्र"
+      "alt": "ओखली का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -3982,7 +4252,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ऊन",
     "image": {
       "url": "/images/words/oon.svg",
-      "alt": "ऊन का गोला"
+      "alt": "ऊन का गोला",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -4013,7 +4285,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ठप्पा",
     "image": {
       "url": "/images/words/thappa.svg",
-      "alt": "मुहर या ठप्पा"
+      "alt": "मुहर या ठप्पा",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -4046,7 +4320,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "षट्कोण",
     "image": {
       "url": "/images/words/shatkon.svg",
-      "alt": "षट्कोण आकृति"
+      "alt": "षट्कोण आकृति",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -4074,7 +4350,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "यज्ञ",
     "image": {
       "url": "/images/words/yagya.svg",
-      "alt": "पवित्र यज्ञ"
+      "alt": "पवित्र यज्ञ",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -5209,7 +5487,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "औरत",
     "image": {
       "url": "/images/words/aurat.svg",
-      "alt": "औरत का चित्र"
+      "alt": "औरत का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -5846,7 +6126,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "एक",
     "image": {
       "url": "/images/words/ek.svg",
-      "alt": "एक की संख्या"
+      "alt": "एक की संख्या",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {
@@ -6060,7 +6342,9 @@ const HINDI_WORDS_SEED = [
     "audioText": "ऋषि",
     "image": {
       "url": "/images/words/rishi.svg",
-      "alt": "ऋषि का चित्र"
+      "alt": "ऋषि का चित्र",
+      "source": "HindiPlay Vector Assets",
+      "license": "Original HindiPlay asset"
     }
   },
   {

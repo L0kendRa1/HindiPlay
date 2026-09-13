@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Banana (केला) -->
+    <!-- Stem -->
+    <path d="M 22 28 Q 18 18 24 16" stroke="#4d7c0f" stroke-width="6" stroke-linecap="round" fill="none" />
+    <!-- Banana Curve -->
+    <path d="M 22 26 C 24 58 48 86 82 76 C 88 74 86 68 80 68 C 54 70 34 52 30 26 Z" fill="#fde047" stroke="#eab308" stroke-width="2" />
+    <!-- Highlight Inner Ridge -->
+    <path d="M 28 32 C 34 56 50 72 74 70" stroke="#fef08a" stroke-width="3" stroke-linecap="round" fill="none" />
+    <!-- Brown Tip -->
+    <circle cx="82" cy="74" r="3" fill="#78350f" />
+  </svg>

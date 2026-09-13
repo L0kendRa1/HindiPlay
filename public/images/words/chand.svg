@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Moon (चाँद) -->
+    <!-- Crescent Moon -->
+    <path d="M 58 14 C 40 18 26 34 26 54 C 26 74 42 90 62 88 C 42 82 38 56 48 34 C 52 24 60 18 58 14 Z" fill="#facc15" stroke="#eab308" stroke-width="2" />
+    <!-- Sparkle Stars -->
+    <polygon points="76,24 78,28 82,30 78,32 76,36 74,32 70,30 74,28" fill="#fef08a" />
+    <polygon points="80,54 81,57 84,58 81,59 80,62 79,59 76,58 79,57" fill="#fef08a" />
+    <!-- Cute Sleepy Eye & Smile on Moon -->
+    <path d="M 38 48 Q 42 52 46 48" stroke="#854d0e" stroke-width="2" stroke-linecap="round" fill="none" />
+    <path d="M 40 58 Q 44 62 48 59" stroke="#854d0e" stroke-width="1.8" stroke-linecap="round" fill="none" />
+  </svg>

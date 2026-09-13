@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Onion (प्याज) -->
+    <!-- Sprout at top -->
+    <path d="M 50 20 Q 52 8 58 6" stroke="#22c55e" stroke-width="4" stroke-linecap="round" fill="none" />
+    <!-- Onion Bulb -->
+    <path d="M 50 18 C 68 18 84 38 82 60 C 80 82 64 90 50 90 C 36 90 20 82 18 60 C 16 38 32 18 50 18 Z" fill="#a855f7" />
+    <path d="M 50 22 C 64 22 78 40 76 60 C 74 78 60 86 50 86 C 40 86 26 78 24 60 C 22 40 36 22 50 22 Z" fill="#c084fc" />
+    <!-- Striations -->
+    <path d="M 50 22 Q 36 54 50 86" stroke="#7e22ce" stroke-width="2" fill="none" />
+    <path d="M 50 22 Q 64 54 50 86" stroke="#7e22ce" stroke-width="2" fill="none" />
+    <!-- Root tips -->
+    <line x1="47" y1="90" x2="45" y2="95" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <line x1="50" y1="90" x2="50" y2="97" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <line x1="53" y1="90" x2="55" y2="95" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+  </svg>

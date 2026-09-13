@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Sparrow (चिड़िया) -->
+    <!-- Tail -->
+    <polygon points="66,62 86,70 72,56" fill="#78350f" />
+    <!-- Plump Body -->
+    <ellipse cx="48" cy="54" rx="22" ry="20" fill="#fed7aa" />
+    <!-- Head -->
+    <circle cx="36" cy="38" r="15" fill="#92400e" />
+    <!-- Cheeks & Throat -->
+    <circle cx="34" cy="42" r="6" fill="#f1f5f9" />
+    <!-- Beak -->
+    <polygon points="24,36 12,39 24,43" fill="#f59e0b" />
+    <!-- Eye -->
+    <circle cx="32" cy="35" r="3" fill="#0f172a" />
+    <circle cx="31" cy="34" r="1" fill="#ffffff" />
+    <!-- Wing -->
+    <path d="M 44 48 C 60 48 68 62 56 72 C 46 68 40 58 44 48 Z" fill="#78350f" />
+  </svg>

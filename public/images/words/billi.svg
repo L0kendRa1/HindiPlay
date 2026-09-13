@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Cat (बिल्ली) -->
+    <!-- Pointed Ears -->
+    <polygon points="26,40 30,12 48,30" fill="#f97316" />
+    <polygon points="30,36 33,18 44,28" fill="#fecdd3" />
+    <polygon points="74,40 70,12 52,30" fill="#f97316" />
+    <polygon points="70,36 67,18 56,28" fill="#fecdd3" />
+    <!-- Head -->
+    <ellipse cx="50" cy="52" rx="30" ry="26" fill="#fb923c" />
+    <!-- Cheeks -->
+    <circle cx="38" cy="60" r="8" fill="#fed7aa" />
+    <circle cx="62" cy="60" r="8" fill="#fed7aa" />
+    <!-- Big Anime Cat Eyes -->
+    <ellipse cx="38" cy="46" rx="6" ry="7" fill="#15803d" />
+    <ellipse cx="62" cy="46" rx="6" ry="7" fill="#15803d" />
+    <ellipse cx="38" cy="46" rx="3.5" ry="6" fill="#0f172a" />
+    <ellipse cx="62" cy="46" rx="3.5" ry="6" fill="#0f172a" />
+    <circle cx="36" cy="43" r="2" fill="#ffffff" />
+    <circle cx="60" cy="43" r="2" fill="#ffffff" />
+    <!-- Little Pink Nose & Mouth -->
+    <polygon points="50,56 47,53 53,53" fill="#f43f5e" />
+    <path d="M 47 58 Q 50 61 53 58" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" fill="none" />
+    <!-- Whiskers -->
+    <line x1="16" y1="56" x2="30" y2="58" stroke="#78350f" stroke-width="1.5" stroke-linecap="round" />
+    <line x1="16" y1="62" x2="30" y2="61" stroke="#78350f" stroke-width="1.5" stroke-linecap="round" />
+    <line x1="84" y1="56" x2="70" y2="58" stroke="#78350f" stroke-width="1.5" stroke-linecap="round" />
+    <line x1="84" y1="62" x2="70" y2="61" stroke="#78350f" stroke-width="1.5" stroke-linecap="round" />
+  </svg>

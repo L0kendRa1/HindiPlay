@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Swan (हंस) -->
+    <!-- Water Ripples -->
+    <ellipse cx="50" cy="80" rx="38" ry="8" fill="#bae6fd" />
+    <ellipse cx="50" cy="84" rx="28" ry="5" fill="#38bdf8" opacity="0.6" />
+    <!-- Body -->
+    <ellipse cx="56" cy="64" rx="26" ry="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+    <!-- Tail feathers -->
+    <path d="M 76 56 Q 86 52 82 66 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+    <!-- Elegant S-Neck & Head -->
+    <path d="M 44 68 C 36 56 34 36 44 26 C 48 20 44 14 36 16 C 30 18 28 28 34 46 C 38 56 40 68 44 68 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+    <!-- Orange Beak & Black Mask -->
+    <polygon points="34,17 22,20 32,23" fill="#f97316" />
+    <polygon points="34,17 32,23 37,20" fill="#0f172a" />
+    <!-- Eye -->
+    <circle cx="36" cy="18" r="1.5" fill="#0f172a" />
+  </svg>

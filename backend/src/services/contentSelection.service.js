@@ -7,9 +7,11 @@ const MAX_EXCLUSION_IDS = 100;
 // Activities that strictly require words with verified image assets
 const PICTURE_REQUIRED_ACTIVITIES = new Set([
   'picture-match',
+  'letter-picture-match',
   'picture-word-quiz',
   'word-picture-quiz',
   'memory-match',
+  'memory-game',
 ]);
 
 /**
@@ -27,6 +29,7 @@ const PICTURE_REQUIRED_ACTIVITIES = new Set([
  * @param {string} [options.difficulty]
  * @param {string} [options.category]
  * @param {boolean|string} [options.hasImage]
+ * @param {boolean|string} [options.requireImage]
  * @param {string|string[]} [options.exclude] Comma-separated or array of IDs/words to exclude
  * @param {string} [options.userId] Optional authenticated user ID for future personalization
  * @returns {Promise<Array>} Array of unique HindiWord documents
@@ -37,6 +40,7 @@ async function selectWords(options = {}) {
     difficulty,
     category,
     hasImage,
+    requireImage,
     exclude,
     userId, // available for logging or future per-user heuristics
   } = options;
@@ -48,7 +52,12 @@ async function selectWords(options = {}) {
 
   // 1. Determine image requirements
   let imageFilterRequired = false;
-  if (hasImage === true || hasImage === 'true') {
+  if (
+    hasImage === true ||
+    hasImage === 'true' ||
+    requireImage === true ||
+    requireImage === 'true'
+  ) {
     imageFilterRequired = true;
   } else if (activityId && PICTURE_REQUIRED_ACTIVITIES.has(activityId.trim())) {
     imageFilterRequired = true;
@@ -84,8 +93,14 @@ async function selectWords(options = {}) {
   }
 
   if (imageFilterRequired) {
-    baseFilter.image = { $ne: null };
-  } else if (hasImage === false || hasImage === 'false') {
+    baseFilter['image.url'] = { $exists: true, $nin: [null, ''] };
+    baseFilter['image.isAvailable'] = { $ne: false };
+  } else if (
+    hasImage === false ||
+    hasImage === 'false' ||
+    requireImage === false ||
+    requireImage === 'false'
+  ) {
     baseFilter.image = null;
   }
 

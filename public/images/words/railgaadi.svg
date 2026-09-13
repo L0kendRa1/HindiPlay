@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Train (रेलगाड़ी) -->
+    <!-- Steam Puffs -->
+    <circle cx="72" cy="18" r="6" fill="#cbd5e1" opacity="0.8" />
+    <circle cx="80" cy="12" r="8" fill="#e2e8f0" opacity="0.7" />
+    <!-- Chimney -->
+    <rect x="68" y="24" width="10" height="14" fill="#0f172a" />
+    <!-- Engine Boiler Body -->
+    <rect x="36" y="38" width="50" height="28" rx="4" fill="#dc2626" />
+    <!-- Cabin -->
+    <rect x="14" y="26" width="26" height="40" rx="4" fill="#2563eb" />
+    <rect x="18" y="32" width="16" height="14" rx="2" fill="#bae6fd" />
+    <!-- Cowcatcher in front -->
+    <polygon points="86,66 94,66 86,52" fill="#f59e0b" />
+    <!-- Wheels -->
+    <circle cx="26" cy="68" r="11" fill="#0f172a" />
+    <circle cx="26" cy="68" r="5" fill="#94a3b8" />
+    <circle cx="50" cy="68" r="11" fill="#0f172a" />
+    <circle cx="50" cy="68" r="5" fill="#94a3b8" />
+    <circle cx="74" cy="68" r="11" fill="#0f172a" />
+    <circle cx="74" cy="68" r="5" fill="#94a3b8" />
+  </svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Potato (आलू) -->
+    <!-- Earthy Potato Shape -->
+    <path d="M 28 36 C 36 22 66 20 78 34 C 88 46 86 70 74 80 C 60 90 34 88 24 74 C 16 62 18 48 28 36 Z" fill="#b45309" />
+    <path d="M 30 38 C 38 26 64 24 74 36 C 84 46 82 68 72 76 C 58 86 36 84 26 72 C 20 60 22 48 30 38 Z" fill="#d97706" />
+    <!-- Dimples / Eyes of Potato -->
+    <ellipse cx="40" cy="42" rx="3" ry="1.5" fill="#78350f" transform="rotate(-15 40 42)" />
+    <ellipse cx="62" cy="48" rx="3.5" ry="2" fill="#78350f" transform="rotate(10 62 48)" />
+    <ellipse cx="46" cy="66" rx="4" ry="2" fill="#78350f" transform="rotate(-5 46 66)" />
+    <ellipse cx="70" cy="68" rx="2.5" ry="1.5" fill="#78350f" />
+    <ellipse cx="32" cy="58" rx="3" ry="1.5" fill="#78350f" />
+  </svg>

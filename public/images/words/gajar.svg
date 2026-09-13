@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Carrot (गाजर) -->
+    <!-- Green Carrot Tops -->
+    <path d="M 68 18 C 76 8 86 12 84 22 C 78 20 72 20 68 18 Z" fill="#22c55e" />
+    <path d="M 70 16 C 80 4 84 4 82 12 Z" fill="#16a34a" />
+    <path d="M 66 20 C 68 8 76 8 72 16 Z" fill="#15803d" />
+    <!-- Carrot Root (Tapered) -->
+    <path d="M 70 20 C 66 22 56 24 50 36 C 38 52 24 74 16 88 C 22 86 46 64 62 48 C 72 38 72 26 70 20 Z" fill="#f97316" />
+    <!-- Horizontal Creases -->
+    <path d="M 52 38 Q 58 40 60 44" stroke="#c2410c" stroke-width="2" stroke-linecap="round" fill="none" />
+    <path d="M 40 52 Q 46 54 48 58" stroke="#c2410c" stroke-width="2" stroke-linecap="round" fill="none" />
+    <path d="M 30 66 Q 34 68 36 70" stroke="#c2410c" stroke-width="2" stroke-linecap="round" fill="none" />
+  </svg>

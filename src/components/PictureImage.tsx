@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { markImageUnavailable } from '../data/imageRegistry';
 
 interface PictureImageProps {
   src?: string;
@@ -6,6 +7,7 @@ interface PictureImageProps {
   fallbackEmoji?: string;
   className?: string;
   sizeClassName?: string;
+  onImageError?: (url: string) => void;
 }
 
 export const PictureImage: React.FC<PictureImageProps> = ({
@@ -14,9 +16,18 @@ export const PictureImage: React.FC<PictureImageProps> = ({
   fallbackEmoji = '🖼️',
   className = '',
   sizeClassName = 'w-24 h-24 md:w-32 md:h-32',
+  onImageError,
 }) => {
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  const handleError = () => {
+    if (src) {
+      markImageUnavailable(src);
+      onImageError?.(src);
+    }
+    setHasError(true);
+  };
 
   // If no source provided or failed to load, display child-friendly fallback
   if (!src || hasError) {
@@ -49,7 +60,7 @@ export const PictureImage: React.FC<PictureImageProps> = ({
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
-        onError={() => setHasError(true)}
+        onError={handleError}
         className={`w-full h-full object-contain filter drop-shadow-xs transition-all duration-200 transform hover:scale-105 ${
           isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         }`}

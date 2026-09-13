@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Bus (बस) -->
+    <!-- Yellow School Bus Body -->
+    <rect x="10" y="24" width="80" height="46" rx="8" fill="#eab308" />
+    <!-- Black Side Stripe -->
+    <rect x="10" y="52" width="80" height="5" fill="#1e293b" />
+    <!-- Windows -->
+    <rect x="16" y="30" width="14" height="16" rx="2" fill="#bae6fd" />
+    <rect x="34" y="30" width="14" height="16" rx="2" fill="#bae6fd" />
+    <rect x="52" y="30" width="14" height="16" rx="2" fill="#bae6fd" />
+    <rect x="70" y="30" width="14" height="16" rx="2" fill="#bae6fd" />
+    <!-- Headlight -->
+    <circle cx="86" cy="60" r="3.5" fill="#fef08a" />
+    <!-- Wheels -->
+    <circle cx="28" cy="70" r="12" fill="#1e293b" />
+    <circle cx="28" cy="70" r="5" fill="#94a3b8" />
+    <circle cx="72" cy="70" r="12" fill="#1e293b" />
+    <circle cx="72" cy="70" r="5" fill="#94a3b8" />
+  </svg>

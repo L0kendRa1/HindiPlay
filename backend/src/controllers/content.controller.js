@@ -41,9 +41,10 @@ exports.getWords = async (req, res, next) => {
       filter.tags = tag.trim();
     }
 
-    if (hasImage === 'true') {
-      filter.image = { $ne: null };
-    } else if (hasImage === 'false') {
+    if (hasImage === 'true' || req.query.requireImage === 'true') {
+      filter['image.url'] = { $exists: true, $nin: [null, ''] };
+      filter['image.isAvailable'] = { $ne: false };
+    } else if (hasImage === 'false' || req.query.requireImage === 'false') {
       filter.image = null;
     }
 
@@ -98,6 +99,7 @@ exports.getRandomWords = async (req, res, next) => {
       category,
       difficulty,
       hasImage,
+      requireImage,
       exclude,
       activityId,
     } = req.query;
@@ -107,6 +109,7 @@ exports.getRandomWords = async (req, res, next) => {
       category,
       difficulty,
       hasImage,
+      requireImage,
       exclude,
       activityId,
       userId: req.user ? req.user._id : undefined,

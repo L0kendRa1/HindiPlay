@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <!-- Parrot (तोता) -->
+    <!-- Tail -->
+    <path d="M 44 68 L 36 94 L 46 76 Z" fill="#15803d" />
+    <path d="M 48 70 L 44 96 L 50 76 Z" fill="#16a34a" />
+    <!-- Body & Head -->
+    <ellipse cx="52" cy="46" rx="22" ry="28" fill="#22c55e" />
+    <!-- Red Neck Ring -->
+    <path d="M 38 38 Q 50 44 62 38" stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" />
+    <!-- Wing -->
+    <path d="M 52 42 C 64 48 68 62 58 72 C 50 68 46 56 52 42 Z" fill="#15803d" />
+    <!-- Eye with white patch -->
+    <circle cx="44" cy="30" r="7" fill="#ffffff" />
+    <circle cx="44" cy="30" r="3.5" fill="#0f172a" />
+    <circle cx="42.5" cy="28.5" r="1.2" fill="#ffffff" />
+    <!-- Big Red Curved Beak -->
+    <path d="M 37 26 C 24 28 20 40 32 44 C 34 38 35 34 37 26 Z" fill="#ef4444" />
+  </svg>
