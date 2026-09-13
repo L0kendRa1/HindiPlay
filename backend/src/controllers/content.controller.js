@@ -305,14 +305,50 @@ exports.getStoryById = async (req, res, next) => {
  */
 exports.getContentStats = async (req, res, next) => {
   try {
-    const [words, letters, matras, stories, wordsWithImages, categories] = await Promise.all([
+    const [
+      words,
+      letters,
+      matras,
+      stories,
+      wordsWithImages,
+      categories,
+      difficultyAggregation,
+      categoryAggregation,
+    ] = await Promise.all([
       HindiWord.countDocuments({ isActive: true }),
       HindiLetter.countDocuments({ isActive: true }),
       HindiMatra.countDocuments({ isActive: true }),
       HindiStory.countDocuments({ isActive: true }),
       HindiWord.countDocuments({ isActive: true, image: { $ne: null } }),
       HindiWord.distinct('category', { isActive: true }),
+      HindiWord.aggregate([
+        { $match: { isActive: true } },
+        { $group: { _id: '$difficulty', count: { $sum: 1 } } },
+      ]),
+      HindiWord.aggregate([
+        { $match: { isActive: true } },
+        { $group: { _id: '$category', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]),
     ]);
+
+    const wordsByDifficulty = {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+    };
+    difficultyAggregation.forEach((item) => {
+      if (item._id && wordsByDifficulty[item._id] !== undefined) {
+        wordsByDifficulty[item._id] = item.count;
+      }
+    });
+
+    const wordsByCategory = {};
+    categoryAggregation.forEach((item) => {
+      if (item._id) {
+        wordsByCategory[item._id] = item.count;
+      }
+    });
 
     res.status(200).json({
       success: true,
@@ -324,6 +360,8 @@ exports.getContentStats = async (req, res, next) => {
         wordsWithImages,
         categoriesCount: categories.length,
         categories,
+        wordsByDifficulty,
+        wordsByCategory,
       },
     });
   } catch (error) {
