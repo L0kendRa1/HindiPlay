@@ -3,11 +3,14 @@ import {
   ACTIVITY_CATEGORIES,
   ActivityCategoryKey,
   ActivityMeta,
+  ACTIVITIES_REGISTRY,
   filterActivities,
 } from '../data/activityRegistry';
 import { ActivityCard } from './ActivityCard';
 import { UserProfileBar } from './UserProfileBar';
-import { Search, Sparkles, X } from 'lucide-react';
+import { usePersonalizedLearning } from '../hooks/usePersonalizedLearning';
+import { useAuth } from '../hooks/useAuth';
+import { Search, Sparkles, X, ArrowRight } from 'lucide-react';
 
 interface ActivityLibraryProps {
   onSelectActivity: (activity: ActivityMeta) => void;
@@ -20,6 +23,8 @@ export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({
   onLoginClick,
   onProgressClick,
 }) => {
+  const { isAuthenticated } = useAuth();
+  const { recommendation } = usePersonalizedLearning();
   const [selectedCategory, setSelectedCategory] = useState<ActivityCategoryKey>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -94,6 +99,44 @@ export const ActivityLibrary: React.FC<ActivityLibraryProps> = ({
             नीचे दी गई किसी भी गतिविधि पर क्लिक करके अभ्यास शुरू करें!
           </p>
         </div>
+
+        {/* Smart Recommendation Banner for Logged-In Learners */}
+        {isAuthenticated && recommendation && recommendation.recommendedActivities.length > 0 && (
+          <div className="mb-6 bg-gradient-to-r from-sky-50 via-indigo-50/50 to-amber-50/50 border-2 border-toy-sky rounded-3xl p-3.5 sm:p-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-toy-sky to-toy-blue text-white flex items-center justify-center text-xl shadow-2xs shrink-0">
+                🎯
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-black uppercase text-toy-blue bg-white px-2 py-0.5 rounded-full border border-toy-sky">
+                    स्मार्ट सुझाव (Recommended)
+                  </span>
+                  <span className="text-xs font-bold text-slate-500">
+                    {recommendation.messageHindi}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm font-black text-slate-800 mt-0.5">
+                  सुझाया गया अभ्यास: {recommendation.recommendedActivities[0].title}
+                  {recommendation.recommendedActivities[0].highlightTextHindi ? ` • ${recommendation.recommendedActivities[0].highlightTextHindi}` : ''}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                const topAct = ACTIVITIES_REGISTRY.find(
+                  (a) => a.activityCode === recommendation.recommendedActivities[0].activityCode
+                );
+                if (topAct) onSelectActivity(topAct);
+              }}
+              className="bg-toy-blue hover:bg-toy-blue/90 text-white text-xs font-black px-4 py-2 rounded-xl shadow-toy-xs flex items-center gap-1.5 transition-all self-stretch sm:self-auto justify-center hover:scale-105 active:scale-95"
+            >
+              <span>अभी खेलें</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Category Navigation Buttons */}
         <div className="flex items-center justify-center gap-2 flex-wrap mb-8">

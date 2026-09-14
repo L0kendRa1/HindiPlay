@@ -1,6 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const contentController = require('../controllers/content.controller');
+const adaptiveLearningController = require('../controllers/adaptiveLearning.controller');
+const { optionalProtect } = require('../middleware/auth.middleware');
+
+/**
+ * @route   GET /api/content/hindi/personalized
+ * @desc    Get personalized learning recommendations (adaptive if auth token present, guest starter pack otherwise)
+ * @access  Public (Optional Auth)
+ */
+router.get('/personalized', optionalProtect, adaptiveLearningController.getPersonalizedRecommendations);
+
+/**
+ * @route   GET /api/content/hindi/personalized/guest
+ * @desc    Get guest starter learning recommendations
+ * @access  Public
+ */
+router.get('/personalized/guest', adaptiveLearningController.getGuestRecommendations);
 
 /**
  * @route   GET /api/content/hindi/stats

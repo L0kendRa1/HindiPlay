@@ -49,6 +49,38 @@ const protect = async (req, res, next) => {
   }
 };
 
+/**
+ * Optional authentication middleware: if Bearer token is provided and valid, attaches req.user.
+ * If token is missing or invalid, proceeds without error with req.user = null.
+ */
+const optionalProtect = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer ')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    req.user = null;
+    return next();
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded.id);
+    req.user = user || null;
+    next();
+  } catch (error) {
+    req.user = null;
+    next();
+  }
+};
+
 module.exports = {
   protect,
+  optionalProtect,
 };
+

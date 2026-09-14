@@ -7,7 +7,9 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "seed": "node src/data/seed.js",
-    "validate:images": "node src/scripts/validateImages.js"
+    "validate:images": "node src/scripts/validateImages.js",
+    "validate:content": "node src/scripts/validateContent.js",
+    "test:adaptive": "node src/scripts/testAdaptiveLearning.js"
   },
   "keywords": [
     "hindiplay",

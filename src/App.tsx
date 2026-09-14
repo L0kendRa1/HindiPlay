@@ -205,11 +205,23 @@ export function App() {
 
       {/* 5. Learner Dashboard Screen */}
       {currentView === 'dashboard' && (
-        <LearnerDashboard
-          onBackToLibrary={handleBackToLibrary}
-          onLoginClick={handleGoToLogin}
-          onContinueGuest={handleContinueGuest}
-        />
+        <>
+          <LearnerDashboard
+            onBackToLibrary={handleBackToLibrary}
+            onLoginClick={handleGoToLogin}
+            onContinueGuest={handleContinueGuest}
+            onSelectActivity={handleSelectActivity}
+          />
+
+          {/* Activity Preview Modal (Opened when an activity is clicked from recommendations) */}
+          {previewActivity && (
+            <ActivityPreviewModal
+              activity={previewActivity}
+              onStart={handleStartActivity}
+              onBack={handleClosePreview}
+            />
+          )}
+        </>
       )}
 
       {/* 6. Active Gameplay Screen (Launched only after "शुरू करें") */}

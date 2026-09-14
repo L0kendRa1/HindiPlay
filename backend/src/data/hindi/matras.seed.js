@@ -72,7 +72,7 @@ const HINDI_MATRAS_SEED = [
     examples: [
       { baseConsonant: 'म', combinedUnit: 'मू', exampleWord: 'मूली' },
       { baseConsonant: 'क', combinedUnit: 'कू', exampleWord: 'कूद' },
-      { baseConsonant: 'भ', combinedUnit: 'भू', exampleWord: 'भालू' },
+      { baseConsonant: 'स', combinedUnit: 'सू', exampleWord: 'सूरज' },
     ],
     learningUnits: ['ू'],
     audioText: 'ऊ की मात्रा',

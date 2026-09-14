@@ -10,6 +10,9 @@ import {
 } from '../types/api';
 import { BadgeCollection } from './BadgeCollection';
 import { ActivityProgressList } from './ActivityProgressList';
+import { PersonalizedRecommendations } from './PersonalizedRecommendations';
+import { usePersonalizedLearning } from '../hooks/usePersonalizedLearning';
+import { ActivityMeta } from '../data/activityRegistry';
 import {
   Sparkles,
   Flame,
@@ -28,14 +31,17 @@ interface LearnerDashboardProps {
   onBackToLibrary: () => void;
   onLoginClick?: () => void;
   onContinueGuest?: () => void;
+  onSelectActivity?: (activity: ActivityMeta) => void;
 }
 
 export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
   onBackToLibrary,
   onLoginClick,
   onContinueGuest,
+  onSelectActivity,
 }) => {
   const { user, isAuthenticated } = useAuth();
+  const { recommendation, refetch: refetchRecommendations } = usePersonalizedLearning();
 
   // Data states
   const [gamification, setGamification] = useState<GamificationProfile | null>(null);
@@ -89,13 +95,17 @@ export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
       if (progressRes?.data) {
         setProgressRecords(progressRes.data);
       }
+
+      if (isRefresh) {
+        await refetchRecommendations();
+      }
     } catch {
       setError('प्रगति अभी लोड नहीं हो सकी।');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, refetchRecommendations]);
 
   useEffect(() => {
     loadDashboardData();
@@ -337,7 +347,16 @@ export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
           </div>
         </div>
 
-        {/* 3. Empty State For New Students */}
+        {/* 3. Adaptive Learning & Personalized Recommendations */}
+        {recommendation && (
+          <PersonalizedRecommendations
+            recommendation={recommendation}
+            onSelectActivity={onSelectActivity}
+            onViewAllActivities={onBackToLibrary}
+          />
+        )}
+
+        {/* 4. Empty State For New Students */}
         {hasNoActivity ? (
           <div className="bg-white rounded-3xl p-8 sm:p-12 border-2 border-dashed border-slate-300 text-center shadow-xs">
             <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-toy-sky to-toy-blue text-white flex items-center justify-center text-4xl shadow-toy-md mx-auto mb-4 animate-bounce-short">
@@ -347,18 +366,18 @@ export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
               अभी आपकी कोई प्रगति नहीं है।
             </h2>
             <p className="text-sm font-bold text-slate-500 mb-6 max-w-md mx-auto">
-              पहला अभ्यास शुरू करें और अपनी सीखने की यात्रा शुरू करें! 🚀
+              ऊपर दिए गए सुझाए गए अभ्यासों में से कोई चुनें या लाइब्रेरी से शुरू करें! 🚀
             </p>
             <button
               onClick={onBackToLibrary}
               className="py-3 px-8 rounded-2xl bg-gradient-to-r from-toy-orange to-toy-yellow text-white font-black text-base shadow-toy-md hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-2"
             >
-              <span>अभ्यास शुरू करें</span>
+              <span>लाइब्रेरी पर वापस</span>
             </button>
           </div>
         ) : (
           <>
-            {/* 4. Overall Statistics Cards */}
+            {/* 5. Overall Statistics Cards */}
             {stats && (
               <div className="bg-white rounded-3xl p-5 md:p-6 border-2 border-slate-200 shadow-sm">
                 <div className="flex items-center gap-2.5 mb-4">
