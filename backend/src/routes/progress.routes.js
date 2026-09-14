@@ -29,6 +29,14 @@ router.get('/', progressController.getProgress);
 router.get('/stats', progressController.getProgressStats);
 
 /**
+ * @route   GET /api/progress/insights
+ * @desc    Get comprehensive learning insights dashboard data
+ * @access  Private
+ * NOTE: Must be registered BEFORE /:activityId to avoid route collision
+ */
+router.get('/insights', progressController.getLearningInsights);
+
+/**
  * @route   GET /api/progress/:activityId
  * @desc    Get user's progress for a specific activity
  * @access  Private

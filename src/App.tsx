@@ -18,10 +18,11 @@ import { SentenceBuilderActivity } from './components/SentenceBuilderActivity';
 import { ReadingComprehensionActivity } from './components/ReadingComprehensionActivity';
 import { ReadingPracticeActivity } from './components/ReadingPracticeActivity';
 import { LearnerDashboard } from './components/LearnerDashboard';
+import { LearnerInsightsDashboard } from './components/LearnerInsightsDashboard';
 
 import { audioService } from './services/audioService';
 
-type AppView = 'auth-entry' | 'login' | 'register' | 'library' | 'playing' | 'dashboard';
+type AppView = 'auth-entry' | 'login' | 'register' | 'library' | 'playing' | 'dashboard' | 'insights';
 
 export function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -142,6 +143,12 @@ export function App() {
     setCurrentView('dashboard');
   }, []);
 
+  // Insights navigation
+  const handleGoToInsights = useCallback(() => {
+    audioService.stopSpeech();
+    setCurrentView('insights');
+  }, []);
+
   // 0. Loading Screen during token validation
   if (isLoading) {
     return (
@@ -208,6 +215,29 @@ export function App() {
         <>
           <LearnerDashboard
             onBackToLibrary={handleBackToLibrary}
+            onLoginClick={handleGoToLogin}
+            onContinueGuest={handleContinueGuest}
+            onSelectActivity={handleSelectActivity}
+            onInsightsClick={handleGoToInsights}
+          />
+
+          {/* Activity Preview Modal (Opened when an activity is clicked from recommendations) */}
+          {previewActivity && (
+            <ActivityPreviewModal
+              activity={previewActivity}
+              onStart={handleStartActivity}
+              onBack={handleClosePreview}
+            />
+          )}
+        </>
+      )}
+
+      {/* 6. Teacher/Parent Learning Insights Dashboard */}
+      {currentView === 'insights' && (
+        <>
+          <LearnerInsightsDashboard
+            onBackToLibrary={handleBackToLibrary}
+            onBackToDashboard={handleGoToDashboard}
             onLoginClick={handleGoToLogin}
             onContinueGuest={handleContinueGuest}
             onSelectActivity={handleSelectActivity}

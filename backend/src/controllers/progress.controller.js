@@ -328,3 +328,25 @@ exports.getProgressStats = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * @desc    Get comprehensive learning insights dashboard data for authenticated user
+ * @route   GET /api/progress/insights
+ * @access  Private (Authenticated users only)
+ */
+exports.getLearningInsights = async (req, res, next) => {
+  try {
+    const learningInsightsService = require('../services/learningInsights.service');
+    const userId = req.user._id;
+
+    const insights = await learningInsightsService.getLearningInsights(userId);
+
+    res.status(200).json({
+      success: true,
+      data: insights,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

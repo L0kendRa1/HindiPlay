@@ -9,7 +9,8 @@
     "seed": "node src/data/seed.js",
     "validate:images": "node src/scripts/validateImages.js",
     "validate:content": "node src/scripts/validateContent.js",
-    "test:adaptive": "node src/scripts/testAdaptiveLearning.js"
+    "test:adaptive": "node src/scripts/testAdaptiveLearning.js",
+    "test:insights": "node src/scripts/testLearningInsights.js"
   },
   "keywords": [
     "hindiplay",

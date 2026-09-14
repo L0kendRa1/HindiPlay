@@ -32,6 +32,7 @@ interface LearnerDashboardProps {
   onLoginClick?: () => void;
   onContinueGuest?: () => void;
   onSelectActivity?: (activity: ActivityMeta) => void;
+  onInsightsClick?: () => void;
 }
 
 export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
@@ -39,6 +40,7 @@ export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
   onLoginClick,
   onContinueGuest,
   onSelectActivity,
+  onInsightsClick,
 }) => {
   const { user, isAuthenticated } = useAuth();
   const { recommendation, refetch: refetchRecommendations } = usePersonalizedLearning();
@@ -244,8 +246,18 @@ export const LearnerDashboard: React.FC<LearnerDashboardProps> = ({
             <span>लाइब्रेरी पर वापस</span>
           </button>
 
-          {/* Title & Refresh */}
+          {/* Title & Refresh & Insights */}
           <div className="flex items-center gap-2">
+            {onInsightsClick && (
+              <button
+                onClick={onInsightsClick}
+                className="flex items-center gap-1.5 bg-gradient-to-r from-toy-blue to-toy-sky text-white px-3 py-1.5 rounded-2xl text-xs font-black shadow-toy-sm hover:scale-105 active:scale-95 transition-all"
+                title="अभिभावक व शिक्षक अंतर्दृष्टि देखें"
+              >
+                <span>📊 अंतर्दृष्टि</span>
+              </button>
+            )}
+
             <button
               onClick={() => loadDashboardData(true)}
               disabled={isRefreshing}
